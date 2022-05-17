@@ -4,6 +4,7 @@ import Menu from "../include/Menu";
 import Data from "../json/countryByContinent.json";
 
 import SelectionDropdown from "./components/SelectionDropdown";
+import SelectionDropdownMonth from "./components/SelectionDropdownMonth";
 export default function CountryManagement() {
   var continentList = [];
   const [countinentList, setCountinentList] = useState([]);
@@ -27,10 +28,12 @@ export default function CountryManagement() {
 
     "December",
   ];
+  // const [visible, setvisible] = useState(second)
   const [disable, setDisable] = useState(false);
   const [error, setError] = useState({});
   const [addPicture, setAddPicture] = useState(false);
   const [image, setImage] = useState("");
+  const [change, setchange] = useState(false);
   const [showImg, setShowImg] = useState({
     src: "",
     alt: "",
@@ -145,6 +148,11 @@ export default function CountryManagement() {
       isValid = false;
       error["budget"] = "Please enter budget";
     }
+    if (input["budgetFrom"] >= input["budgetTo"] + 100) {
+      isValid = false;
+      error["budgetInvalid"] =
+        "Maximum value can't be less then minimum (Ex. : from:4000 To: 4100)";
+    }
     if (!input["safetyGuidelines"]) {
       isValid = false;
       error["safetyGuidelines"] = "Please enter guidelines";
@@ -164,14 +172,18 @@ export default function CountryManagement() {
       error["multiChoice"] = "Please select any one";
     }
     setError(error);
+    return isValid;
     //return isValid;
   };
 
   const submitHandler = (e) => {
     e.preventDefault();
-    validate();
+    console.log(validate());
   };
   console.log(state.input);
+  // useEffect(() => {
+  //   if (Object.keys(error).length !== 0) setError({});
+  // });
 
   return (
     <>
@@ -216,6 +228,13 @@ export default function CountryManagement() {
                   label="Continent Name:"
                   firstOption="Select Continent"
                 />
+                <div
+                  className="text-danger"
+                  style={{ marginTop: "-13px", marginBottom: "5px" }}
+                >
+                  {error.continent}
+                </div>
+
                 {countryList && continent ? (
                   <>
                     <SelectionDropdown
@@ -226,6 +245,12 @@ export default function CountryManagement() {
                       label="Country Name:"
                       firstOption="Select Country"
                     />
+                    <div
+                      className="text-danger"
+                      style={{ marginTop: "-13px", marginBottom: "5px" }}
+                    >
+                      {error.countryName}
+                    </div>
                   </>
                 ) : null}
                 <div class="form-group">
@@ -392,6 +417,7 @@ export default function CountryManagement() {
                                 <i
                                   className="fa fa-trash placeDeleteIcon"
                                   onClick={(e) => {
+                                    console.log(e);
                                     deleteItem(e, i);
                                   }}
                                 ></i>
@@ -415,10 +441,10 @@ export default function CountryManagement() {
                       From:
                     </label>
                     <input
-                      type="text"
+                      type="number"
                       className="form-control ml-0"
                       id="exampleInputPassword1"
-                      placeholder="₹"
+                      placeholder="Minimum ₹"
                       name="budgetFrom"
                       value={formData.budgetFrom}
                       onChange={(e) =>
@@ -432,16 +458,17 @@ export default function CountryManagement() {
                       To:
                     </label>
                     <input
-                      type="text"
+                      type="number"
                       className="form-control ml-0"
                       id="exampleInputPassword1"
-                      placeholder="₹"
+                      placeholder="Maximum ₹"
                       name="budgetTo"
                       value={formData.budgetTo}
                       onChange={(e) =>
                         setFormData({ ...formData, budgetTo: e.target.value })
                       }
                     />
+                    <div className="text-danger">{error.budgetInvalid}</div>
                   </div>
                   <div className="text-danger">{error.budget}</div>
                 </div>
@@ -464,21 +491,51 @@ export default function CountryManagement() {
                   ></textarea>
                   <div className="text-danger">{error.safetyGuidelines}</div>
                 </div>
-                <SelectionDropdown
+                <SelectionDropdownMonth
                   list={months}
                   setState={(e) => {
-                    if (e) setMonth([...month, e]);
+                    if (e) {
+                      setMonth([...new Set([...month, e])]);
+                    }
                   }}
                   label=" Best Months to Visit:"
                   firstOption="Select Month"
                 />
-
                 <div className="text-danger">{error.bestMonths}</div>
+                <div className="placeListDiv row">
+                  {month.length !== 0 ? (
+                    <div>
+                      {month.map((subItems, i) => {
+                        return (
+                          <button className="btn btn-primary m-4 placeButton">
+                            {subItems}{" "}
+                            <span className="placeDeleteIcon">
+                              <i
+                                className="fa fa-trash placeDeleteIcon"
+                                onClick={(e1) => {
+                                  e1.preventDefault();
+                                  var array = month;
+                                  var index = i;
 
+                                  if (index !== -1) {
+                                    array.splice(index, 1);
+                                    setMonth(array);
+                                  }
+                                  setchange(!change);
+                                }}
+                              ></i>
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  ) : null}
+                </div>
                 <button
                   type="submit"
                   className="btn btn-primary"
                   disabled={disable}
+                  onClick={submitHandler}
                 >
                   {disable ? "Processing..." : "Upload"}
                 </button>
