@@ -6,7 +6,7 @@ import { TableHeader, Pagination, Search } from "../Table";
 import { Dropdown, Table } from "react-bootstrap";
 import SelectionDropdown from "./components/SelectionDropdown";
 import SelectionDropdownMonth from "./components/SelectionDropdownMonth";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 import {
   doc,
@@ -17,9 +17,8 @@ import {
   addDoc,
   onSnapshot,
 } from "firebase/firestore";
-import { db } from "../firebase/firebase";
+import { db, storage } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
-import { async } from "@firebase/util";
 export default function CountryManagement() {
   const navigate = useNavigate();
   const [listData, setListData] = useState([]);
@@ -29,7 +28,6 @@ export default function CountryManagement() {
   const [countryList, setCountryList] = useState([]);
   const [country, setCountry] = useState();
   const [month, setMonth] = useState([]);
-  console.log(listData);
   const months = [
     "January",
     "February",
@@ -98,7 +96,6 @@ export default function CountryManagement() {
     //   sortable: false,
     // },
   ];
-  // const [visible, setvisible] = useState(second)
   const [disable, setDisable] = useState(false);
   const [error, setError] = useState({});
   const [addPicture, setAddPicture] = useState(false);
@@ -108,41 +105,29 @@ export default function CountryManagement() {
     src: "",
     alt: "",
   });
-  useEffect(async () => {}, []);
 
-  let [state, setState] = useState(0);
-  const [placeList, setPlaceList] = useState({ place: [] });
+  let [state, setState] = useState("");
+  const [placeList, setPlaceList] = useState([]);
   const getData = () => {
     const cities = [];
 
     const q = query(collection(db, "cities"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        // let ss={doc.data(),sr_id}
         cities.push(doc.data());
       });
-      console.log("Current cities in CA: ", cities);
       setListData(cities);
     });
     return () => unsubscribe();
   };
   var temp = [];
-  useEffect(async () => {
+  useEffect(() => {
     Data.map((e, i) => {
       continentList.push(e.continent);
     });
 
     setCountinentList([...new Set(continentList)]);
     getData();
-    // const querySnapshot = await getDocs(collection(db, "cities"));
-
-    // querySnapshot.forEach((doc) => {
-    //   // doc.data() is never undefined for query doc snapshots
-    //   let xyz = doc.data();
-    //   k.push(xyz);
-
-    //   console.log(doc.id, " => ", doc.data());
-    // });
 
     document.getElementById("page-loader").style.display = "none";
 
@@ -167,9 +152,9 @@ export default function CountryManagement() {
   const [option3, setOption3] = useState(false);
   const [option4, setOption4] = useState(false);
   const [option5, setOption5] = useState(false);
-
+  var file = "";
   const uploadPicture = async (e) => {
-    e.preventDefault();
+    file = e.target.value;
     if (e.target.files[0]) {
       setShowImg({
         src: URL.createObjectURL(e.target.files[0]),
@@ -178,36 +163,7 @@ export default function CountryManagement() {
     }
     setAddPicture(true);
     setImage(e.target.files[0]);
-    uploadBytes(storageRef, URL.createObjectURL(e.target.files[0])).then(
-      (snapshot) => {
-        console.log("Uploaded a blob or file!");
-      }
-    );
   };
-
-  const addNewPlace = (e) => {
-    if (formData.placeToVisit != "") {
-      e.preventDefault();
-      let input = state;
-      console.log(input);
-      placeList.place.push(input);
-      setState({ input: null });
-      formData.placeToVisit = "";
-    } else {
-    }
-  };
-  function deleteItem(e, id) {
-    e.preventDefault();
-    var array = [...placeList.place];
-    var index = id;
-
-    if (index !== -1) {
-      array.splice(index, 1);
-      setPlaceList({ place: array });
-    }
-    console.log("Delete Place", placeList);
-  }
-  console.log("place List", placeList);
 
   const validate = () => {
     let isValid = true;
@@ -229,7 +185,7 @@ export default function CountryManagement() {
       isValid = false;
       error["description"] = "Please enter description";
     }
-    if (placeList.place == "") {
+    if (placeList.length === 0) {
       isValid = false;
       error["placeToVisit"] = "Please enter name of place ";
     }
@@ -250,7 +206,7 @@ export default function CountryManagement() {
       isValid = false;
       error["safetyGuidelines"] = "Please enter guidelines";
     }
-    if (!month) {
+    if (month.length === 0) {
       isValid = false;
       error["bestMonths"] = "Please enter months";
     }
@@ -271,39 +227,51 @@ export default function CountryManagement() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    setDisable(true);
+    const storage = getStorage();
+    const reference = ref(storage, "file.jpg");
+    // `${continent}_${country}_banner.jpg`
     if (validate()) {
-      let tempData = {
-        continent: continent,
-        country: country,
-        description: formData.description,
-        placeToVisit: placeList.place,
-        budgetFrom: formData.budgetFrom,
-        budgetTo: formData.budgetTo,
-        safetyGuidelines: formData.safetyGuidelines,
-        bestMonths: month,
-        image: showImg.src,
-        category: {
-          Mountains: option1,
-          "Sea Side": option2,
-          Adventures: option3,
-          Desert: option4,
-          Romantic: option5,
-        },
-      };
-      // await setDoc(doc(db, "cities"), {
-      //   tempData,
-      // });
+      uploadBytes(reference, file)
+        .then((snapshot) => {
+          return getDownloadURL(snapshot.ref);
+        })
+        .then(async (downloadURL) => {
+          console.log(downloadURL);
+          if (file) {
+            setShowImg({
+              src: downloadURL,
+              alt: e.target.files[0].name,
+            });
+          }
+          setImage(downloadURL);
+          var tempData = {
+            continent: continent,
+            country: country,
+            description: formData.description,
+            placeToVisit: placeList,
+            budgetFrom: formData.budgetFrom,
+            budgetTo: formData.budgetTo,
+            safetyGuidelines: formData.safetyGuidelines,
+            bestMonths: month,
+            image: downloadURL,
+            category: {
+              Mountains: option1,
+              "Sea Side": option2,
+              Adventures: option3,
+              Desert: option4,
+              Romantic: option5,
+            },
+          };
+          await addDoc(collection(db, "cities"), tempData);
+          setDisable(false);
 
-      const docRef = await addDoc(collection(db, "cities"), tempData);
-      navigate(0);
-      // getData();
-      // Add a new document in collection "cities"
-      // await setDoc(doc(db), "cmanage", tempData);
-      // console.log(tempData);
+          // navigate(0);
+        });
     } else {
+      setDisable(false);
     }
   };
-  console.log(state.input);
 
   const commentsData = useMemo(() => {
     let computedComments = listData;
@@ -333,10 +301,6 @@ export default function CountryManagement() {
       (currentPage - 1) * limit + limit
     );
   }, [currentPage, search, sorting, limit, listData]);
-  const storage = getStorage();
-  const storageRef = ref(storage, "some-child");
-
-  // 'file' comes from the Blob or File API
 
   return (
     <>
@@ -418,6 +382,7 @@ export default function CountryManagement() {
                       name="option1"
                       value="option1"
                       onClick={(e) => setOption1(!option1)}
+                      style={{ cursor: "pointer" }}
                     />
                     <label
                       className="form-check-label mb-2 checkBox"
@@ -434,6 +399,7 @@ export default function CountryManagement() {
                       name="option2"
                       value="option2"
                       onClick={(e) => setOption2(!option2)}
+                      style={{ cursor: "pointer" }}
                     />
                     <label
                       className="form-check-label mb-2 checkBox"
@@ -450,6 +416,7 @@ export default function CountryManagement() {
                       value="option3"
                       name="option3"
                       onClick={(e) => setOption3(!option3)}
+                      style={{ cursor: "pointer" }}
                     />
                     <label
                       className="form-check-label mb-2 checkBox"
@@ -466,6 +433,7 @@ export default function CountryManagement() {
                       value="option4"
                       name="option4"
                       onClick={(e) => setOption4(!option4)}
+                      style={{ cursor: "pointer" }}
                     />
                     <label
                       className="form-check-label mb-2 checkBox"
@@ -482,6 +450,7 @@ export default function CountryManagement() {
                       value="option5"
                       name="option5"
                       onClick={(e) => setOption5(!option5)}
+                      style={{ cursor: "pointer" }}
                     />
                     <label
                       className="form-check-label mb-2 checkBox"
@@ -537,13 +506,9 @@ export default function CountryManagement() {
                       id="exampleInputPassword1"
                       placeholder="Enter places"
                       name="placeToVisit"
-                      value={formData.placeToVisit}
+                      value={state}
                       onChange={(e) => {
-                        setFormData({
-                          ...formData,
-                          placeToVisit: e.target.value,
-                        });
-                        setState({ input: e.target.value });
+                        setState(e.target.value);
                       }}
                     />
                     <button
@@ -553,25 +518,40 @@ export default function CountryManagement() {
                         height: "30px",
                         marginTop: "14px",
                       }}
-                      onClick={addNewPlace}
+                      onClick={(e) => {
+                        // if (e) {
+                        //   setMonth([...new Set([...month, e])]);
+                        // }
+                        e.preventDefault();
+                        // let tempPlace = placeList;
+                        setPlaceList([...new Set([...placeList, state])]);
+                        setState("");
+                      }}
                     >
                       Add
                     </button>
                   </div>
                   <div className="text-danger">{error.placeToVisit}</div>
                   <div className="placeListDiv row">
-                    {placeList.place != "" ? (
+                    {placeList.length !== 0 ? (
                       <div>
-                        {placeList.place.map((subItems, i) => {
+                        {placeList.map((subItems, i) => {
                           return (
                             <button className="btn btn-primary m-4 placeButton">
-                              {placeList?.place[i]?.input}{" "}
+                              {subItems}
                               <span className="placeDeleteIcon">
                                 <i
                                   className="fa fa-trash placeDeleteIcon"
-                                  onClick={(e) => {
-                                    console.log(e);
-                                    deleteItem(e, i);
+                                  onClick={(e1) => {
+                                    e1.preventDefault();
+                                    let array = placeList;
+                                    let index = i;
+
+                                    if (index !== -1) {
+                                      array.splice(index, 1);
+                                      setMonth(array);
+                                    }
+                                    setchange(!change);
                                   }}
                                 ></i>
                               </span>
@@ -819,7 +799,7 @@ export default function CountryManagement() {
                               <td>{i + 1}</td>
                               <td>
                                 <img
-                                  src="https://upload.wikimedia.org/wikipedia/commons/3/3c/IMG_logo_%282017%29.svg"
+                                  src={e.image}
                                   width="70px"
                                   height="60px"
                                   alt="banner"

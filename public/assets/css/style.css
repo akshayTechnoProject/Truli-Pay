@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
 * {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 a {
   cursor: pointer;
@@ -111,7 +111,7 @@ a {
 .changePassForm input {
   border-radius: 20px;
 }
-.profileForm input[type='file']::file-selector-button {
+.profileForm input[type="file"]::file-selector-button {
   border-radius: 20px;
   border: 2px solid #231549 /* #FBE9FF*/;
   background-color: #fff4ee;
@@ -119,7 +119,7 @@ a {
   margin-top: -3px;
 }
 
-.profileForm input[type='file']::file-selector-button:hover {
+.profileForm input[type="file"]::file-selector-button:hover {
   background-color: #231549 /* #FBE9FF*/;
   border: 2px solid #231549 /* #FBE9FF*/;
   cursor: pointer;
@@ -328,3 +328,5 @@ input {
 }
 .placeListDiv {
 }
+/* =========================choose btn ===================
+  */
