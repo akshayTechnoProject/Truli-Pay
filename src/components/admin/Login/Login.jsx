@@ -75,11 +75,14 @@ function Login() {
       .catch((error) => {
         // const errorCode = error.code;
         const errorMessage = error.message;
+
         if (
-          errorMessage.search("wrong-password") ||
-          errorMessage.search("user-not-found")
+          errorMessage.search("wrong-password") === -1 ||
+          errorMessage.search("user-not-found") === -1
         ) {
-          toast.error("Incorrect email or password ");
+          if (errorMessage.search("auth/network-request-failed") !== -1)
+            toast.error("Please, Connect with internet.");
+          else toast.error("Incorrect email or password ");
           setDisable(false);
         } else {
           toast.error(`Something Went Wrong`);

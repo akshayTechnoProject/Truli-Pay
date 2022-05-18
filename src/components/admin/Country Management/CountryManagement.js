@@ -937,6 +937,38 @@ export default function CountryManagement() {
                                   style={{ cursor: "pointer" }}
                                   onClick={() => {
                                     console.log(e);
+                                    // setContinent(e.continent);
+                                    // setPlaceList(e.placeToVisit);
+                                    // var k = {
+                                    //   continent: continent,
+                                    //   country: country,
+                                    //   description: formData.description,
+                                    //   placeToVisit: placeList,
+                                    //   budgetFrom: formData.budgetFrom,
+                                    //   budgetTo: formData.budgetTo,
+                                    //   safetyGuidelines:
+                                    //     formData.safetyGuidelines,
+                                    //   bestMonths: month,
+                                    //   image: image,
+                                    //   category: {
+                                    //     Mountains: option1,
+                                    //     "Sea Side": option2,
+                                    //     Adventures: option3,
+                                    //     Desert: option4,
+                                    //     Romantic: option5,
+                                    //   },
+                                    // };
+                                    // setOption1(e.category.Mountains);
+                                    // setOption2(e.category["Sea Side"]);
+                                    // setOption3(e.category.Adventures);
+                                    // setOption4(e.category.Desert);
+                                    // setOption5(e.category.Romantic);
+                                    // setFormData({
+                                    //   description: e.description,
+                                    //   budgetFrom: e.budgetFrom,
+                                    //   budgetTo: e.budgetTo,
+                                    //   safetyGuidelines: e.safetyGuidelines,
+                                    // });
                                   }}
                                 ></i>
                               </td>

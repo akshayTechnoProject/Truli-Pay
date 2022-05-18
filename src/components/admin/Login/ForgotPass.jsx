@@ -31,11 +31,13 @@ function ForgotPass() {
         .catch((error) => {
           // const errorCode = error.code;
           const errorMessage = error.message;
-          if (errorMessage.search("user-not-found")) {
+          if (errorMessage.search("user-not-found") !== -1) {
             toast.error(`Enter valid email`);
             setDisable(false);
           } else {
-            toast.error("Something went Wrong");
+            if (errorMessage.search("auth/network-request-failed") !== -1)
+              toast.error("Please, Connect with internet.");
+            else toast.error("Something went Wrong");
             setDisable(false);
           }
 
