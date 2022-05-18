@@ -13,6 +13,8 @@ function Menu() {
     localStorage.removeItem('DM_Admin_ID');
     localStorage.removeItem('DM_Admin_EMAIL');
     localStorage.removeItem('DM_Admin_NAME');
+    localStorage.removeItem('DM_Admin_CURRENTUSER');
+    navigate('/travel-app-admin');
     toast.success('Logout Successfully...!');
   };
 
@@ -80,10 +82,9 @@ function Menu() {
         <ul className="navbar-nav navbar-right">
           <li className="dropdown navbar-user">
             <a href="#" className="dropdown-toggle" data-toggle="dropdown">
-              <img src="assets/img/icon/profileIcon.png" alt="" />
+              <img src={localStorage.getItem('DM_Admin_IMAGE')} alt="" />
               <span className="d-none d-md-inline userName">
-                {/* {localStorage.getItem("BRUD_Admin_NAME")} */}
-                Travel Admin
+                {localStorage.getItem('DM_Admin_NAME')}
               </span>{' '}
               <b className="caret"></b>
             </a>

@@ -1,139 +1,114 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import Loader from './include/Loader';
 import Menu from './include/Menu';
 import Footer from './include/Footer';
-import { app } from './firebase/firebase';
-import { storage } from './firebase/firebase';
-import axios from 'axios';
+import { doc, updateDoc, getDoc, onSnapshot } from 'firebase/firestore';
+import { db } from './firebase/firebase';
+import {
+  getAuth,
+  updatePassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+} from 'firebase/auth';
 
-function Profile() {
-  const [change, setChage] = useState(true);
+export default function Profile() {
+  const auth = getAuth();
+  const user = auth.currentUser;
+  console.log('>>>>>>>>>', user?.email);
+  const [change, setChange] = useState(true);
 
   useEffect(() => {
     document.getElementById('page-loader').style.display = 'none';
-
     var element = document.getElementById('page-container');
     element.classList.add('show');
   }, [change]);
 
-  const [{ alt, src }, setImg] = useState({
-    src: localStorage.getItem('DM_Admin_IMAGE')
-      ? localStorage.getItem('DM_Admin_IMAGE')
-      : '',
+  const [img, setImg] = useState({
+    src: '',
     alt: '',
   });
-
   const [profileInfo, setProfileInfo] = useState({
     name: localStorage.getItem('DM_Admin_NAME'),
     image: localStorage.getItem('DM_Admin_IMAGE'),
   });
-
   const [addPicture, setAddPicture] = useState(false);
-  const [picture, setPicture] = useState({});
-  const [pictureName, setPictureName] = useState({});
-
-  const handleImg = (e) => {
-    if (e.target.files[0]) {
-      const image = e.target.files[0];
-      setProfileInfo({ ...profileInfo, image });
-      setImg({
-        src: URL.createObjectURL(e.target.files[0]),
-        alt: e.target.files[0].name,
-      });
-    }
-  };
-
+  const [isPicUpload, setIsPicUpload] = useState(false);
   const [errors, setErrors] = useState({});
+  const [image, setImage] = useState();
   const [passErrors, setPassErrors] = useState({});
-
   const [disable, setDisable] = useState(false);
   const [disable1, setDisable1] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const initialValues = {
+    old_password: '',
+    new_password: '',
+    confirm_password: '',
+  };
+  const [password, setPassword] = useState(initialValues);
 
+  const handleImg = (e) => {
+    setDisable(true);
+    if (e.target.files[0]) {
+      const newImage = e.target.files[0];
+      setProfileInfo({ ...profileInfo, [image]: newImage });
+
+      const file = e.target.files[0];
+      const storage = getStorage();
+      const reference = ref(storage, `profilePic_${new Date().getTime()}.jpg`);
+      uploadBytes(reference, file)
+        .then((snapshot) => {
+          return getDownloadURL(snapshot.ref);
+        })
+        .then(async (downloadURL) => {
+          console.log(downloadURL);
+          if (file) {
+            setImg({
+              src: downloadURL,
+              alt: e.target.files[0].name,
+            });
+          }
+          setImage(downloadURL);
+          setIsPicUpload(true);
+          setDisable(false);
+        })
+        .catch(() => {
+          setDisable(false);
+          toast.error('Something went wrong!');
+          console.log('Something went wrong!');
+          setChange(!change);
+        });
+    }
+  };
+  console.log('aaaaaaaa', img.src);
   const InputEvent = (e) => {
     const newProfileInfo = { ...profileInfo };
     newProfileInfo[e.target.name] = e.target.value;
     setProfileInfo(newProfileInfo);
   };
-
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
     if (validate()) {
       setDisable(true);
-
       const updateId = localStorage.getItem('DM_Admin_ID');
 
-      const { name, image } = profileInfo;
-
-      if (typeof image == 'object') {
-        const uploadTask = storage.ref(`admins/${image.name}`).put(image);
-
-        uploadTask.on(
-          'state_changed',
-          (snapshot) => {
-            const progress = Math.round(
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-            );
-            setProgress(progress);
-          },
-          (error) => {
-            console.log(error);
-          },
-          () => {
-            storage
-              .ref('admins/')
-              .child(image.name)
-              .getDownloadURL()
-              .then((url) => {
-                const updateRef = app
-                  .firestore()
-                  .collection('admin')
-                  .doc(updateId);
-                updateRef
-                  .update({
-                    name,
-                    image: url,
-                  })
-                  .then((doc) => {
-                    localStorage.setItem('DM_Admin_NAME', profileInfo.name);
-                    localStorage.setItem('DM_Admin_IMAGE', url);
-                    setDisable(false);
-                    toast.success('Profile Updated Sucessfully...!');
-                    setProfileInfo({
-                      name: localStorage.getItem('DM_Admin_NAME'),
-                      image: localStorage.getItem('DM_Admin_IMAGE'),
-                    });
-                  })
-                  .catch((error) => {
-                    setDisable(false);
-                    console.log('Error getting documents: ', error);
-                  });
-              });
-          }
-        );
-      } else {
-        const updateRef = app.firestore().collection('admin').doc(updateId);
-        updateRef
-          .update({
-            name: name,
-          })
-          .then((doc) => {
-            localStorage.setItem('DM_Admin_NAME', profileInfo.name);
-            setDisable(false);
-            toast.success('Profile Updated Sucessfully...!');
-            setProfileInfo({
-              name: localStorage.getItem('DM_Admin_NAME'),
-              image: localStorage.getItem('DM_Admin_IMAGE'),
-            });
-          })
-          .catch((error) => {
-            setDisable(false);
-            console.log('Error getting documents: ', error);
-          });
-      }
+      const adminRef = doc(db, 'admin', updateId);
+      await updateDoc(adminRef, { name: profileInfo.name, image: image })
+        .then(() => {
+          localStorage.setItem('DM_Admin_NAME', profileInfo.name);
+          localStorage.setItem('DM_Admin_IMAGE', img.src);
+          toast.success('Profile Updated Successfully');
+          setDisable(false);
+          setIsPicUpload(false);
+          setChange(!change);
+        })
+        .catch((error) => {
+          toast.error('Something went wrong!');
+          console.log(error);
+          setDisable(false);
+          setIsPicUpload(false);
+        });
     }
   };
 
@@ -152,29 +127,18 @@ function Profile() {
     return isValid;
   };
 
-  const initialValues = {
-    old_password: '',
-    new_password: '',
-    confirm_password: '',
-  };
-  const [password, setPassword] = useState(initialValues);
   const changePassword = (event) => {
     const { name, value } = event.target;
     setPassword({ ...password, [name]: value });
   };
+
   const validatePass = async () => {
     let input = password;
 
     let passErrors = {};
     let isValidPass = true;
-    const updateId = localStorage.getItem('DM_Admin_ID');
-    const updateRef = app.firestore().collection('admin').doc(updateId);
-    const doc = await updateRef.get();
 
-    if (
-      !input['old_password'] ||
-      doc.data().password != password.old_password
-    ) {
+    if (!input['old_password']) {
       isValidPass = false;
       passErrors['old_password'] = 'Please enter old password.';
     } else {
@@ -206,20 +170,28 @@ function Profile() {
     setDisable1(true);
     let validate = await validatePass();
     if (validate) {
-      const updateId = localStorage.getItem('DM_Admin_ID');
-      const updateRef = app.firestore().collection('admin').doc(updateId);
-      updateRef
-        .update({
-          password: password.new_password,
-        })
-        .then((doc) => {
-          setDisable1(false);
-          toast.success('Password Updated Successfully.');
-          console.log('Password updated successfully', doc);
-          setChage(!change);
+      const credential = EmailAuthProvider.credential(
+        user.email,
+        password.old_password
+      );
+      // User re-authenticated.
+      reauthenticateWithCredential(user, credential)
+        .then(() => {
+          updatePassword(user, password.new_password)
+            .then(() => {
+              setDisable1(false);
+              toast.success('Password Updated Successfully.');
+              console.log('Password updated successfully');
+              setChange(!change);
+            })
+            .catch((error) => {
+              console.log('Errors', error);
+              setDisable1(false);
+              toast.error('Something went wrong. Please try again later.');
+            });
         })
         .catch((error) => {
-          console.log('Errors', error);
+          console.log(':: ', error);
           setDisable1(false);
           toast.error('Invalid Inputs!');
         });
@@ -287,6 +259,7 @@ function Profile() {
 
                   <div className="mb-3">
                     <label for="exampleInputImage">Image: </label>
+                    {console.log(profileInfo)}
                     {profileInfo.image != '' ? (
                       <img
                         src={profileInfo.image}
@@ -321,9 +294,9 @@ function Profile() {
                       id="exampleInputImage"
                       onChange={handleImg}
                     />
-                    {src != '' ? (
+                    {img.src != '' ? (
                       <img
-                        src={src}
+                        src={img.src}
                         className="form-img__img-preview"
                         style={{ width: '84px', height: '84px' }}
                         alt="imgs"
@@ -472,5 +445,3 @@ function Profile() {
     </>
   );
 }
-
-export default Profile;

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { async } from "@firebase/util";
-import { doc, setDoc } from "firebase/firestore";
-import { db } from "../firebase/firebase";
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { async } from '@firebase/util';
+import { doc, setDoc, getDoc, onSnapshot } from 'firebase/firestore';
+import { db } from '../firebase/firebase';
 function Login() {
   const navigate = useNavigate();
 
@@ -14,8 +14,10 @@ function Login() {
   //   navigate("/dashboard");
   // }
   const auth = getAuth();
-  const [email, setemail] = useState("");
-  const [password, setpassword] = useState("");
+
+  const [email, setemail] = useState('');
+  const [userID, setUserID] = useState('');
+  const [password, setpassword] = useState('');
   const [disable, setDisable] = useState(false);
   const [checkVisible, setcheckVisible] = useState({
     email: false,
@@ -23,9 +25,9 @@ function Login() {
   });
   const [first, setfirst] = useState(1);
   useEffect(() => {
-    if (localStorage.getItem("forgotTest") != "false") {
-      toast.success("Password reset mail sent successfully");
-      localStorage.setItem("forgotTest", false);
+    if (localStorage.getItem('forgotTest') != 'false') {
+      toast.success('Password reset mail sent successfully');
+      localStorage.setItem('forgotTest', false);
       setfirst(first);
     }
   }, [first]);
@@ -46,18 +48,55 @@ function Login() {
         setDisable(false);
       }
     } else {
-      const DM_Admin_NAME = "Admin";
-      checkAuth(email);
-      localStorage.setItem("DM_Admin_ID", auth.currentUser.uid);
-      localStorage.setItem("DM_Admin_EMAIL", email);
-      localStorage.setItem("DM_Admin_NAME", DM_Admin_NAME);
-      await setDoc(doc(db, "admin", auth.currentUser.uid), {
-        name: DM_Admin_NAME,
-        id: auth.currentUser.uid,
-        email: email,
-        image:
-          "https://cdn.pixabay.com/photo/2018/08/28/12/41/avatar-3637425_960_720.png",
-      });
+      await checkAuth(email);
+      /*const setvalue = onSnapshot(
+        doc(db, 'admin', auth.currentUser.uid),
+        (doc) => {
+          console.log('Current data: ', doc.data());
+          console.log('Current data: ', doc.data().image);
+          if (doc.data().image != '') {
+            localStorage.setItem('DM_Admin_IMAGE', auth?.currentUser?.image);
+          } else {
+            localStorage.setItem(
+              'DM_Admin_IMAGE',
+              `https://cdn.pixabay.com/photo/2018/08/28/12/41/avatar-3637425_960_720.png`
+            );
+          }
+          if (doc.data().name != '') {
+            localStorage.setItem('DM_Admin_IMAGE', auth?.currentUser?.name);
+          } else {
+            localStorage.setItem('DM_Admin_NAME', 'Admin');
+          }
+        }
+      );
+      await setvalue();
+*/
+
+      const docRef = doc(db, 'admin', auth.currentUser.uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        console.log('Document data:', docSnap.data());
+        localStorage.setItem('DM_Admin_NAME', docSnap.data()?.name);
+        localStorage.setItem('DM_Admin_IMAGE', docSnap.data()?.image);
+      } else {
+        // doc.data() will be undefined in this case
+        console.log('No such document!');
+      }
+      localStorage.setItem('DM_Admin_ID', auth?.currentUser?.uid);
+      localStorage.setItem('DM_Admin_CURRENTUSER', auth?.currentUser);
+      localStorage.setItem('DM_Admin_EMAIL', email);
+      /*
+      setTimeout(
+        await setDoc(doc(db, 'admin', auth.currentUser.uid), {
+          name: auth?.currentUser?.uid,
+          id: auth.currentUser.uid,
+          email: email,
+          image:
+            'https://cdn.pixabay.com/photo/2018/08/28/12/41/avatar-3637425_960_720.png',
+        }),
+        1000
+      );
+      */
       setcheckVisible({ email: false, password: false });
     }
   };
@@ -66,20 +105,21 @@ function Login() {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
+        setUserID(auth?.currentUser?.uid);
         console.log(user);
-        setemail("");
-        setpassword("");
-        navigate("/dashboard");
+        setemail('');
+        setpassword('');
+        navigate('/dashboard');
         // ...
       })
       .catch((error) => {
         // const errorCode = error.code;
         const errorMessage = error.message;
         if (
-          errorMessage.search("wrong-password") ||
-          errorMessage.search("user-not-found")
+          errorMessage.search('wrong-password') ||
+          errorMessage.search('user-not-found')
         ) {
-          toast.error("Incorrect email or password ");
+          toast.error('Incorrect email or password ');
           setDisable(false);
         } else {
           toast.error(`Something Went Wrong`);
@@ -89,10 +129,10 @@ function Login() {
   }
 
   useEffect(() => {
-    document.getElementById("page-loader").style.display = "none";
+    document.getElementById('page-loader').style.display = 'none';
 
-    var element = document.getElementById("page-container");
-    element.classList.add("show");
+    var element = document.getElementById('page-container');
+    element.classList.add('show');
   }, []);
 
   return (
@@ -105,7 +145,7 @@ function Login() {
         <div
           className="login-cover-image"
           style={{
-            backgroundImage: "url(assets/img/login-bg/login-bg-17.jpg)",
+            backgroundImage: 'url(assets/img/login-bg/login-bg-17.jpg)',
           }}
           data-id="login-cover-image"
         ></div>
@@ -157,13 +197,13 @@ function Login() {
                   <div className="text-danger ms-0 text-start">
                     Please enter password
                   </div>
-                ) : null}{" "}
+                ) : null}{' '}
               </div>
               {console.log(email)}
               <div className="form-group m-b-20">
                 <Link
                   to={{
-                    pathname: "/forgot-password",
+                    pathname: '/forgot-password',
                   }}
                   state={email}
                 >
@@ -178,7 +218,7 @@ function Login() {
                   disabled={disable}
                   onClick={submitHandler}
                 >
-                  {disable ? "Processing..." : "Sign me in"}
+                  {disable ? 'Processing...' : 'Sign me in'}
                 </button>
               </div>
             </form>
