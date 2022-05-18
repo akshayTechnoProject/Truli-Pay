@@ -51,13 +51,13 @@ function Login() {
       localStorage.setItem("DM_Admin_ID", auth.currentUser.uid);
       localStorage.setItem("DM_Admin_EMAIL", email);
       localStorage.setItem("DM_Admin_NAME", DM_Admin_NAME);
-      await setDoc(doc(db, "admin", auth.currentUser.uid), {
-        name: DM_Admin_NAME,
-        id: auth.currentUser.uid,
-        email: email,
-        image:
-          "https://cdn.pixabay.com/photo/2018/08/28/12/41/avatar-3637425_960_720.png",
-      });
+      // await setDoc(doc(db, "admin", auth.currentUser.uid), {
+      //   name: DM_Admin_NAME,
+      //   id: auth.currentUser.uid,
+      //   email: email,
+      //   image:
+      //     "https://cdn.pixabay.com/photo/2018/08/28/12/41/avatar-3637425_960_720.png",
+      // });
       setcheckVisible({ email: false, password: false });
     }
   };
