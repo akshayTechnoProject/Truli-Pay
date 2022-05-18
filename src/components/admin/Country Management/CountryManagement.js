@@ -71,23 +71,16 @@ export default function CountryManagement() {
       sortable: false,
     },
     {
-      name: "Place",
-      field: "placeToVisit",
+      name: "Range (₹)",
+      sortable: false,
+    },
+
+    {
+      name: "Edit",
       sortable: false,
     },
     {
-      name: "BestMonths",
-      field: "bestMonths",
-      sortable: false,
-    },
-    // {
-    //   name: "Category",
-    //   field: "category",
-    //   sortable: false,
-    // },
-    {
-      name: "Range",
-      // field: "category",
+      name: "Delete",
       sortable: false,
     },
     // {
@@ -109,16 +102,29 @@ export default function CountryManagement() {
   let [state, setState] = useState("");
   const [placeList, setPlaceList] = useState([]);
   const getData = () => {
-    const cities = [];
+    //     import { collection, query, where, onSnapshot } from "firebase/firestore";
 
+    // const q = query(collection(db, "cities"), where("state", "==", "CA"));
+    // const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    //   const cities = [];
+    //   querySnapshot.forEach((doc) => {
+    //       cities.push(doc.data().name);
+    //   });
+    //   console.log("Current cities in CA: ", cities.join(", "));
+    // });
+    const cities = [];
+    let i = 1;
     const q = query(collection(db, "cities"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        cities.push(doc.data());
+        cities.push({ ...doc.data(), sr_no: i, id: doc.id });
+        i++;
       });
       setListData(cities);
     });
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+    };
   };
   var temp = [];
   useEffect(() => {
@@ -154,15 +160,27 @@ export default function CountryManagement() {
   const [option5, setOption5] = useState(false);
   var file = "";
   const uploadPicture = async (e) => {
-    file = e.target.value;
-    if (e.target.files[0]) {
-      setShowImg({
-        src: URL.createObjectURL(e.target.files[0]),
-        alt: e.target.files[0].name,
+    e.preventDefault();
+    file = e.target.files[0];
+    const storage = getStorage();
+    const reference = ref(storage, `banner_${new Date().getTime()}.jpg`);
+
+    uploadBytes(reference, file)
+      .then((snapshot) => {
+        return getDownloadURL(snapshot.ref);
+      })
+      .then(async (downloadURL) => {
+        console.log(downloadURL);
+        if (file) {
+          setShowImg({
+            src: downloadURL,
+            alt: e.target.files[0].name,
+          });
+        }
+        setImage(downloadURL);
       });
-    }
     setAddPicture(true);
-    setImage(e.target.files[0]);
+    // setImage(e.target.files[0]);
   };
 
   const validate = () => {
@@ -197,7 +215,7 @@ export default function CountryManagement() {
       isValid = false;
       error["budget"] = "Please enter budget";
     }
-    if (input["budgetFrom"] >= input["budgetTo"] + 100) {
+    if (Number(input["budgetFrom"]) >= Number(input["budgetTo"]) + 100) {
       isValid = false;
       error["budgetInvalid"] =
         "Maximum value can't be less then minimum (Ex. : from:4000 To: 4100)";
@@ -228,46 +246,38 @@ export default function CountryManagement() {
   const submitHandler = async (e) => {
     e.preventDefault();
     setDisable(true);
-    const storage = getStorage();
-    const reference = ref(storage, "file.jpg");
-    // `${continent}_${country}_banner.jpg`
-    if (validate()) {
-      uploadBytes(reference, file)
-        .then((snapshot) => {
-          return getDownloadURL(snapshot.ref);
-        })
-        .then(async (downloadURL) => {
-          console.log(downloadURL);
-          if (file) {
-            setShowImg({
-              src: downloadURL,
-              alt: e.target.files[0].name,
-            });
-          }
-          setImage(downloadURL);
-          var tempData = {
-            continent: continent,
-            country: country,
-            description: formData.description,
-            placeToVisit: placeList,
-            budgetFrom: formData.budgetFrom,
-            budgetTo: formData.budgetTo,
-            safetyGuidelines: formData.safetyGuidelines,
-            bestMonths: month,
-            image: downloadURL,
-            category: {
-              Mountains: option1,
-              "Sea Side": option2,
-              Adventures: option3,
-              Desert: option4,
-              Romantic: option5,
-            },
-          };
-          await addDoc(collection(db, "cities"), tempData);
-          setDisable(false);
+    const uploadDataList = async (tempData) => {
+      try {
+        await addDoc(collection(db, "cities"), tempData);
+        // setDisable(false);
+      } catch (e) {
+        console.log(e);
+      }
+    };
 
-          // navigate(0);
-        });
+    if (validate()) {
+      var tempData = {
+        continent: continent,
+        country: country,
+        description: formData.description,
+        placeToVisit: placeList,
+        budgetFrom: formData.budgetFrom,
+        budgetTo: formData.budgetTo,
+        safetyGuidelines: formData.safetyGuidelines,
+        bestMonths: month,
+        image: image,
+        category: {
+          Mountains: option1,
+          "Sea Side": option2,
+          Adventures: option3,
+          Desert: option4,
+          Romantic: option5,
+        },
+      };
+
+      uploadDataList(tempData);
+
+      navigate(0);
     } else {
       setDisable(false);
     }
@@ -796,7 +806,7 @@ export default function CountryManagement() {
                         <tbody>
                           {commentsData.map((e, i) => (
                             <tr>
-                              <td>{i + 1}</td>
+                              <td>{e.sr_no}</td>
                               <td>
                                 <img
                                   src={e.image}
@@ -807,15 +817,15 @@ export default function CountryManagement() {
                               </td>
                               <td>{e.continent}</td>
                               <td>{e.country}</td>
-                              <td>
+                              {/* <td>
                                 {e.placeToVisit.map((e, i) => (
                                   <p>
                                     {e.input}
                                     <br />
                                   </p>
                                 ))}
-                              </td>
-                              <td>
+                              </td> */}
+                              {/* <td>
                                 {" "}
                                 {e.bestMonths.map((e, i) => (
                                   <p>
@@ -823,7 +833,7 @@ export default function CountryManagement() {
                                     <br />
                                   </p>
                                 ))}
-                              </td>
+                              </td> */}
                               {/* <td>
                                 {e.category.Adventures ? (
                                   <p>{e.category.Adventures}</p>
@@ -841,7 +851,20 @@ export default function CountryManagement() {
                                   <p>{e.category["Sea Side"]}</p>
                                 ) : null}
                               </td> */}
-                              <td>{`${e.budgetFrom}-${e.budgetTo}`}</td>
+
+                              <td>{`${e.budgetFrom} - ${e.budgetTo}`}</td>
+                              <td>
+                                <i
+                                  className="fa fa-eye edit"
+                                  style={{ cursor: "pointer" }}
+                                ></i>
+                              </td>
+                              <td>
+                                <i
+                                  className="fa fa-trash delete"
+                                  style={{ cursor: "pointer" }}
+                                ></i>
+                              </td>
                             </tr>
                           ))}
                         </tbody>
