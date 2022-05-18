@@ -857,12 +857,18 @@ export default function CountryManagement() {
                                 <i
                                   className="fa fa-eye edit"
                                   style={{ cursor: "pointer" }}
+                                  onClick={() => {
+                                    console.log(e.id);
+                                  }}
                                 ></i>
                               </td>
                               <td>
                                 <i
                                   className="fa fa-trash delete"
                                   style={{ cursor: "pointer" }}
+                                  onClick={() => {
+                                    console.log(e.id);
+                                  }}
                                 ></i>
                               </td>
                             </tr>
