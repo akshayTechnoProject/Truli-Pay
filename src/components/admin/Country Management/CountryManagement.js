@@ -1,15 +1,15 @@
-import React, { useEffect, useState, useMemo } from "react";
-import Loader from "../include/Loader";
-import Menu from "../include/Menu";
-import Data from "../json/countryByContinent.json";
-import { TableHeader, Pagination, Search } from "../Table";
-import { Dropdown, Table } from "react-bootstrap";
-import SelectionDropdown from "./components/SelectionDropdown";
-import SelectionDropdownMonth from "./components/SelectionDropdownMonth";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import Popup from "reactjs-popup";
-import "reactjs-popup/dist/index.css";
-import "./components/style.css";
+import React, { useEffect, useState, useMemo } from 'react';
+import Loader from '../include/Loader';
+import Menu from '../include/Menu';
+import Data from '../json/countryByContinent.json';
+import { TableHeader, Pagination, Search } from '../Table';
+import { Dropdown, Table } from 'react-bootstrap';
+import SelectionDropdown from './components/SelectionDropdown';
+import SelectionDropdownMonth from './components/SelectionDropdownMonth';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import './components/style.css';
 import {
   deleteDoc,
   doc,
@@ -19,9 +19,9 @@ import {
   getDocs,
   addDoc,
   onSnapshot,
-} from "firebase/firestore";
-import { db, storage } from "../firebase/firebase";
-import { useNavigate } from "react-router-dom";
+} from 'firebase/firestore';
+import { db, storage } from '../firebase/firebase';
+import { useNavigate } from 'react-router-dom';
 export default function CountryManagement() {
   const navigate = useNavigate();
   const [listData, setListData] = useState([]);
@@ -32,58 +32,58 @@ export default function CountryManagement() {
   const [country, setCountry] = useState();
   const [month, setMonth] = useState([]);
   const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
 
-    "November",
+    'November',
 
-    "December",
+    'December',
   ];
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [search, setSearch] = useState("");
-  const [sorting, setSorting] = useState({ field: "", order: "" });
+  const [search, setSearch] = useState('');
+  const [sorting, setSorting] = useState({ field: '', order: '' });
   const [limit, setlimit] = useState(10);
   const Header = [
     {
-      name: "Sr. NO.",
-      field: "sr_no",
+      name: 'Sr. NO.',
+      field: 'sr_no',
       sortable: false,
     },
     {
-      name: "Image",
-      field: "image",
+      name: 'Image',
+      field: 'image',
       sortable: false,
     },
     {
-      name: "Continent",
-      field: "continent",
+      name: 'Continent',
+      field: 'continent',
       sortable: false,
     },
     {
-      name: "Country",
-      field: "country",
+      name: 'Country',
+      field: 'country',
       sortable: false,
     },
     {
-      name: "Range (₹)",
+      name: 'Range (₹)',
       sortable: false,
     },
 
     {
-      name: "Edit",
+      name: 'Edit',
       sortable: false,
     },
     {
-      name: "Delete",
+      name: 'Delete',
       sortable: false,
     },
     // {
@@ -95,17 +95,17 @@ export default function CountryManagement() {
   const [disable, setDisable] = useState(false);
   const [error, setError] = useState({});
   const [addPicture, setAddPicture] = useState(false);
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState('');
   const [change, setchange] = useState(false);
   const [showImg, setShowImg] = useState({
-    src: "",
-    alt: "",
+    src: '',
+    alt: '',
   });
 
-  let [state, setState] = useState("");
+  let [state, setState] = useState('');
   const [placeList, setPlaceList] = useState([]);
   const getData = () => {
-    const q = query(collection(db, "cities"));
+    const q = query(collection(db, 'cities'));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const cities = [];
       let i = 1;
@@ -129,10 +129,10 @@ export default function CountryManagement() {
 
     setCountinentList([...new Set(continentList)]);
 
-    document.getElementById("page-loader").style.display = "none";
+    document.getElementById('page-loader').style.display = 'none';
 
-    var element = document.getElementById("page-container");
-    element.classList.add("show");
+    var element = document.getElementById('page-container');
+    element.classList.add('show');
   }, []);
   const handleContinent = (e) => {
     setContinent(e);
@@ -142,17 +142,17 @@ export default function CountryManagement() {
     setCountryList(temp);
   };
   const [formData, setFormData] = useState({
-    description: "",
-    budgetFrom: "",
-    budgetTo: "",
-    safetyGuidelines: "",
+    description: '',
+    budgetFrom: '',
+    budgetTo: '',
+    safetyGuidelines: '',
   });
   const [option1, setOption1] = useState(false);
   const [option2, setOption2] = useState(false);
   const [option3, setOption3] = useState(false);
   const [option4, setOption4] = useState(false);
   const [option5, setOption5] = useState(false);
-  var file = "";
+  var file = '';
   const uploadPicture = async (e) => {
     e.preventDefault();
     file = e.target.files[0];
@@ -181,44 +181,44 @@ export default function CountryManagement() {
     let error = {};
     if (!country) {
       isValid = false;
-      error["countryName"] = "Please enter country name";
+      error['countryName'] = 'Please enter country name';
     }
     if (!continent) {
       isValid = false;
-      error["continent"] = "Please enter continent";
+      error['continent'] = 'Please enter continent';
     }
     if (!addPicture) {
       isValid = false;
-      error["img_err"] = "Please select the image.";
+      error['img_err'] = 'Please select the image.';
     }
-    if (!input["description"].trim()) {
+    if (!input['description'].trim()) {
       isValid = false;
-      error["description"] = "Please enter description";
+      error['description'] = 'Please enter description';
     }
     if (placeList.length === 0) {
       isValid = false;
-      error["placeToVisit"] = "Please enter name of place ";
+      error['placeToVisit'] = 'Please enter name of place ';
     }
-    if (!input["budgetFrom"]) {
+    if (!input['budgetFrom']) {
       isValid = false;
-      error["budget"] = "Please enter budget";
+      error['budget'] = 'Please enter budget';
     }
-    if (!input["budgetTo"]) {
+    if (!input['budgetTo']) {
       isValid = false;
-      error["budget"] = "Please enter budget";
+      error['budget'] = 'Please enter budget';
     }
-    if (Number(input["budgetFrom"]) >= Number(input["budgetTo"]) + 100) {
+    if (Number(input['budgetFrom']) >= Number(input['budgetTo']) + 100) {
       isValid = false;
-      error["budgetInvalid"] =
+      error['budgetInvalid'] =
         "Maximum value can't be less then minimum (Ex. : from:4000 To: 4100)";
     }
-    if (!input["safetyGuidelines"].trim()) {
+    if (!input['safetyGuidelines'].trim()) {
       isValid = false;
-      error["safetyGuidelines"] = "Please enter guidelines";
+      error['safetyGuidelines'] = 'Please enter guidelines';
     }
     if (month.length === 0) {
       isValid = false;
-      error["bestMonths"] = "Please enter months";
+      error['bestMonths'] = 'Please enter months';
     }
     if (
       option1 == false &&
@@ -228,7 +228,7 @@ export default function CountryManagement() {
       option5 == false
     ) {
       isValid = false;
-      error["multiChoice"] = "Please select any one";
+      error['multiChoice'] = 'Please select any one';
     }
     setError(error);
     return isValid;
@@ -240,7 +240,7 @@ export default function CountryManagement() {
     setDisable(true);
     const uploadDataList = async (tempData) => {
       try {
-        await addDoc(collection(db, "cities"), tempData);
+        await addDoc(collection(db, 'cities'), tempData);
       } catch (e) {
         console.warn(e);
       }
@@ -259,7 +259,7 @@ export default function CountryManagement() {
         image: image,
         category: {
           Mountains: option1,
-          "Sea Side": option2,
+          'Sea Side': option2,
           Adventures: option3,
           Desert: option4,
           Romantic: option5,
@@ -269,14 +269,14 @@ export default function CountryManagement() {
       uploadDataList(tempData).then(() => {
         // navigate("/country-management");
         setShowImg({
-          src: "",
-          alt: "",
+          src: '',
+          alt: '',
         });
         setFormData({
-          description: "",
-          budgetFrom: "",
-          budgetTo: "",
-          safetyGuidelines: "",
+          description: '',
+          budgetFrom: '',
+          budgetTo: '',
+          safetyGuidelines: '',
         });
         setMonth([]);
         setPlaceList([]);
@@ -303,7 +303,7 @@ export default function CountryManagement() {
 
     //Sorting comments
     if (sorting.field) {
-      const reversed = sorting.order === "asc" ? 1 : -1;
+      const reversed = sorting.order === 'asc' ? 1 : -1;
       computedComments = computedComments.sort(
         (a, b) => reversed * a[sorting.field].localeCompare(b[sorting.field])
       );
@@ -354,7 +354,7 @@ export default function CountryManagement() {
               trigger={
                 <button
                   className="btn btn-outline-success"
-                  style={{ borderRadius: "20px" }}
+                  style={{ borderRadius: '20px' }}
                 >
                   Add Country
                 </button>
@@ -363,18 +363,18 @@ export default function CountryManagement() {
               nested
               lockScroll={true}
               contentStyle={{
-                marginTop: "30px",
+                marginTop: '30px',
               }}
             >
               {(close) => (
                 <div
                   style={{
-                    height: "100vh",
-                    padding: "20px",
-                    whiteSpace: "nowrap",
-                    overflowY: "visible",
-                    overflowX: "hidden",
-                    paddingBottom: "40px",
+                    height: '100vh',
+                    padding: '20px',
+                    whiteSpace: 'nowrap',
+                    overflowY: 'visible',
+                    overflowX: 'hidden',
+                    paddingBottom: '40px',
                   }}
                 >
                   <div className="d-flex justify-content-between">
@@ -383,9 +383,9 @@ export default function CountryManagement() {
                     <button
                       className="btn btn-outline-success "
                       style={{
-                        fontSize: "30px",
+                        fontSize: '30px',
                         padding: 0,
-                        border: "none",
+                        border: 'none',
                       }}
                       onClick={close}
                     >
@@ -403,7 +403,7 @@ export default function CountryManagement() {
                         />
                         <div
                           className="text-danger"
-                          style={{ marginTop: "-13px", marginBottom: "5px" }}
+                          style={{ marginTop: '-13px', marginBottom: '5px' }}
                         >
                           {error.continent}
                         </div>
@@ -421,8 +421,8 @@ export default function CountryManagement() {
                             <div
                               className="text-danger"
                               style={{
-                                marginTop: "-13px",
-                                marginBottom: "5px",
+                                marginTop: '-13px',
+                                marginBottom: '5px',
                               }}
                             >
                               {error.countryName}
@@ -441,7 +441,7 @@ export default function CountryManagement() {
                               name="option1"
                               value="option1"
                               onClick={(e) => setOption1(!option1)}
-                              style={{ cursor: "pointer" }}
+                              style={{ cursor: 'pointer' }}
                             />
                             <label
                               className="form-check-label mb-2 checkBox"
@@ -458,7 +458,7 @@ export default function CountryManagement() {
                               name="option2"
                               value="option2"
                               onClick={(e) => setOption2(!option2)}
-                              style={{ cursor: "pointer" }}
+                              style={{ cursor: 'pointer' }}
                             />
                             <label
                               className="form-check-label mb-2 checkBox"
@@ -475,7 +475,7 @@ export default function CountryManagement() {
                               value="option3"
                               name="option3"
                               onClick={(e) => setOption3(!option3)}
-                              style={{ cursor: "pointer" }}
+                              style={{ cursor: 'pointer' }}
                             />
                             <label
                               className="form-check-label mb-2 checkBox"
@@ -492,7 +492,7 @@ export default function CountryManagement() {
                               value="option4"
                               name="option4"
                               onClick={(e) => setOption4(!option4)}
-                              style={{ cursor: "pointer" }}
+                              style={{ cursor: 'pointer' }}
                             />
                             <label
                               className="form-check-label mb-2 checkBox"
@@ -509,7 +509,7 @@ export default function CountryManagement() {
                               value="option5"
                               name="option5"
                               onClick={(e) => setOption5(!option5)}
-                              style={{ cursor: "pointer" }}
+                              style={{ cursor: 'pointer' }}
                             />
                             <label
                               className="form-check-label mb-2 checkBox"
@@ -528,17 +528,17 @@ export default function CountryManagement() {
                             className="form-control-file imgInput"
                             id="exampleFormControlFile1"
                             onChange={uploadPicture}
-                            style={{ cursor: "pointer" }}
+                            style={{ cursor: 'pointer' }}
                           />
-                          {showImg.src != "" ? (
+                          {showImg.src != '' ? (
                             <img
                               src={showImg.src}
                               className="form-img__img-preview"
-                              style={{ width: "84px", height: "84px" }}
+                              style={{ width: '84px', height: '84px' }}
                               alt="imgs"
                             />
                           ) : (
-                            ""
+                            ''
                           )}
                         </div>
                         <div className="text-danger">{error.img_err}</div>
@@ -577,15 +577,15 @@ export default function CountryManagement() {
                               onChange={(e) => {
                                 if (e.target.value.trim().length != 0)
                                   setState(e.target.value);
-                                else setState("");
+                                else setState('');
                               }}
                             />
                             <button
                               className="btn btn-sm btn-primary"
                               style={{
-                                borderRadius: "20px",
-                                height: "30px",
-                                marginTop: "14px",
+                                borderRadius: '20px',
+                                height: '30px',
+                                marginTop: '14px',
                               }}
                               onClick={(e) => {
                                 e.preventDefault();
@@ -593,7 +593,7 @@ export default function CountryManagement() {
                                   setPlaceList([
                                     ...new Set([...placeList, state]),
                                   ]);
-                                setState("");
+                                setState('');
                               }}
                             >
                               Add
@@ -639,7 +639,7 @@ export default function CountryManagement() {
                           <div className="d-flex w-100">
                             <label
                               for="exampleInputPassword1"
-                              style={{ marginTop: "16px", marginRight: "5px" }}
+                              style={{ marginTop: '16px', marginRight: '5px' }}
                             >
                               From:
                             </label>
@@ -659,7 +659,7 @@ export default function CountryManagement() {
                             />
                             <label
                               for="exampleInputPassword1"
-                              style={{ marginTop: "16px", marginRight: "5px" }}
+                              style={{ marginTop: '16px', marginRight: '5px' }}
                             >
                               To:
                             </label>
@@ -721,7 +721,7 @@ export default function CountryManagement() {
                               {month.map((subItems, i) => {
                                 return (
                                   <button className="btn btn-primary m-4 placeButton">
-                                    {subItems}{" "}
+                                    {subItems}{' '}
                                     <span className="placeDeleteIcon">
                                       <i
                                         className="fa fa-trash placeDeleteIcon"
@@ -754,7 +754,7 @@ export default function CountryManagement() {
                             if (validate()) close();
                           }}
                         >
-                          {disable ? "Processing..." : "Upload"}
+                          {disable ? 'Processing...' : 'Upload'}
                         </button>
                       </form>
                     </div>
@@ -765,10 +765,10 @@ export default function CountryManagement() {
           </div>
           <div
             style={{
-              backgroundColor: "white",
-              padding: "20px",
-              borderRadius: "20px",
-              marginTop: "10px",
+              backgroundColor: 'white',
+              padding: '20px',
+              borderRadius: '20px',
+              marginTop: '10px',
             }}
           >
             <div className="row w-100">
@@ -790,11 +790,11 @@ export default function CountryManagement() {
                   <div className="col-xl-6 col-lg-6 col-sm-6 col-12 d-flex justify-content-end mb-3">
                     <div
                       style={{
-                        color: "black",
-                        fontSize: "12px",
-                        fontWeight: "300",
-                        paddingTop: "0px",
-                        paddingBottom: "0px",
+                        color: 'black',
+                        fontSize: '12px',
+                        fontWeight: '300',
+                        paddingTop: '0px',
+                        paddingBottom: '0px',
                       }}
                       className="align-self-center"
                     >
@@ -806,11 +806,11 @@ export default function CountryManagement() {
                           variant="none"
                           id="dropdown-basic"
                           style={{
-                            cursor: "auto",
-                            backgroundColor: "white",
-                            borderColor: "#d5dbe0",
-                            paddingBottom: "3px",
-                            paddingTop: "3px",
+                            cursor: 'auto',
+                            backgroundColor: 'white',
+                            borderColor: '#d5dbe0',
+                            paddingBottom: '3px',
+                            paddingTop: '3px',
                           }}
                         >
                           {limit}&nbsp;<i class="fa fa-caret-down"></i>
@@ -934,7 +934,7 @@ export default function CountryManagement() {
                               <td>
                                 <i
                                   className="fa fa-eye edit"
-                                  style={{ cursor: "pointer" }}
+                                  style={{ cursor: 'pointer' }}
                                   onClick={() => {
                                     console.log(e);
                                     // setContinent(e.continent);
@@ -975,14 +975,14 @@ export default function CountryManagement() {
                               <td>
                                 <i
                                   className="fa fa-trash delete"
-                                  style={{ cursor: "pointer" }}
+                                  style={{ cursor: 'pointer' }}
                                   onClick={async () => {
                                     if (
                                       window.confirm(
-                                        "Do you want to delete? "
+                                        'Do you want to delete? '
                                       ) == true
                                     ) {
-                                      await deleteDoc(doc(db, "cities", e.id));
+                                      await deleteDoc(doc(db, 'cities', e.id));
                                     } else {
                                     }
                                   }}
@@ -998,7 +998,7 @@ export default function CountryManagement() {
                 <div
                   className="mt-2 d-flex justify-content-sm-center justify-content-xs-center justify-content-lg-end"
                   style={{
-                    overflowX: "auto",
+                    overflowX: 'auto',
                   }}
                 >
                   <Pagination
