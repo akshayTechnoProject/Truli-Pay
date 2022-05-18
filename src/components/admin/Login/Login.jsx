@@ -3,6 +3,9 @@ import { useNavigate, Link } from "react-router-dom";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { async } from "@firebase/util";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase/firebase";
 function Login() {
   const navigate = useNavigate();
 
@@ -27,7 +30,7 @@ function Login() {
     }
   }, [first]);
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
     setDisable(true);
     // validate();
@@ -43,10 +46,18 @@ function Login() {
         setDisable(false);
       }
     } else {
+      const DM_Admin_NAME = "Admin";
       checkAuth(email);
-      localStorage.setItem("DM_Admin_ID", email);
-      localStorage.setItem("DM_Admin_EMAIL", password);
-
+      localStorage.setItem("DM_Admin_ID", auth.currentUser.uid);
+      localStorage.setItem("DM_Admin_EMAIL", email);
+      localStorage.setItem("DM_Admin_NAME", DM_Admin_NAME);
+      await setDoc(doc(db, "admin", auth.currentUser.uid), {
+        name: DM_Admin_NAME,
+        id: auth.currentUser.uid,
+        email: email,
+        image:
+          "https://cdn.pixabay.com/photo/2018/08/28/12/41/avatar-3637425_960_720.png",
+      });
       setcheckVisible({ email: false, password: false });
     }
   };
