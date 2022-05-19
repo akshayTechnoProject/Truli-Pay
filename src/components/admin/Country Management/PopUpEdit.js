@@ -6,14 +6,16 @@ import SelectionDropdownMonth from "./components/SelectionDropdownMonth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Data from "../json/countryByContinent.json";
 import { db } from "../firebase/firebase";
-import { collection, addDoc } from "firebase/firestore";
-export default function PopUp(props) {
+import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
+import CheckBox from "./components/CheckBox";
+export default function PopUpEdit(props) {
+  console.log(props.edit);
   var continentList = [];
   const [countinentList, setCountinentList] = useState([]);
-  const [continent, setContinent] = useState();
+  const [continent, setContinent] = useState(props.edit.continent);
   const [countryList, setCountryList] = useState([]);
-  const [country, setCountry] = useState();
-  const [month, setMonth] = useState([]);
+  const [country, setCountry] = useState(props.edit.country);
+  const [month, setMonth] = useState(props.edit.bestMonths);
   const months = [
     "January",
     "February",
@@ -32,8 +34,8 @@ export default function PopUp(props) {
   ];
   const [disable, setDisable] = useState(false);
   const [error, setError] = useState({});
-  const [addPicture, setAddPicture] = useState(false);
-  const [image, setImage] = useState("");
+  const [addPicture, setAddPicture] = useState(true);
+  const [image, setImage] = useState(props.edit.image);
   const [change, setchange] = useState(false);
   const [showImg, setShowImg] = useState({
     src: "",
@@ -41,18 +43,18 @@ export default function PopUp(props) {
   });
 
   let [state, setState] = useState("");
-  const [placeList, setPlaceList] = useState([]);
+  const [placeList, setPlaceList] = useState(props.edit.placeToVisit);
   const [formData, setFormData] = useState({
-    description: "",
-    budgetFrom: "",
-    budgetTo: "",
-    safetyGuidelines: "",
+    description: props.edit.description,
+    budgetFrom: props.edit.budgetFrom,
+    budgetTo: props.edit.budgetTo,
+    safetyGuidelines: props.edit.safetyGuidelines,
   });
-  const [option1, setOption1] = useState(false);
-  const [option2, setOption2] = useState(false);
-  const [option3, setOption3] = useState(false);
-  const [option4, setOption4] = useState(false);
-  const [option5, setOption5] = useState(false);
+  const [option1, setOption1] = useState(props.edit.category.Mountains);
+  const [option2, setOption2] = useState(props.edit.category["Sea Side"]);
+  const [option3, setOption3] = useState(props.edit.category.Adventures);
+  const [option4, setOption4] = useState(props.edit.category.Desert);
+  const [option5, setOption5] = useState(props.edit.category.Romantic);
   useEffect(() => {
     Data.map((e, i) => {
       continentList.push(e.continent);
@@ -92,7 +94,12 @@ export default function PopUp(props) {
       isValid = false;
       error["budget"] = "Please enter budget";
     }
-    if (formData.budgetFrom <= formData.budgetTo + 100) {
+    console.log(
+      Number(formData.budgetFrom) + "_____________" + Number(formData.budgetTo)
+    );
+
+    console.log(Number(formData.budgetFrom) >= Number(formData.budgetTo) + 100);
+    if (Number(formData.budgetFrom) >= Number(formData.budgetTo) + 100) {
       isValid = false;
       error["budgetInvalid"] =
         "Maximum value can't be less then minimum (Ex. : from:4000 To: 4100)";
@@ -154,7 +161,10 @@ export default function PopUp(props) {
     setDisable(true);
     const uploadDataList = async (tempData) => {
       try {
-        await addDoc(collection(db, "cities"), tempData);
+        const docRef = doc(db, "cities", props.edit.id);
+
+        // Update the timestamp field with the value from the server
+        const updateTimestamp = await updateDoc(docRef, tempData);
       } catch (e) {
         console.warn(e);
       }
@@ -231,7 +241,7 @@ export default function PopUp(props) {
               <br />
               <br />
               <div className="d-flex justify-content-between">
-                <div className="page-header"> Add country </div>
+                <div className="page-header"> Edit country </div>
 
                 <button
                   className="btn btn-outline-success "
@@ -244,19 +254,6 @@ export default function PopUp(props) {
                     paddingLeft: "5px",
                   }}
                   onClick={() => {
-                    setShowImg({
-                      src: "",
-                      alt: "",
-                    });
-                    setFormData({
-                      description: "",
-                      budgetFrom: "",
-                      budgetTo: "",
-                      safetyGuidelines: "",
-                    });
-                    setMonth([]);
-                    setPlaceList([]);
-                    setDisable(false);
                     close();
                   }}
                 >
@@ -269,6 +266,7 @@ export default function PopUp(props) {
                     <SelectionDropdown
                       list={countinentList}
                       setState={handleContinent}
+                      state={continent}
                       label="Continent Name:"
                       firstOption="Select Continent"
                     />
@@ -288,6 +286,7 @@ export default function PopUp(props) {
                           }}
                           label="Country Name:"
                           firstOption="Select Country"
+                          state={country}
                         />
                         <div
                           className="text-danger"
@@ -303,93 +302,32 @@ export default function PopUp(props) {
                     <div class="form-group">
                       <label for="exampleInputPassword1"> Category: </label>
                       <br />
-                      <div className="row categoryDiv">
-                        <div className="form-check form-check-inline ">
-                          <input
-                            className="form-check-input mt-1"
-                            type="checkbox"
-                            id="inlineCheckbox1"
-                            name="option1"
-                            value="option1"
-                            onClick={(e) => setOption1(!option1)}
-                            style={{ cursor: "pointer" }}
-                          />
-                          <label
-                            className="form-check-label mb-2 checkBox"
-                            for="inlineCheckbox1"
-                          >
-                            Mountains
-                          </label>
-                        </div>
-                        <div className="form-check form-check-inline">
-                          <input
-                            className="form-check-input mt-1"
-                            type="checkbox"
-                            id="inlineCheckbox2"
-                            name="option2"
-                            value="option2"
-                            onClick={(e) => setOption2(!option2)}
-                            style={{ cursor: "pointer" }}
-                          />
-                          <label
-                            className="form-check-label mb-2 checkBox"
-                            for="inlineCheckbox2"
-                          >
-                            Sea Side
-                          </label>
-                        </div>
-                        <div className="form-check form-check-inline">
-                          <input
-                            className="form-check-input mt-1"
-                            type="checkbox"
-                            id="inlineCheckbox3"
-                            value="option3"
-                            name="option3"
-                            onClick={(e) => setOption3(!option3)}
-                            style={{ cursor: "pointer" }}
-                          />
-                          <label
-                            className="form-check-label mb-2 checkBox"
-                            for="inlineCheckbox3"
-                          >
-                            Adventures
-                          </label>
-                        </div>
-                        <div className="form-check form-check-inline">
-                          <input
-                            className="form-check-input mt-1"
-                            type="checkbox"
-                            id="inlineCheckbox4"
-                            value="option4"
-                            name="option4"
-                            onClick={(e) => setOption4(!option4)}
-                            style={{ cursor: "pointer" }}
-                          />
-                          <label
-                            className="form-check-label mb-2 checkBox"
-                            for="inlineCheckbox4"
-                          >
-                            Desert
-                          </label>
-                        </div>
-                        <div className="form-check form-check-inline">
-                          <input
-                            className="form-check-input mt-1"
-                            type="checkbox"
-                            id="inlineCheckbox5"
-                            value="option5"
-                            name="option5"
-                            onClick={(e) => setOption5(!option5)}
-                            style={{ cursor: "pointer" }}
-                          />
-                          <label
-                            className="form-check-label mb-2 checkBox"
-                            for="inlineCheckbox5"
-                          >
-                            Romantic
-                          </label>
-                        </div>
-                      </div>
+                      <CheckBox
+                        onChange={(e) => setOption1(e)}
+                        name="Mountains"
+                        initialState={option1}
+                      />
+                      <CheckBox
+                        onChange={(e) => setOption2(e)}
+                        name="Sea Side"
+                        initialState={option2}
+                      />
+                      <CheckBox
+                        onChange={(e) => setOption3(e)}
+                        name="Adventures"
+                        initialState={option3}
+                      />
+                      <CheckBox
+                        onChange={(e) => setOption4(e)}
+                        name="Desert"
+                        initialState={option4}
+                      />
+                      <CheckBox
+                        onChange={(e) => setOption5(e)}
+                        name="Romantic"
+                        initialState={option5}
+                      />
+
                       <div className="text-danger">{error.multiChoice}</div>
                     </div>
 
@@ -402,9 +340,9 @@ export default function PopUp(props) {
                         onChange={uploadPicture}
                         style={{ cursor: "pointer" }}
                       />
-                      {showImg.src != "" ? (
+                      {image != "" ? (
                         <img
-                          src={showImg.src}
+                          src={image}
                           className="form-img__img-preview"
                           style={{ width: "84px", height: "84px" }}
                           alt="imgs"

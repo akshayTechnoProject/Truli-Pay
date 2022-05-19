@@ -10,15 +10,20 @@ import {
   collection,
   onSnapshot,
 } from "firebase/firestore";
+
 import { db } from "../firebase/firebase";
 import PopUp from "./PopUp";
+import PopUpEdit from "./PopUpEdit";
 export default function CountryManagement() {
+  const [state, setState] = useState(false);
+  const [state1, setState1] = useState(false);
   const [listData, setListData] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
   const [sorting, setSorting] = useState({ field: "", order: "" });
   const [limit, setlimit] = useState(10);
+  const [edit, setEdit] = useState();
   const Header = [
     {
       name: "Sr. NO.",
@@ -54,7 +59,7 @@ export default function CountryManagement() {
       sortable: false,
     },
   ];
-
+  const [stateEdit, setstateEdit] = useState(false);
   const getData = () => {
     const q = query(collection(db, "cities"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -131,8 +136,29 @@ export default function CountryManagement() {
           <h1 className="page-header">Country Management</h1>
 
           <div className="popup">
-            <PopUp />
+            <button
+              className="btn btn-outline-success"
+              style={{
+                borderRadius: "20px",
+              }}
+              onClick={() => {
+                setState(!state);
+              }}
+            >
+              Add Country
+            </button>
+            <PopUp state={state} setState={(e) => setState(e)} />
           </div>
+          <div>
+            {state1 ? (
+              <PopUpEdit
+                edit={edit}
+                state={state1}
+                setState={(e) => setState1(e)}
+              />
+            ) : null}
+          </div>
+
           <div
             style={{
               backgroundColor: "white",
@@ -273,6 +299,8 @@ export default function CountryManagement() {
                                   style={{ cursor: "pointer" }}
                                   onClick={() => {
                                     console.log(e);
+                                    setState1(true);
+                                    setEdit(e);
                                     // setContinent(e.continent);
                                     // setPlaceList(e.placeToVisit);
                                     // var k = {
@@ -305,6 +333,14 @@ export default function CountryManagement() {
                                     //   budgetTo: e.budgetTo,
                                     //   safetyGuidelines: e.safetyGuidelines,
                                     // });
+                                    return (
+                                      <>
+                                        <PopUp
+                                          state={true}
+                                          setState={(e) => setState(e)}
+                                        />
+                                      </>
+                                    );
                                   }}
                                 ></i>
                               </td>

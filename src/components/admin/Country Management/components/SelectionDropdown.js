@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 export default function SelectionDropdown(props) {
-  const [input, setInput] = useState();
+  const [input, setInput] = useState(props.state ? props.state : undefined);
   const handleChange = (event) => {
     setInput(event.target.value);
   };
