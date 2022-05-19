@@ -354,7 +354,9 @@ export default function CountryManagement() {
               trigger={
                 <button
                   className="btn btn-outline-success"
-                  style={{ borderRadius: '20px' }}
+                  style={{
+                    borderRadius: '20px',
+                  }}
                 >
                   Add Country
                 </button>
@@ -364,7 +366,6 @@ export default function CountryManagement() {
               lockScroll={true}
               //className="popup"
               contentStyle={{
-                marginTop: '30px',
                 zIndex: '10',
               }}
               position="bottom center"
@@ -380,6 +381,9 @@ export default function CountryManagement() {
                     paddingBottom: '40px',
                   }}
                 >
+                  <br />
+                  <br />
+                  <br />
                   <div className="d-flex justify-content-between">
                     <div className="page-header"> Add country </div>
 
@@ -387,8 +391,11 @@ export default function CountryManagement() {
                       className="btn btn-outline-success "
                       style={{
                         fontSize: '30px',
-                        padding: 0,
+                        paddingTop: '0',
+                        paddingBottom: '0',
                         border: 'none',
+                        paddingRight: '5px',
+                        paddingLeft: '5px',
                       }}
                       onClick={close}
                     >
@@ -608,7 +615,7 @@ export default function CountryManagement() {
                           </div>
                           <div className="placeListDiv row">
                             {placeList.length !== 0 ? (
-                              <div>
+                              <div className="row ml-2">
                                 {placeList.map((subItems, i) => {
                                   return (
                                     <button className="btn btn-primary m-4 placeButton">
@@ -731,7 +738,7 @@ export default function CountryManagement() {
                         <div className="text-danger">{error.bestMonths}</div>
                         <div className="placeListDiv row">
                           {month.length !== 0 ? (
-                            <div>
+                            <div className="row ml-2 mt-0">
                               {month.map((subItems, i) => {
                                 return (
                                   <button className="btn btn-primary m-4 placeButton">
