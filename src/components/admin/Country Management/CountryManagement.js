@@ -391,7 +391,22 @@ export default function CountryManagement() {
                         padding: 0,
                         border: "none",
                       }}
-                      onClick={close}
+                      onClick={() => {
+                        setShowImg({
+                          src: "",
+                          alt: "",
+                        });
+                        setFormData({
+                          description: "",
+                          budgetFrom: "",
+                          budgetTo: "",
+                          safetyGuidelines: "",
+                        });
+                        setMonth([]);
+                        setPlaceList([]);
+                        setDisable(false);
+                        close();
+                      }}
                     >
                       &times;
                     </button>
