@@ -9,6 +9,7 @@ import SelectionDropdownMonth from "./components/SelectionDropdownMonth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
+import "./components/style.css";
 import {
   deleteDoc,
   doc,
@@ -348,7 +349,7 @@ export default function CountryManagement() {
               Add Country
             </button>
           </p> */}
-          <div>
+          <div className="popup ">
             <Popup
               trigger={
                 <button
@@ -361,9 +362,13 @@ export default function CountryManagement() {
               modal
               nested
               lockScroll={true}
+              //className="popup"
+
               contentStyle={{
-                marginTop: "30px",
+                marginTop: window.innerWidth <= 767 ? "95px" : "30px",
+                zIndex: "10",
               }}
+              position="bottom center"
             >
               {(close) => (
                 <div
@@ -639,47 +644,57 @@ export default function CountryManagement() {
                           <label for="exampleInputPassword1">
                             Budget Range Per Person:
                           </label>
-                          <div className="d-flex w-100">
-                            <label
-                              for="exampleInputPassword1"
-                              style={{ marginTop: "16px", marginRight: "5px" }}
-                            >
-                              From:
-                            </label>
-                            <input
-                              type="number"
-                              className="form-control ml-0"
-                              id="exampleInputPassword1"
-                              placeholder="Minimum ₹"
-                              name="budgetFrom"
-                              value={formData.budgetFrom}
-                              onChange={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  budgetFrom: e.target.value,
-                                })
-                              }
-                            />
-                            <label
-                              for="exampleInputPassword1"
-                              style={{ marginTop: "16px", marginRight: "5px" }}
-                            >
-                              To:
-                            </label>
-                            <input
-                              type="number"
-                              className="form-control ml-0"
-                              id="exampleInputPassword1"
-                              placeholder="Maximum ₹"
-                              name="budgetTo"
-                              value={formData.budgetTo}
-                              onChange={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  budgetTo: e.target.value,
-                                })
-                              }
-                            />
+                          <div className="row">
+                            <div className="d-flex w-50">
+                              <label
+                                for="exampleInputPassword1"
+                                style={{
+                                  marginTop: "16px",
+                                  marginRight: "5px",
+                                }}
+                              >
+                                From:
+                              </label>
+                              <input
+                                type="number"
+                                className="form-control ml-0"
+                                id="exampleInputPassword1"
+                                placeholder="Minimum ₹"
+                                name="budgetFrom"
+                                value={formData.budgetFrom}
+                                onChange={(e) =>
+                                  setFormData({
+                                    ...formData,
+                                    budgetFrom: e.target.value,
+                                  })
+                                }
+                              />
+                            </div>
+                            <div className="d-flex w-50">
+                              <label
+                                for="exampleInputPassword1"
+                                style={{
+                                  marginTop: "16px",
+                                  marginRight: "5px",
+                                }}
+                              >
+                                To:
+                              </label>
+                              <input
+                                type="number"
+                                className="form-control ml-0"
+                                id="exampleInputPassword1"
+                                placeholder="Maximum ₹"
+                                name="budgetTo"
+                                value={formData.budgetTo}
+                                onChange={(e) =>
+                                  setFormData({
+                                    ...formData,
+                                    budgetTo: e.target.value,
+                                  })
+                                }
+                              />
+                            </div>
                             <div className="text-danger">
                               {error.budgetInvalid}
                             </div>
@@ -755,6 +770,7 @@ export default function CountryManagement() {
                           type="submit"
                           className="btn btn-primary"
                           disabled={disable}
+                          style={{ borderRadius: "20px" }}
                           onClick={(e) => {
                             submitHandler(e);
                             if (validate()) close();

@@ -280,11 +280,9 @@ input {
 }
 
 /* ================= Country Form ===================== */
-/* 
-.CountryForm {
-  width: 600px;
-  padding-left: 20px;
-  padding-top: 20px;
+
+/* .CountryForm {
+  width: 600px !important;
 }
 @media (max-width: 950px) {
   .CountryForm {
@@ -332,5 +330,65 @@ input {
 .placeListDiv {
 }
 
-/* ===========================popup=====================
- */
+/* ===========================popup===================== */
+
+.popup-content {
+  width: 800px !important;
+  z-index: 100;
+  left: 6%;
+}
+@media (max-width: 1300px) {
+  .popup-content {
+    /* margin-top: 30px !important; */
+    width: 600px !important;
+    left: 8%;
+  }
+}
+@media (max-width: 1100px) {
+  .popup-content {
+    /* margin-top: 30px !important; */
+    width: 600px !important;
+    left: 10%;
+  }
+}
+@media (max-width: 1100px) {
+  .popup-content {
+    /* margin-top: 30px !important; */
+    width: 600px !important;
+    left: 11%;
+  }
+}
+@media (max-width: 950px) {
+  .popup-content {
+    /* margin-top: 30px !important; */
+    width: 600px !important;
+    left: 13%;
+  }
+}
+@media (max-width: 830px) {
+  .popup-content {
+    /* margin-top: 30px !important; */
+    width: 500px !important;
+    left: 14%;
+  }
+}
+@media (max-width: 767px) {
+  .popup-content {
+    /* top: 5% !important; */
+    width: 70% !important;
+    overflow-y: auto !important;
+    left: 0%;
+  }
+}
+@media (max-width: 450px) {
+  .popup-content {
+    /* margin-top: 90px !important;
+    margin-bottom: -90px !important; */
+    width: 90% !important;
+    overflow-y: auto !important;
+    left: 0%;
+  }
+  .popup-content {
+    margin-top: 30px !important;
+  }
+}
