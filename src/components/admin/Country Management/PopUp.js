@@ -146,7 +146,11 @@ export default function PopUp(props) {
   const handleContinent = (e) => {
     var temp = [];
 
-    setContinent(e);
+    if (e != 'Select Continent') {
+      setContinent(e);
+    } else {
+      setContinent('');
+    }
     Data.filter((e1, i) => e1.continent == e).map((e, i) => {
       temp.push(e.country);
     });
@@ -217,7 +221,6 @@ export default function PopUp(props) {
           contentStyle={{
             zIndex: '10',
           }}
-          position="bottom center"
         >
           {(close) => (
             <div
@@ -277,7 +280,7 @@ export default function PopUp(props) {
                     />
                     <div
                       className="text-danger"
-                      style={{ marginTop: '-13px', marginBottom: '5px' }}
+                      style={{ marginTop: '-20px', marginBottom: '15px' }}
                     >
                       {error.continent}
                     </div>
@@ -287,7 +290,11 @@ export default function PopUp(props) {
                         <SelectionDropdown
                           list={countryList}
                           setState={(e) => {
-                            setCountry(e);
+                            if (e != 'Select Country') {
+                              setCountry(e);
+                            } else {
+                              setCountry('');
+                            }
                           }}
                           label="Country Name:"
                           firstOption="Select Country"
@@ -295,8 +302,8 @@ export default function PopUp(props) {
                         <div
                           className="text-danger"
                           style={{
-                            marginTop: '-13px',
-                            marginBottom: '5px',
+                            marginTop: '-20px',
+                            marginBottom: '15px',
                           }}
                         >
                           {error.countryName}
@@ -405,6 +412,7 @@ export default function PopUp(props) {
                         onChange={uploadPicture}
                         style={{ cursor: 'pointer' }}
                       />
+                      <div className="text-danger">{error.img_err}</div>
                       {showImg.src != '' ? (
                         <img
                           src={showImg.src}
@@ -416,7 +424,6 @@ export default function PopUp(props) {
                         ''
                       )}
                     </div>
-                    <div className="text-danger">{error.img_err}</div>
                     <div className="form-group mb-4">
                       <label for="exampleFormControlTextarea1">
                         Description:
