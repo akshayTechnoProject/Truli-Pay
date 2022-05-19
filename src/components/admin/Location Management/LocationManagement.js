@@ -772,7 +772,6 @@ export default function LocationManagement() {
                           </div>
                         </div>
 
-                        {/* Currency */}
                         {/* <div className="form-group mb-4">
                           <label for="exampleFormControl">Currency:</label>
                           <input
@@ -791,6 +790,7 @@ export default function LocationManagement() {
                           <div className="text-danger">{error.currency}</div>
                         </div> */}
 
+                        {/* Currency */}
                         <div style={{ marginBottom: '35px' }}>
                           <SelectionDropdown
                             list={currencyList}

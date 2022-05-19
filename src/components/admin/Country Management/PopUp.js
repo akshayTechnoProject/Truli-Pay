@@ -121,7 +121,6 @@ export default function PopUp(props) {
     }
     setError(error);
     return isValid;
-    //return isValid;
   };
   const uploadPicture = async (e) => {
     e.preventDefault();
