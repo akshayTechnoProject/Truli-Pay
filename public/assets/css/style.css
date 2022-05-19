@@ -328,7 +328,9 @@ input {
 .placeDeleteIcon i:hover {
   color: rgb(255, 91, 91) !important;
 }
-.placeListDiv {
+
+.budgetRow {
+  margin-left: 2px;
 }
 
 /* ===========================popup===================== */

@@ -373,7 +373,7 @@ export default function CountryManagement() {
                   <br />
                   <br />
                   <div className="d-flex justify-content-between">
-                    <div className="page-header"> Add country </div>
+                    <div className="page-header"> Add Country </div>
 
                     <button
                       className="btn btn-outline-success "
@@ -606,7 +606,12 @@ export default function CountryManagement() {
                               <div className="row ml-2">
                                 {placeList.map((subItems, i) => {
                                   return (
-                                    <button className="btn btn-primary m-4 placeButton">
+                                    <button
+                                      className="btn btn-primary m-4 placeButton"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                      }}
+                                    >
                                       {subItems}
                                       <span className="placeDeleteIcon">
                                         <i
@@ -635,7 +640,7 @@ export default function CountryManagement() {
                           <label for="exampleInputPassword1">
                             Budget Range Per Person:
                           </label>
-                          <div className="row">
+                          <div className="row budgetRow">
                             <div className="d-flex w-50">
                               <label
                                 for="exampleInputPassword1"
@@ -729,7 +734,12 @@ export default function CountryManagement() {
                             <div className="row ml-2 mt-0">
                               {month.map((subItems, i) => {
                                 return (
-                                  <button className="btn btn-primary m-4 placeButton">
+                                  <button
+                                    className="btn btn-primary m-4 placeButton"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                    }}
+                                  >
                                     {subItems}{' '}
                                     <span className="placeDeleteIcon">
                                       <i
