@@ -1,17 +1,216 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import SelectionDropdown from "./components/SelectionDropdown";
 import SelectionDropdownMonth from "./components/SelectionDropdownMonth";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import Data from "../json/countryByContinent.json";
+import { db } from "../firebase/firebase";
+
+import { collection, addDoc } from "firebase/firestore";
 export default function PopUp() {
+  var continentList = [];
+  const [countinentList, setCountinentList] = useState([]);
+  const [continent, setContinent] = useState();
+  const [countryList, setCountryList] = useState([]);
+  const [country, setCountry] = useState();
+  const [month, setMonth] = useState([]);
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+
+    "November",
+
+    "December",
+  ];
+  const [disable, setDisable] = useState(false);
+  const [error, setError] = useState({});
+  const [addPicture, setAddPicture] = useState(false);
+  const [image, setImage] = useState("");
+  const [change, setchange] = useState(false);
+  const [showImg, setShowImg] = useState({
+    src: "",
+    alt: "",
+  });
+
+  let [state, setState] = useState("");
+  const [placeList, setPlaceList] = useState([]);
+  const [formData, setFormData] = useState({
+    description: "",
+    budgetFrom: "",
+    budgetTo: "",
+    safetyGuidelines: "",
+  });
+  const [option1, setOption1] = useState(false);
+  const [option2, setOption2] = useState(false);
+  const [option3, setOption3] = useState(false);
+  const [option4, setOption4] = useState(false);
+  const [option5, setOption5] = useState(false);
+  useEffect(() => {
+    Data.map((e, i) => {
+      continentList.push(e.continent);
+    });
+    setCountinentList([...new Set(continentList)]);
+  }, []);
+
+  const validate = () => {
+    let isValid = true;
+    let input = formData;
+    let error = {};
+    if (!country) {
+      isValid = false;
+      error["countryName"] = "Please enter country name";
+    }
+    if (!continent) {
+      isValid = false;
+      error["continent"] = "Please enter continent";
+    }
+    if (!addPicture) {
+      isValid = false;
+      error["img_err"] = "Please select the image.";
+    }
+    if (!input["description"].trim()) {
+      isValid = false;
+      error["description"] = "Please enter description";
+    }
+    if (placeList.length === 0) {
+      isValid = false;
+      error["placeToVisit"] = "Please enter name of place ";
+    }
+    if (!input["budgetFrom"]) {
+      isValid = false;
+      error["budget"] = "Please enter budget";
+    }
+    if (!input["budgetTo"]) {
+      isValid = false;
+      error["budget"] = "Please enter budget";
+    }
+    if (formData.budgetFrom <= formData.budgetTo + 100) {
+      isValid = false;
+      error["budgetInvalid"] =
+        "Maximum value can't be less then minimum (Ex. : from:4000 To: 4100)";
+    }
+    if (!input["safetyGuidelines"].trim()) {
+      isValid = false;
+      error["safetyGuidelines"] = "Please enter guidelines";
+    }
+    if (month.length === 0) {
+      isValid = false;
+      error["bestMonths"] = "Please enter months";
+    }
+    if (
+      option1 === false &&
+      option2 === false &&
+      option3 === false &&
+      option4 === false &&
+      option5 === false
+    ) {
+      isValid = false;
+      error["multiChoice"] = "Please select any one";
+    }
+    setError(error);
+    return isValid;
+    //return isValid;
+  };
+  const uploadPicture = async (e) => {
+    e.preventDefault();
+
+    const storage = getStorage();
+    const reference = ref(storage, `banner_${new Date().getTime()}.jpg`);
+
+    uploadBytes(reference, e.target.files[0])
+      .then((snapshot) => {
+        return getDownloadURL(snapshot.ref);
+      })
+      .then(async (downloadURL) => {
+        if (e.target.files[0]) {
+          setShowImg({
+            src: downloadURL,
+            alt: e.target.files[0].name,
+          });
+        }
+        setImage(downloadURL);
+      });
+    setAddPicture(true);
+  };
+  const handleContinent = (e) => {
+    var temp = [];
+
+    setContinent(e);
+    Data.filter((e1, i) => e1.continent == e).map((e, i) => {
+      temp.push(e.country);
+    });
+    setCountryList(temp);
+  };
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    setDisable(true);
+    const uploadDataList = async (tempData) => {
+      try {
+        await addDoc(collection(db, "cities"), tempData);
+      } catch (e) {
+        console.warn(e);
+      }
+    };
+
+    if (validate()) {
+      var tempData = {
+        continent: continent,
+        country: country,
+        description: formData.description,
+        placeToVisit: placeList,
+        budgetFrom: formData.budgetFrom,
+        budgetTo: formData.budgetTo,
+        safetyGuidelines: formData.safetyGuidelines,
+        bestMonths: month,
+        image: image,
+        category: {
+          Mountains: option1,
+          "Sea Side": option2,
+          Adventures: option3,
+          Desert: option4,
+          Romantic: option5,
+        },
+      };
+
+      uploadDataList(tempData).then(() => {
+        // navigate("/country-management");
+        setShowImg({
+          src: "",
+          alt: "",
+        });
+        setFormData({
+          description: "",
+          budgetFrom: "",
+          budgetTo: "",
+          safetyGuidelines: "",
+        });
+        setMonth([]);
+        setPlaceList([]);
+        setDisable(false);
+      });
+    } else {
+      setDisable(false);
+    }
+  };
   return (
     <>
-      <div>
+      <div className="popup">
         <Popup
           trigger={
             <button
               className="btn btn-outline-success"
-              style={{ borderRadius: "20px" }}
+              style={{
+                borderRadius: "20px",
+              }}
             >
               Add Country
             </button>
@@ -19,9 +218,11 @@ export default function PopUp() {
           modal
           nested
           lockScroll={true}
+          //className="popup"
           contentStyle={{
-            marginTop: "30px",
+            zIndex: "10",
           }}
+          position="bottom center"
         >
           {(close) => (
             <div
@@ -34,6 +235,9 @@ export default function PopUp() {
                 paddingBottom: "40px",
               }}
             >
+              <br />
+              <br />
+              <br />
               <div className="d-flex justify-content-between">
                 <div className="page-header"> Add country </div>
 
@@ -41,10 +245,28 @@ export default function PopUp() {
                   className="btn btn-outline-success "
                   style={{
                     fontSize: "30px",
-                    padding: 0,
+                    paddingTop: "0",
+                    paddingBottom: "0",
                     border: "none",
+                    paddingRight: "5px",
+                    paddingLeft: "5px",
                   }}
-                  onClick={close}
+                  onClick={() => {
+                    setShowImg({
+                      src: "",
+                      alt: "",
+                    });
+                    setFormData({
+                      description: "",
+                      budgetFrom: "",
+                      budgetTo: "",
+                      safetyGuidelines: "",
+                    });
+                    setMonth([]);
+                    setPlaceList([]);
+                    setDisable(false);
+                    close();
+                  }}
                 >
                   &times;
                 </button>
@@ -258,7 +480,7 @@ export default function PopUp() {
                       <div className="text-danger">{error.placeToVisit}</div>
                       <div className="placeListDiv row">
                         {placeList.length !== 0 ? (
-                          <div>
+                          <div className="row ml-2">
                             {placeList.map((subItems, i) => {
                               return (
                                 <button
@@ -276,7 +498,7 @@ export default function PopUp() {
 
                                         if (index !== -1) {
                                           array.splice(index, 1);
-                                          setMonth(array);
+                                          setPlaceList(array);
                                         }
                                         setchange(!change);
                                       }}
@@ -293,47 +515,57 @@ export default function PopUp() {
                       <label for="exampleInputPassword1">
                         Budget Range Per Person:
                       </label>
-                      <div className="d-flex w-100">
-                        <label
-                          for="exampleInputPassword1"
-                          style={{ marginTop: "16px", marginRight: "5px" }}
-                        >
-                          From:
-                        </label>
-                        <input
-                          type="number"
-                          className="form-control ml-0"
-                          id="exampleInputPassword1"
-                          placeholder="Minimum ₹"
-                          name="budgetFrom"
-                          value={formData.budgetFrom}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              budgetFrom: e.target.value,
-                            })
-                          }
-                        />
-                        <label
-                          for="exampleInputPassword1"
-                          style={{ marginTop: "16px", marginRight: "5px" }}
-                        >
-                          To:
-                        </label>
-                        <input
-                          type="number"
-                          className="form-control ml-0"
-                          id="exampleInputPassword1"
-                          placeholder="Maximum ₹"
-                          name="budgetTo"
-                          value={formData.budgetTo}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              budgetTo: e.target.value,
-                            })
-                          }
-                        />
+                      <div className="row">
+                        <div className="d-flex w-50">
+                          <label
+                            for="exampleInputPassword1"
+                            style={{
+                              marginTop: "16px",
+                              marginRight: "5px",
+                            }}
+                          >
+                            From:
+                          </label>
+                          <input
+                            type="number"
+                            className="form-control ml-0"
+                            id="exampleInputPassword1"
+                            placeholder="Minimum ₹"
+                            name="budgetFrom"
+                            value={formData.budgetFrom}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                budgetFrom: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                        <div className="d-flex w-50">
+                          <label
+                            for="exampleInputPassword1"
+                            style={{
+                              marginTop: "16px",
+                              marginRight: "5px",
+                            }}
+                          >
+                            To:
+                          </label>
+                          <input
+                            type="number"
+                            className="form-control ml-0"
+                            id="exampleInputPassword1"
+                            placeholder="Maximum ₹"
+                            name="budgetTo"
+                            value={formData.budgetTo}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                budgetTo: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
                         <div className="text-danger">{error.budgetInvalid}</div>
                       </div>
                       <div className="text-danger">{error.budget}</div>
@@ -372,7 +604,7 @@ export default function PopUp() {
                     <div className="text-danger">{error.bestMonths}</div>
                     <div className="placeListDiv row">
                       {month.length !== 0 ? (
-                        <div>
+                        <div className="row ml-2 mt-0">
                           {month.map((subItems, i) => {
                             return (
                               <button
@@ -407,6 +639,7 @@ export default function PopUp() {
                       type="submit"
                       className="btn btn-primary"
                       disabled={disable}
+                      style={{ borderRadius: "20px" }}
                       onClick={(e) => {
                         submitHandler(e);
                         if (validate()) close();
