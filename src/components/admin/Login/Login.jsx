@@ -9,10 +9,10 @@ import { db } from "../firebase/firebase";
 function Login() {
   const navigate = useNavigate();
 
-  // if (localStorage.getItem("DM_Admin_ID") != null) {
-  //   toast.error("Already login...!");
-  //   navigate("/dashboard");
-  // }
+  if (localStorage.getItem("DM_Admin_ID") != null) {
+    toast.error("Already login...!");
+    navigate("/dashboard");
+  }
   const auth = getAuth();
 
   const [email, setemail] = useState("");
