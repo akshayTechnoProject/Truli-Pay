@@ -15,9 +15,10 @@ export default function SelectionDropdownMonth(props) {
         <label for="exampleInputPassword1">{props.label}</label>
 
         <div>
+          {console.log(input)}
           <Dropdown
             options={props.list}
-            value={input}
+            value={input ? props.firstOption : input}
             onChange={handleChange}
             firstOption={props.firstOption}
           ></Dropdown>
