@@ -92,7 +92,7 @@ export default function PopUp(props) {
       isValid = false;
       error["budget"] = "Please enter budget";
     }
-    if (formData.budgetFrom <= formData.budgetTo + 100) {
+    if (formData.budgetFrom >= formData.budgetTo + 100) {
       isValid = false;
       error["budgetInvalid"] =
         "Maximum value can't be less then minimum (Ex. : from:4000 To: 4100)";
