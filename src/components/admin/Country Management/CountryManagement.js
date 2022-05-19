@@ -336,19 +336,7 @@ export default function CountryManagement() {
             </li>
           </ol>
           <h1 className="page-header">Country Management</h1>
-          {/* <p>
-            <button
-              className="btn btn-outline-success"
-              type="button"
-              data-toggle="collapse"
-              data-target="#collapseExample"
-              aria-expanded="false"
-              aria-controls="collapseExample"
-              style={{ borderRadius: "20px" }}
-            >
-              Add Country
-            </button>
-          </p> */}
+
           <div className="popup">
             <Popup
               trigger={
