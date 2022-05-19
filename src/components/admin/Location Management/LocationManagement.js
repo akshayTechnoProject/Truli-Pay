@@ -10,7 +10,6 @@ import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import Data from '../json/countryByContinent.json';
 import currencyData from '../json/countryByCurrency.json';
-import '../Country Management/components/style.css';
 import {
   deleteDoc,
   doc,

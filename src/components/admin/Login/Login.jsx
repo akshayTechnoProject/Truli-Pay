@@ -9,10 +9,6 @@ import { db } from "../firebase/firebase";
 function Login() {
   const navigate = useNavigate();
 
-  // if (localStorage.getItem("DM_Admin_ID") != null) {
-  //   toast.error("Already login...!");
-  //   navigate("/dashboard");
-  // }
   const auth = getAuth();
 
   const [email, setemail] = useState("");
@@ -132,6 +128,10 @@ function Login() {
   }
 
   useEffect(() => {
+    if (localStorage.getItem("DM_Admin_ID") != null) {
+      toast.error("Already login...!");
+      navigate("/dashboard");
+    }
     document.getElementById("page-loader").style.display = "none";
 
     var element = document.getElementById("page-container");
