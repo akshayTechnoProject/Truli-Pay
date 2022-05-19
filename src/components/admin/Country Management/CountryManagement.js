@@ -394,7 +394,7 @@ export default function CountryManagement() {
                   </div>
                   <div>
                     <div>
-                      <form>
+                      <form className="CountryForm">
                         <SelectionDropdown
                           list={countinentList}
                           setState={handleContinent}
@@ -432,91 +432,92 @@ export default function CountryManagement() {
                         <div class="form-group">
                           <label for="exampleInputPassword1"> Category: </label>
                           <br />
-
-                          <div className="form-check form-check-inline ">
-                            <input
-                              className="form-check-input mt-1"
-                              type="checkbox"
-                              id="inlineCheckbox1"
-                              name="option1"
-                              value="option1"
-                              onClick={(e) => setOption1(!option1)}
-                              style={{ cursor: 'pointer' }}
-                            />
-                            <label
-                              className="form-check-label mb-2 checkBox"
-                              for="inlineCheckbox1"
-                            >
-                              Mountains
-                            </label>
-                          </div>
-                          <div className="form-check form-check-inline">
-                            <input
-                              className="form-check-input mt-1"
-                              type="checkbox"
-                              id="inlineCheckbox2"
-                              name="option2"
-                              value="option2"
-                              onClick={(e) => setOption2(!option2)}
-                              style={{ cursor: 'pointer' }}
-                            />
-                            <label
-                              className="form-check-label mb-2 checkBox"
-                              for="inlineCheckbox2"
-                            >
-                              Sea Side
-                            </label>
-                          </div>
-                          <div className="form-check form-check-inline">
-                            <input
-                              className="form-check-input mt-1"
-                              type="checkbox"
-                              id="inlineCheckbox3"
-                              value="option3"
-                              name="option3"
-                              onClick={(e) => setOption3(!option3)}
-                              style={{ cursor: 'pointer' }}
-                            />
-                            <label
-                              className="form-check-label mb-2 checkBox"
-                              for="inlineCheckbox3"
-                            >
-                              Adventures
-                            </label>
-                          </div>
-                          <div className="form-check form-check-inline">
-                            <input
-                              className="form-check-input mt-1"
-                              type="checkbox"
-                              id="inlineCheckbox4"
-                              value="option4"
-                              name="option4"
-                              onClick={(e) => setOption4(!option4)}
-                              style={{ cursor: 'pointer' }}
-                            />
-                            <label
-                              className="form-check-label mb-2 checkBox"
-                              for="inlineCheckbox4"
-                            >
-                              Desert
-                            </label>
-                          </div>
-                          <div className="form-check form-check-inline">
-                            <input
-                              className="form-check-input mt-1"
-                              type="checkbox"
-                              id="inlineCheckbox5"
-                              value="option5"
-                              name="option5"
-                              onClick={(e) => setOption5(!option5)}
-                              style={{ cursor: 'pointer' }}
-                            />
-                            <label
-                              className="form-check-label mb-2 checkBox"
-                              for="inlineCheckbox5"
-                            >
-                              Romantic
-                            </label>
+                          <div className="row categoryDiv">
+                            <div className="form-check form-check-inline ">
+                              <input
+                                className="form-check-input mt-1"
+                                type="checkbox"
+                                id="inlineCheckbox1"
+                                name="option1"
+                                value="option1"
+                                onClick={(e) => setOption1(!option1)}
+                                style={{ cursor: 'pointer' }}
+                              />
+                              <label
+                                className="form-check-label mb-2 checkBox"
+                                for="inlineCheckbox1"
+                              >
+                                Mountains
+                              </label>
+                            </div>
+                            <div className="form-check form-check-inline">
+                              <input
+                                className="form-check-input mt-1"
+                                type="checkbox"
+                                id="inlineCheckbox2"
+                                name="option2"
+                                value="option2"
+                                onClick={(e) => setOption2(!option2)}
+                                style={{ cursor: 'pointer' }}
+                              />
+                              <label
+                                className="form-check-label mb-2 checkBox"
+                                for="inlineCheckbox2"
+                              >
+                                Sea Side
+                              </label>
+                            </div>
+                            <div className="form-check form-check-inline">
+                              <input
+                                className="form-check-input mt-1"
+                                type="checkbox"
+                                id="inlineCheckbox3"
+                                value="option3"
+                                name="option3"
+                                onClick={(e) => setOption3(!option3)}
+                                style={{ cursor: 'pointer' }}
+                              />
+                              <label
+                                className="form-check-label mb-2 checkBox"
+                                for="inlineCheckbox3"
+                              >
+                                Adventures
+                              </label>
+                            </div>
+                            <div className="form-check form-check-inline">
+                              <input
+                                className="form-check-input mt-1"
+                                type="checkbox"
+                                id="inlineCheckbox4"
+                                value="option4"
+                                name="option4"
+                                onClick={(e) => setOption4(!option4)}
+                                style={{ cursor: 'pointer' }}
+                              />
+                              <label
+                                className="form-check-label mb-2 checkBox"
+                                for="inlineCheckbox4"
+                              >
+                                Desert
+                              </label>
+                            </div>
+                            <div className="form-check form-check-inline">
+                              <input
+                                className="form-check-input mt-1"
+                                type="checkbox"
+                                id="inlineCheckbox5"
+                                value="option5"
+                                name="option5"
+                                onClick={(e) => setOption5(!option5)}
+                                style={{ cursor: 'pointer' }}
+                              />
+                              <label
+                                className="form-check-label mb-2 checkBox"
+                                for="inlineCheckbox5"
+                              >
+                                Romantic
+                              </label>
+                            </div>
                           </div>
                           <div className="text-danger">{error.multiChoice}</div>
                         </div>
