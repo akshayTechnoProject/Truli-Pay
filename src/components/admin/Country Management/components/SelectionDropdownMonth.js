@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
 export default function SelectionDropdownMonth(props) {
   const [input, setInput] = useState();
@@ -36,8 +36,8 @@ const Dropdown = ({ options, value, onChange, firstOption }) => {
         id="exampleInputPassword1"
         className="form-control ml-0"
         style={{
-          cursor: "pointer",
-          borderRadius: "17px",
+          cursor: 'pointer',
+          borderRadius: '17px',
         }}
       >
         <option value={undefined}>{firstOption}</option>

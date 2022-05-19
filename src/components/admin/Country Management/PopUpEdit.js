@@ -27,9 +27,7 @@ export default function PopUpEdit(props) {
     "August",
     "September",
     "October",
-
     "November",
-
     "December",
   ];
   const [disable, setDisable] = useState(false);
@@ -86,24 +84,25 @@ export default function PopUpEdit(props) {
       isValid = false;
       error["placeToVisit"] = "Please enter name of place ";
     }
+
     if (!input["budgetFrom"]) {
       isValid = false;
-      error["budget"] = "Please enter budget";
-    }
-    if (!input["budgetTo"]) {
+      error["budget"] = "Please enter Minimum budget";
+    } else if (!input["budgetTo"]) {
       isValid = false;
-      error["budget"] = "Please enter budget";
-    }
-    console.log(
-      Number(formData.budgetFrom) + "_____________" + Number(formData.budgetTo)
-    );
-
-    console.log(Number(formData.budgetFrom) >= Number(formData.budgetTo) + 100);
-    if (Number(formData.budgetFrom) >= Number(formData.budgetTo) + 100) {
+      error["budget"] = "Please enter maximum budget";
+    } else if (Number(formData.budgetFrom <= 0)) {
+      isValid = false;
+      error["budget"] = "Amount should be positive";
+    } else if (Number(formData.budgetTo) <= 0) {
+      isValid = false;
+      error["budget"] = "Amount should be positive";
+    } else if (Number(formData.budgetFrom) >= Number(formData.budgetTo)) {
       isValid = false;
       error["budgetInvalid"] =
         "Maximum value can't be less then minimum (Ex. : from:4000 To: 4100)";
     }
+
     if (!input["safetyGuidelines"].trim()) {
       isValid = false;
       error["safetyGuidelines"] = "Please enter guidelines";
@@ -150,7 +149,11 @@ export default function PopUpEdit(props) {
   const handleContinent = (e) => {
     var temp = [];
 
-    setContinent(e);
+    if (e != "Select Continent") {
+      setContinent(e);
+    } else {
+      setContinent("");
+    }
     Data.filter((e1, i) => e1.continent == e).map((e, i) => {
       temp.push(e.country);
     });
@@ -282,7 +285,11 @@ export default function PopUpEdit(props) {
                         <SelectionDropdown
                           list={countryList}
                           setState={(e) => {
-                            setCountry(e);
+                            if (e != "Select Country") {
+                              setCountry(e);
+                            } else {
+                              setCountry("");
+                            }
                           }}
                           label="Country Name:"
                           firstOption="Select Country"
@@ -531,8 +538,10 @@ export default function PopUpEdit(props) {
                       label=" Best Months to Visit:"
                       firstOption="Select Month"
                     />
-                    <div className="text-danger">{error.bestMonths}</div>
-                    <div className="placeListDiv row">
+                    <div className="text-danger" style={{ marginTop: "-15px" }}>
+                      {error.bestMonths}
+                    </div>
+                    <div className="placeListDiv row mb-2">
                       {month.length !== 0 ? (
                         <div className="row ml-2 mt-0">
                           {month.map((subItems, i) => {

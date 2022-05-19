@@ -86,13 +86,17 @@ export default function PopUp(props) {
     }
     if (!input["budgetFrom"]) {
       isValid = false;
-      error["budget"] = "Please enter budget";
-    }
-    if (!input["budgetTo"]) {
+      error["budget"] = "Please enter minimum budget";
+    } else if (!input["budgetTo"]) {
       isValid = false;
-      error["budget"] = "Please enter budget";
-    }
-    if (formData.budgetFrom >= formData.budgetTo + 100) {
+      error["budget"] = "Please enter maximum budget";
+    } else if (formData.budgetFrom <= 0) {
+      isValid = false;
+      error["budget"] = "Amount should be positive";
+    } else if (formData.budgetTo <= 0) {
+      isValid = false;
+      error["budget"] = "Amount should be positive";
+    } else if (formData.budgetFrom >= formData.budgetTo) {
       isValid = false;
       error["budgetInvalid"] =
         "Maximum value can't be less then minimum (Ex. : from:4000 To: 4100)";
@@ -103,7 +107,7 @@ export default function PopUp(props) {
     }
     if (month.length === 0) {
       isValid = false;
-      error["bestMonths"] = "Please enter months";
+      error["bestMonths"] = "Please select month";
     }
     if (
       option1 === false &&
@@ -117,7 +121,6 @@ export default function PopUp(props) {
     }
     setError(error);
     return isValid;
-    //return isValid;
   };
   const uploadPicture = async (e) => {
     e.preventDefault();
@@ -143,7 +146,11 @@ export default function PopUp(props) {
   const handleContinent = (e) => {
     var temp = [];
 
-    setContinent(e);
+    if (e != "Select Continent") {
+      setContinent(e);
+    } else {
+      setContinent("");
+    }
     Data.filter((e1, i) => e1.continent == e).map((e, i) => {
       temp.push(e.country);
     });
@@ -214,7 +221,6 @@ export default function PopUp(props) {
           contentStyle={{
             zIndex: "10",
           }}
-          position="bottom center"
         >
           {(close) => (
             <div
@@ -274,7 +280,7 @@ export default function PopUp(props) {
                     />
                     <div
                       className="text-danger"
-                      style={{ marginTop: "-13px", marginBottom: "5px" }}
+                      style={{ marginTop: "-20px", marginBottom: "15px" }}
                     >
                       {error.continent}
                     </div>
@@ -284,7 +290,11 @@ export default function PopUp(props) {
                         <SelectionDropdown
                           list={countryList}
                           setState={(e) => {
-                            setCountry(e);
+                            if (e != "Select Country") {
+                              setCountry(e);
+                            } else {
+                              setCountry("");
+                            }
                           }}
                           label="Country Name:"
                           firstOption="Select Country"
@@ -292,8 +302,8 @@ export default function PopUp(props) {
                         <div
                           className="text-danger"
                           style={{
-                            marginTop: "-13px",
-                            marginBottom: "5px",
+                            marginTop: "-20px",
+                            marginBottom: "15px",
                           }}
                         >
                           {error.countryName}
@@ -402,6 +412,7 @@ export default function PopUp(props) {
                         onChange={uploadPicture}
                         style={{ cursor: "pointer" }}
                       />
+                      <div className="text-danger">{error.img_err}</div>
                       {showImg.src != "" ? (
                         <img
                           src={showImg.src}
@@ -413,7 +424,6 @@ export default function PopUp(props) {
                         ""
                       )}
                     </div>
-                    <div className="text-danger">{error.img_err}</div>
                     <div className="form-group mb-4">
                       <label for="exampleFormControlTextarea1">
                         Description:
@@ -507,7 +517,7 @@ export default function PopUp(props) {
                       <label for="exampleInputPassword1">
                         Budget Range Per Person:
                       </label>
-                      <div className="row">
+                      <div className="row budgetRow">
                         <div className="d-flex w-50">
                           <label
                             for="exampleInputPassword1"
@@ -593,8 +603,10 @@ export default function PopUp(props) {
                       label=" Best Months to Visit:"
                       firstOption="Select Month"
                     />
-                    <div className="text-danger">{error.bestMonths}</div>
-                    <div className="placeListDiv row">
+                    <div className="text-danger" style={{ marginTop: "-15px" }}>
+                      {error.bestMonths}
+                    </div>
+                    <div className="monthDiv row mb-2 ">
                       {month.length !== 0 ? (
                         <div className="row ml-2 mt-0">
                           {month.map((subItems, i) => {
