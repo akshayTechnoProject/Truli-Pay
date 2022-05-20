@@ -57,15 +57,16 @@ function Login() {
       }
     } else {
       await checkAuth(email);
+      await localStorage.setItem("DM_Admin_CURRENTUSER", auth.currentUser);
+      await localStorage.setItem("DM_Admin_EMAIL", email);
 
-      localStorage.setItem("DM_Admin_ID", auth?.currentUser?.uid);
-      localStorage.setItem("DM_Admin_CURRENTUSER", auth?.currentUser);
-      localStorage.setItem("DM_Admin_EMAIL", email);
-      const docRef = doc(db, "admin", auth.currentUser.uid);
+      const docRef = doc(db, "admin", email);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
         console.log("Document data:", docSnap.data());
+        console.log("111Current User", auth.currentUser);
+        await localStorage.setItem("DM_Admin_ID", docSnap.data().id);
         localStorage.setItem("DM_Admin_NAME", docSnap.data()?.name);
         localStorage.setItem("DM_Admin_IMAGE", docSnap.data()?.image);
       } else {
