@@ -20,8 +20,6 @@ import { db } from '../firebase/firebase';
 function Login() {
   const navigate = useNavigate();
 
-  const auth = getAuth();
-
   const [email, setemail] = useState('');
   const [isDB, setIsDB] = useState(false);
   const [userID, setUserID] = useState('');
@@ -57,8 +55,8 @@ function Login() {
       }
     } else {
       await checkAuth(email);
-      await localStorage.setItem('DM_Admin_CURRENTUSER', auth.currentUser);
       await localStorage.setItem('DM_Admin_EMAIL', email);
+      const auth = await getAuth();
 
       const docRef = doc(db, 'admin', email);
       const docSnap = await getDoc(docRef);
@@ -92,6 +90,8 @@ function Login() {
     }
   };
   function checkAuth(tempEmail) {
+    const auth = getAuth();
+
     signInWithEmailAndPassword(auth, tempEmail.trim(), password)
       .then((userCredential) => {
         // Signed in
