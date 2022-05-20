@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import Popup from 'reactjs-popup';
-import 'reactjs-popup/dist/index.css';
-import SelectionDropdown from './components/SelectionDropdown';
-import SelectionDropdownMonth from './components/SelectionDropdownMonth';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import Data from '../json/countryByContinent.json';
-import { db } from '../firebase/firebase';
-import { collection, addDoc, updateDoc, doc } from 'firebase/firestore';
-import CheckBox from './components/CheckBox';
+import React, { useState, useEffect } from "react";
+import Popup from "reactjs-popup";
+import "reactjs-popup/dist/index.css";
+import SelectionDropdown from "./components/SelectionDropdown";
+import SelectionDropdownMonth from "./components/SelectionDropdownMonth";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import Data from "../json/countryByContinent.json";
+import { db } from "../firebase/firebase";
+import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
+import CheckBox from "./components/CheckBox";
 export default function PopUpEdit(props) {
   console.log(props.edit);
   var continentList = [];
@@ -17,20 +17,18 @@ export default function PopUpEdit(props) {
   const [country, setCountry] = useState(props.edit.country);
   const [month, setMonth] = useState(props.edit.bestMonths);
   const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-
-    'November',
-
-    'December',
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
   const [disable, setDisable] = useState(false);
   const [error, setError] = useState({});
@@ -38,11 +36,11 @@ export default function PopUpEdit(props) {
   const [image, setImage] = useState(props.edit.image);
   const [change, setchange] = useState(false);
   const [showImg, setShowImg] = useState({
-    src: '',
-    alt: '',
+    src: "",
+    alt: "",
   });
 
-  let [state, setState] = useState('');
+  let [state, setState] = useState("");
   const [placeList, setPlaceList] = useState(props.edit.placeToVisit);
   const [formData, setFormData] = useState({
     description: props.edit.description,
@@ -51,7 +49,7 @@ export default function PopUpEdit(props) {
     safetyGuidelines: props.edit.safetyGuidelines,
   });
   const [option1, setOption1] = useState(props.edit.category.Mountains);
-  const [option2, setOption2] = useState(props.edit.category['Sea Side']);
+  const [option2, setOption2] = useState(props.edit.category["Sea Side"]);
   const [option3, setOption3] = useState(props.edit.category.Adventures);
   const [option4, setOption4] = useState(props.edit.category.Desert);
   const [option5, setOption5] = useState(props.edit.category.Romantic);
@@ -68,49 +66,50 @@ export default function PopUpEdit(props) {
     let error = {};
     if (!country) {
       isValid = false;
-      error['countryName'] = 'Please enter country name';
+      error["countryName"] = "Please enter country name";
     }
     if (!continent) {
       isValid = false;
-      error['continent'] = 'Please enter continent';
+      error["continent"] = "Please enter continent";
     }
     if (!addPicture) {
       isValid = false;
-      error['img_err'] = 'Please select the image.';
+      error["img_err"] = "Please select the image.";
     }
-    if (!input['description'].trim()) {
+    if (!input["description"].trim()) {
       isValid = false;
-      error['description'] = 'Please enter description';
+      error["description"] = "Please enter description";
     }
     if (placeList.length === 0) {
       isValid = false;
-      error['placeToVisit'] = 'Please enter name of place ';
+      error["placeToVisit"] = "Please enter name of place ";
     }
-    if (!input['budgetFrom']) {
-      isValid = false;
-      error['budget'] = 'Please enter budget';
-    }
-    if (!input['budgetTo']) {
-      isValid = false;
-      error['budget'] = 'Please enter budget';
-    }
-    console.log(
-      Number(formData.budgetFrom) + '_____________' + Number(formData.budgetTo)
-    );
 
-    console.log(Number(formData.budgetFrom) >= Number(formData.budgetTo) + 100);
-    if (Number(formData.budgetFrom) >= Number(formData.budgetTo) + 100) {
+    if (!input["budgetFrom"]) {
       isValid = false;
-      error['budgetInvalid'] =
+      error["budget"] = "Please enter Minimum budget";
+    } else if (!input["budgetTo"]) {
+      isValid = false;
+      error["budget"] = "Please enter maximum budget";
+    } else if (Number(formData.budgetFrom <= 0)) {
+      isValid = false;
+      error["budget"] = "Amount should be positive";
+    } else if (Number(formData.budgetTo) <= 0) {
+      isValid = false;
+      error["budget"] = "Amount should be positive";
+    } else if (Number(formData.budgetFrom) >= Number(formData.budgetTo)) {
+      isValid = false;
+      error["budgetInvalid"] =
         "Maximum value can't be less then minimum (Ex. : from:4000 To: 4100)";
     }
-    if (!input['safetyGuidelines'].trim()) {
+
+    if (!input["safetyGuidelines"].trim()) {
       isValid = false;
-      error['safetyGuidelines'] = 'Please enter guidelines';
+      error["safetyGuidelines"] = "Please enter guidelines";
     }
     if (month.length === 0) {
       isValid = false;
-      error['bestMonths'] = 'Please enter months';
+      error["bestMonths"] = "Please enter months";
     }
     if (
       option1 === false &&
@@ -120,7 +119,7 @@ export default function PopUpEdit(props) {
       option5 === false
     ) {
       isValid = false;
-      error['multiChoice'] = 'Please select any one';
+      error["multiChoice"] = "Please select any one";
     }
     setError(error);
     return isValid;
@@ -150,7 +149,11 @@ export default function PopUpEdit(props) {
   const handleContinent = (e) => {
     var temp = [];
 
-    setContinent(e);
+    if (e != "Select Continent") {
+      setContinent(e);
+    } else {
+      setContinent("");
+    }
     Data.filter((e1, i) => e1.continent == e).map((e, i) => {
       temp.push(e.country);
     });
@@ -161,7 +164,7 @@ export default function PopUpEdit(props) {
     setDisable(true);
     const uploadDataList = async (tempData) => {
       try {
-        const docRef = doc(db, 'cities', props.edit.id);
+        const docRef = doc(db, "cities", props.edit.id);
 
         // Update the timestamp field with the value from the server
         const updateTimestamp = await updateDoc(docRef, tempData);
@@ -183,7 +186,7 @@ export default function PopUpEdit(props) {
         image: image,
         category: {
           Mountains: option1,
-          'Sea Side': option2,
+          "Sea Side": option2,
           Adventures: option3,
           Desert: option4,
           Romantic: option5,
@@ -193,14 +196,14 @@ export default function PopUpEdit(props) {
       uploadDataList(tempData).then(() => {
         // navigate("/country-management");
         setShowImg({
-          src: '',
-          alt: '',
+          src: "",
+          alt: "",
         });
         setFormData({
-          description: '',
-          budgetFrom: '',
-          budgetTo: '',
-          safetyGuidelines: '',
+          description: "",
+          budgetFrom: "",
+          budgetTo: "",
+          safetyGuidelines: "",
         });
         setMonth([]);
         setPlaceList([]);
@@ -222,19 +225,19 @@ export default function PopUpEdit(props) {
             props.setState(false);
           }}
           contentStyle={{
-            zIndex: '10',
+            zIndex: "10",
           }}
           position="bottom center"
         >
           {(close) => (
             <div
               style={{
-                height: '100vh',
-                padding: '20px',
-                whiteSpace: 'nowrap',
-                overflowY: 'visible',
-                overflowX: 'hidden',
-                paddingBottom: '40px',
+                height: "100vh",
+                padding: "20px",
+                whiteSpace: "nowrap",
+                overflowY: "visible",
+                overflowX: "hidden",
+                paddingBottom: "40px",
               }}
             >
               <br />
@@ -246,12 +249,12 @@ export default function PopUpEdit(props) {
                 <button
                   className="btn btn-outline-success "
                   style={{
-                    fontSize: '30px',
-                    paddingTop: '0',
-                    paddingBottom: '0',
-                    border: 'none',
-                    paddingRight: '5px',
-                    paddingLeft: '5px',
+                    fontSize: "30px",
+                    paddingTop: "0",
+                    paddingBottom: "0",
+                    border: "none",
+                    paddingRight: "5px",
+                    paddingLeft: "5px",
                   }}
                   onClick={() => {
                     close();
@@ -272,7 +275,7 @@ export default function PopUpEdit(props) {
                     />
                     <div
                       className="text-danger"
-                      style={{ marginTop: '-13px', marginBottom: '5px' }}
+                      style={{ marginTop: "-13px", marginBottom: "5px" }}
                     >
                       {error.continent}
                     </div>
@@ -282,7 +285,11 @@ export default function PopUpEdit(props) {
                         <SelectionDropdown
                           list={countryList}
                           setState={(e) => {
-                            setCountry(e);
+                            if (e != "Select Country") {
+                              setCountry(e);
+                            } else {
+                              setCountry("");
+                            }
                           }}
                           label="Country Name:"
                           firstOption="Select Country"
@@ -291,8 +298,8 @@ export default function PopUpEdit(props) {
                         <div
                           className="text-danger"
                           style={{
-                            marginTop: '-13px',
-                            marginBottom: '5px',
+                            marginTop: "-13px",
+                            marginBottom: "5px",
                           }}
                         >
                           {error.countryName}
@@ -338,17 +345,17 @@ export default function PopUpEdit(props) {
                         className="form-control-file imgInput"
                         id="exampleFormControlFile1"
                         onChange={uploadPicture}
-                        style={{ cursor: 'pointer' }}
+                        style={{ cursor: "pointer" }}
                       />
-                      {image != '' ? (
+                      {image != "" ? (
                         <img
                           src={image}
                           className="form-img__img-preview"
-                          style={{ width: '84px', height: '84px' }}
+                          style={{ width: "84px", height: "84px" }}
                           alt="imgs"
                         />
                       ) : (
-                        ''
+                        ""
                       )}
                     </div>
                     <div className="text-danger">{error.img_err}</div>
@@ -387,21 +394,21 @@ export default function PopUpEdit(props) {
                           onChange={(e) => {
                             if (e.target.value.trim().length != 0)
                               setState(e.target.value);
-                            else setState('');
+                            else setState("");
                           }}
                         />
                         <button
                           className="btn btn-sm btn-primary"
                           style={{
-                            borderRadius: '20px',
-                            height: '30px',
-                            marginTop: '14px',
+                            borderRadius: "20px",
+                            height: "30px",
+                            marginTop: "14px",
                           }}
                           onClick={(e) => {
                             e.preventDefault();
                             if (state)
                               setPlaceList([...new Set([...placeList, state])]);
-                            setState('');
+                            setState("");
                           }}
                         >
                           Add
@@ -450,8 +457,8 @@ export default function PopUpEdit(props) {
                           <label
                             for="exampleInputPassword1"
                             style={{
-                              marginTop: '16px',
-                              marginRight: '5px',
+                              marginTop: "16px",
+                              marginRight: "5px",
                             }}
                           >
                             From:
@@ -475,8 +482,8 @@ export default function PopUpEdit(props) {
                           <label
                             for="exampleInputPassword1"
                             style={{
-                              marginTop: '16px',
-                              marginRight: '5px',
+                              marginTop: "16px",
+                              marginRight: "5px",
                             }}
                           >
                             To:
@@ -531,7 +538,7 @@ export default function PopUpEdit(props) {
                       label=" Best Months to Visit:"
                       firstOption="Select Month"
                     />
-                    <div className="text-danger" style={{ marginTop: '-15px' }}>
+                    <div className="text-danger" style={{ marginTop: "-15px" }}>
                       {error.bestMonths}
                     </div>
                     <div className="placeListDiv row mb-2">
@@ -543,7 +550,7 @@ export default function PopUpEdit(props) {
                                 className="btn btn-primary m-4 placeButton"
                                 type="button"
                               >
-                                {subItems}{' '}
+                                {subItems}{" "}
                                 <span className="placeDeleteIcon">
                                   <i
                                     className="fa fa-trash placeDeleteIcon"
@@ -571,13 +578,13 @@ export default function PopUpEdit(props) {
                       type="submit"
                       className="btn btn-primary"
                       disabled={disable}
-                      style={{ borderRadius: '20px' }}
+                      style={{ borderRadius: "20px" }}
                       onClick={(e) => {
                         submitHandler(e);
                         if (validate()) close();
                       }}
                     >
-                      {disable ? 'Processing...' : 'Upload'}
+                      {disable ? "Processing..." : "Upload"}
                     </button>
                   </form>
                 </div>

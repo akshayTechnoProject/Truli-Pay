@@ -59,7 +59,6 @@ export default function CountryManagement() {
       sortable: false,
     },
   ];
-  const [stateEdit, setstateEdit] = useState(false);
   const getData = () => {
     const q = query(collection(db, 'cities'));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -301,46 +300,6 @@ export default function CountryManagement() {
                                     console.log(e);
                                     setState1(true);
                                     setEdit(e);
-                                    // setContinent(e.continent);
-                                    // setPlaceList(e.placeToVisit);
-                                    // var k = {
-                                    //   continent: continent,
-                                    //   country: country,
-                                    //   description: formData.description,
-                                    //   placeToVisit: placeList,
-                                    //   budgetFrom: formData.budgetFrom,
-                                    //   budgetTo: formData.budgetTo,
-                                    //   safetyGuidelines:
-                                    //     formData.safetyGuidelines,
-                                    //   bestMonths: month,
-                                    //   image: image,
-                                    //   category: {
-                                    //     Mountains: option1,
-                                    //     "Sea Side": option2,
-                                    //     Adventures: option3,
-                                    //     Desert: option4,
-                                    //     Romantic: option5,
-                                    //   },
-                                    // };
-                                    // setOption1(e.category.Mountains);
-                                    // setOption2(e.category["Sea Side"]);
-                                    // setOption3(e.category.Adventures);
-                                    // setOption4(e.category.Desert);
-                                    // setOption5(e.category.Romantic);
-                                    // setFormData({
-                                    //   description: e.description,
-                                    //   budgetFrom: e.budgetFrom,
-                                    //   budgetTo: e.budgetTo,
-                                    //   safetyGuidelines: e.safetyGuidelines,
-                                    // });
-                                    return (
-                                      <>
-                                        <PopUp
-                                          state={true}
-                                          setState={(e) => setState(e)}
-                                        />
-                                      </>
-                                    );
                                   }}
                                 ></i>
                               </td>
