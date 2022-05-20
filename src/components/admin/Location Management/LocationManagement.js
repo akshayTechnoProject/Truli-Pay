@@ -4,19 +4,6 @@ import Menu from '../include/Menu';
 import PopUp from './LocationPopUp';
 import { TableHeader, Pagination, Search } from '../Table';
 import { Dropdown, Table } from 'react-bootstrap';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import {
-  deleteDoc,
-  doc,
-  query,
-  setDoc,
-  collection,
-  getDocs,
-  addDoc,
-  onSnapshot,
-} from 'firebase/firestore';
-import { db, storage } from '../firebase/firebase';
-import { useNavigate } from 'react-router-dom';
 
 export default function LocationManagement() {
   const [totalItems, setTotalItems] = useState(0);

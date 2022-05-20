@@ -18,10 +18,11 @@ ReactDOM.render(
       hideProgressBar={false}
       newestOnTop={false}
       closeOnClick
-      rtl={false}
+      rtl={true}
       pauseOnFocusLoss
       draggable
       pauseOnHover
+      progressClassName="left-right"
       toastStyle={{
         backgroundColor: "rgb(0,0,0,0.3)",
         color: "#ffffff",

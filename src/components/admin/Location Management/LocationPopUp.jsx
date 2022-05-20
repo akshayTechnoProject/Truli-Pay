@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { Dropdown, Table } from 'react-bootstrap';
 import SelectionDropdown from '../Country Management/components/SelectionDropdown';
 import SelectionDropdownMonth from '../Country Management/components/SelectionDropdownMonth';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -7,18 +6,6 @@ import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import Data from '../json/countryByContinent.json';
 import currencyData from '../json/countryByCurrency.json';
-import {
-  deleteDoc,
-  doc,
-  query,
-  setDoc,
-  collection,
-  getDocs,
-  addDoc,
-  onSnapshot,
-} from 'firebase/firestore';
-import { db, storage } from '../firebase/firebase';
-import { useNavigate } from 'react-router-dom';
 
 export default function LocationPopUp(props) {
   const [countryList, setCountryList] = useState([]);
