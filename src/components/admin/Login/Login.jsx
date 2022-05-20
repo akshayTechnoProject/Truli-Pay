@@ -75,10 +75,10 @@ function Login() {
           email: email,
           image:
             "https://cdn.pixabay.com/photo/2018/08/28/12/41/avatar-3637425_960_720.png",
-          id: auth.currentUser.uid,
+          id: auth?.currentUser?.uid,
         };
         console.log("0000", tempData);
-        await setDoc(doc(db, "admin", auth.currentUser.uid), tempData);
+        await setDoc(doc(db, "admin", auth?.currentUser?.uid), tempData);
         localStorage.setItem(
           "DM_Admin_IMAGE",
           `https://cdn.pixabay.com/photo/2018/08/28/12/41/avatar-3637425_960_720.png`
