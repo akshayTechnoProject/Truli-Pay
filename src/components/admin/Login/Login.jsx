@@ -129,7 +129,7 @@ function Login() {
 
   useEffect(() => {
     if (localStorage.getItem("DM_Admin_ID") != null) {
-      // toast.error("Already login...!");
+      toast.error("Already login...!");
       navigate("/dashboard");
     }
     document.getElementById("page-loader").style.display = "none";
