@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { NavLink, useHistory } from "react-router-dom";
-import { db, storage } from "./firebase/firebase";
-import Loader from "./include/Loader";
-import Menu from "./include/Menu";
-import Footer from "./include/Footer";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import { NavLink, useHistory } from 'react-router-dom';
+import { db, storage } from './firebase/firebase';
+import Loader from './include/Loader';
+import Menu from './include/Menu';
+import Footer from './include/Footer';
+import axios from 'axios';
 import {
   getAuth,
   updatePassword,
@@ -17,25 +17,29 @@ import {
   query,
   collection,
   onSnapshot,
-} from "firebase/firestore";
+} from 'firebase/firestore';
 function Dashboard() {
   const [totalCountry, setTotalCountry] = useState(0);
   const [totalLocation, setTotalLocation] = useState(0);
 
   useEffect(() => {
-    onSnapshot(query(collection(db, "cities")), (querySnapshot) => {
+    onSnapshot(query(collection(db, 'cities')), (querySnapshot) => {
       setTotalCountry(querySnapshot.size);
     });
-    onSnapshot(query(collection(db, "location")), (querySnapshot) => {
+    onSnapshot(query(collection(db, 'location')), (querySnapshot) => {
       setTotalLocation(querySnapshot.size);
     });
 
-    document.getElementById("page-loader").style.display = "none";
+    document.getElementById('page-loader').style.display = 'none';
 
-    var element = document.getElementById("page-container");
-    element.classList.add("show");
+    var element = document.getElementById('page-container');
+    element.classList.add('show');
   }, []);
   console.log('Current User', getAuth().currentUser);
+  console.log('Image', localStorage.getItem('DM_Admin_EMAIL'));
+  console.log('Image', localStorage.getItem('DM_Admin_NAME'));
+  console.log('Image', localStorage.getItem('DM_Admin_IMAGE'));
+  console.log('Image', localStorage.getItem('DM_Admin_ID'));
   return (
     <>
       <Loader />
@@ -58,7 +62,7 @@ function Dashboard() {
             <div className="col-xl-3 col-md-6">
               <div
                 className="widget widget-stats bg-success"
-                style={{ borderRadius: "20px" }}
+                style={{ borderRadius: '20px' }}
               >
                 <div className="stats-icon">
                   <i className="fa fa-globe"></i>
@@ -77,7 +81,7 @@ function Dashboard() {
             <div className="col-xl-3 col-md-6">
               <div
                 className="widget widget-stats bg-dark"
-                style={{ borderRadius: "20px" }}
+                style={{ borderRadius: '20px' }}
               >
                 <div className="stats-icon">
                   <i className="fa fa-map-pin "></i>

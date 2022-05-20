@@ -5,7 +5,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Loader from "./include/Loader";
 import Menu from "./include/Menu";
 import Footer from "./include/Footer";
-import { doc, updateDoc, getDoc, onSnapshot } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "./firebase/firebase";
 import {
   getAuth,

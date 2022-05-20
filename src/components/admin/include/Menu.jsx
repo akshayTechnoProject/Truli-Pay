@@ -1,15 +1,24 @@
 import React, { useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { getAuth, signOut } from 'firebase/auth';
+
 function Menu() {
   const navigate = useNavigate();
 
   const Logout = () => {
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        console.log('Sign-out successful.');
+      })
+      .catch((error) => {
+        console.log('An error happened.');
+      });
     localStorage.removeItem('DM_Admin_ID');
     localStorage.removeItem('DM_Admin_EMAIL');
     localStorage.removeItem('DM_Admin_NAME');
     localStorage.removeItem('DM_Admin_IMAGE');
-    localStorage.removeItem('DM_Admin_CURRENTUSER');
     navigate('/travel-app-admin');
     toast.success('Logout Successfully...!');
   };
