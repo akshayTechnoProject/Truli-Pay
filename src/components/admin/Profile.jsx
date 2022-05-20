@@ -90,7 +90,7 @@ export default function Profile() {
     e.preventDefault();
     if (validate()) {
       setDisable(true);
-      const updateId = localStorage.getItem('DM_Admin_ID');
+      const updateId = localStorage.getItem('DM_Admin_EMAIL');
       if (isPicUpload) {
         const adminRef = doc(db, 'admin', updateId);
         await updateDoc(adminRef, { name: profileInfo.name, image: image })
