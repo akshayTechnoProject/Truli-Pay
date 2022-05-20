@@ -6,6 +6,12 @@ import Menu from './include/Menu';
 import Footer from './include/Footer';
 import axios from 'axios';
 import {
+  getAuth,
+  updatePassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+} from 'firebase/auth';
+import {
   deleteDoc,
   doc,
   query,
@@ -28,7 +34,7 @@ function Dashboard() {
     var element = document.getElementById('page-container');
     element.classList.add('show');
   }, []);
-
+  console.log('Current User', getAuth().currentUser);
   return (
     <>
       <Loader />
@@ -86,6 +92,7 @@ function Dashboard() {
                 </div>
               </div>
             </div>
+
             {/* <div className="col-xl-3 col-md-6">
                   <div className="widget widget-stats bg-orange">
                      <div className="stats-icon"><i className="fa fa-dollar-sign"></i></div>

@@ -81,7 +81,6 @@ export default function Profile() {
         });
     }
   };
-  console.log('aaaaaaaa', img.src);
   const InputEvent = (e) => {
     const newProfileInfo = { ...profileInfo };
     newProfileInfo[e.target.name] = e.target.value;
@@ -103,12 +102,14 @@ export default function Profile() {
             setIsPicUpload(false);
             setChange(!change);
             setImage();
+            updateId = '';
           })
           .catch((error) => {
             toast.error('Something went wrong!');
             console.log(error);
             setDisable(false);
             setIsPicUpload(false);
+            updateId = '';
           });
       } else {
         console.log('hii');
