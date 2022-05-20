@@ -59,7 +59,7 @@ export default function LocationPopUp(props) {
     safetyGuidelines: '',
     purpose: '',
     summary: '',
-    currency: '',
+    //currency: '',
   });
   const [option1, setOption1] = useState(false);
   const [option2, setOption2] = useState(false);
@@ -82,11 +82,12 @@ export default function LocationPopUp(props) {
   var file = '';
   const uploadPicture = async (e) => {
     e.preventDefault();
+    setDisable(true);
     file = e.target.files[0];
     const storage = getStorage();
     const reference = ref(storage, `banner_${new Date().getTime()}.jpg`);
 
-    uploadBytes(reference, file)
+    await uploadBytes(reference, file)
       .then((snapshot) => {
         return getDownloadURL(snapshot.ref);
       })
@@ -98,8 +99,9 @@ export default function LocationPopUp(props) {
           });
         }
         setImage(downloadURL);
+        setAddPicture(true);
       });
-    setAddPicture(true);
+    setDisable(false);
   };
 
   const validate = () => {
@@ -130,27 +132,27 @@ export default function LocationPopUp(props) {
       isValid = false;
       error['placeToVisit'] = 'Please enter name of place ';
     }
-    if (!input['budgetFrom']) {
-      isValid = false;
-      error['budget'] = 'Please enter budget';
-    }
-    //if (!input['currency']) {
-    //  isValid = false;
-    //  error['currency'] = 'Please enter currency';
-    //}
     if (!currency) {
       isValid = false;
       error['currency'] = 'Please select currency';
     }
-    if (!input['budgetTo']) {
-      isValid = false;
-      error['budget'] = 'Please enter budget';
-    }
-    if (Number(input['budgetFrom']) >= Number(input['budgetTo']) + 100) {
-      isValid = false;
-      error['budgetInvalid'] =
-        "Maximum value can't be less then minimum (Ex. : from:4000 To: 4100)";
-    }
+    //if (!input['budgetFrom']) {
+    //isValid = false;
+    //error['budget'] = 'Please enter budget';
+    //}
+    //if (!input['currency']) {
+    //  isValid = false;
+    //  error['currency'] = 'Please enter currency';
+    //}
+    //if (!input['budgetTo']) {
+    //isValid = false;
+    //error['budget'] = 'Please enter budget';
+    //}
+    //if (Number(input['budgetFrom']) >= Number(input['budgetTo']) + 100) {
+    //isValid = false;
+    //error['budgetInvalid'] =
+    //"Maximum value can't be less then minimum (Ex. : from:4000 To: 4100)";
+    //}
     if (!input['budgetFrom']) {
       isValid = false;
       error['budget'] = 'Please enter budget';
@@ -205,20 +207,19 @@ export default function LocationPopUp(props) {
     if (validate()) {
       var tempData = {
         //continent: continent,
-        //country: country,
-        description: formData.description,
-        placeToVisit: topDestinations,
+        country: country,
+        topDestinations: topDestinations,
         budgetFrom: formData.budgetFrom,
         budgetTo: formData.budgetTo,
         safetyGuidelines: formData.safetyGuidelines,
         bestMonths: month,
         image: image,
         category: {
-          Mountains: option1,
-          'Sea Side': option2,
-          Adventures: option3,
-          Desert: option4,
-          Romantic: option5,
+          Sunny: option1,
+          Cloudy: option2,
+          Rainy: option3,
+          Windy: option4,
+          Snowy: option5,
         },
       };
 
@@ -640,7 +641,7 @@ export default function LocationPopUp(props) {
                           src={showImg.src}
                           className="form-img__img-preview"
                           style={{ width: '84px', height: '84px' }}
-                          alt="imgs"
+                          alt={showImg.alt}
                         />
                       ) : (
                         ''
