@@ -206,7 +206,6 @@ export default function LocationPopUp(props) {
 
     if (validate()) {
       var tempData = {
-        //continent: continent,
         country: country,
         topDestinations: topDestinations,
         budgetFrom: formData.budgetFrom,

@@ -1,25 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
-
+import { db, storage } from './firebase/firebase';
 import Loader from './include/Loader';
 import Menu from './include/Menu';
 import Footer from './include/Footer';
 import axios from 'axios';
-
+import {
+  deleteDoc,
+  doc,
+  query,
+  collection,
+  onSnapshot,
+} from 'firebase/firestore';
 function Dashboard() {
-  const [restaurants, setRestaurants] = useState(0);
-  const [customers, setCustomers] = useState(0);
-  const [orders, setOrders] = useState(0);
-
-  
+  const [totalCountry, setTotalCountry] = useState(0);
+  const [totalLocation, setTotalLocation] = useState(0);
 
   useEffect(() => {
+    onSnapshot(query(collection(db, 'cities')), (querySnapshot) => {
+      setTotalCountry(querySnapshot.size);
+    });
+    onSnapshot(query(collection(db, 'location')), (querySnapshot) => {
+      setTotalLocation(querySnapshot.size);
+    });
     document.getElementById('page-loader').style.display = 'none';
 
     var element = document.getElementById('page-container');
     element.classList.add('show');
-
-    
   }, []);
 
   return (
@@ -42,29 +49,35 @@ function Dashboard() {
           <h1 className="page-header">Dashboard </h1>
           <div className="row">
             <div className="col-xl-3 col-md-6">
-              <div className="widget widget-stats bg-blue">
+              <div
+                className="widget widget-stats bg-success"
+                style={{ borderRadius: '20px' }}
+              >
                 <div className="stats-icon">
-                  <i className="fa fa-users"></i>
+                  <i className="fa fa-globe"></i>
                 </div>
                 <div className="stats-info">
-                  <h4>Total Users</h4>
-                  <p>{restaurants || 20}</p>
+                  <h4>Total Countries</h4>
+                  <p>{totalCountry}</p>
                 </div>
                 <div className="stats-link">
-                  <NavLink to="/users">
+                  <NavLink to="/country-management">
                     View Detail <i className="fa fa-arrow-alt-circle-right"></i>
                   </NavLink>
                 </div>
               </div>
             </div>
             <div className="col-xl-3 col-md-6">
-              <div className="widget widget-stats bg-dark">
+              <div
+                className="widget widget-stats bg-dark"
+                style={{ borderRadius: '20px' }}
+              >
                 <div className="stats-icon">
-                  <i className="fa fa-users"></i>
+                  <i className="fa fa-map-pin "></i>
                 </div>
                 <div className="stats-info">
-                  <h4>Total Posts</h4>
-                  <p>{customers|| 12}</p>
+                  <h4>Total Location</h4>
+                  <p>{totalLocation}</p>
                 </div>
                 <div className="stats-link">
                   <a href="">
