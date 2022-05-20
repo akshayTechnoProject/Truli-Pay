@@ -501,6 +501,7 @@ export default function PopUpEdit(props) {
                                 budgetTo: e.target.value,
                               })
                             }
+                            accept="image/png, image/gif, image/jpeg"
                           />
                         </div>
                         <div className="text-danger">{error.budgetInvalid}</div>

@@ -411,6 +411,7 @@ export default function PopUp(props) {
                         id="exampleFormControlFile1"
                         onChange={uploadPicture}
                         style={{ cursor: "pointer" }}
+                        accept="image/png, image/gif, image/jpeg"
                       />
                       <div className="text-danger">{error.img_err}</div>
                       {showImg.src != "" ? (
