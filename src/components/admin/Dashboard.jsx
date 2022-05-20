@@ -17,12 +17,12 @@ function Dashboard() {
     onSnapshot(query(collection(db, 'location')), (querySnapshot) => {
       setTotalLocation(querySnapshot.size);
     });
-    setTimeout(() => {
-      document.getElementById('page-loader').style.display = 'none';
+    //setTimeout(() => {
+    document.getElementById('page-loader').style.display = 'none';
 
-      var element = document.getElementById('page-container');
-      element.classList.add('show');
-    }, 2000);
+    var element = document.getElementById('page-container');
+    element.classList.add('show');
+    //}, 2000);
   }, []);
   console.log('Current User', getAuth().currentUser);
   console.log('Image', localStorage.getItem('DM_Admin_EMAIL'));
