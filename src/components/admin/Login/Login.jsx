@@ -42,37 +42,7 @@ function Login() {
       }
     } else {
       await checkAuth(email);
-      await localStorage.setItem('DM_Admin_EMAIL', email);
-      const auth = await getAuth();
 
-      const docRef = doc(db, 'admin', email);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        console.log('Document data:', docSnap.data());
-        console.log('111Current User', auth.currentUser);
-        await localStorage.setItem('DM_Admin_ID', docSnap.data().id);
-        localStorage.setItem('DM_Admin_NAME', docSnap.data()?.name);
-        localStorage.setItem('DM_Admin_IMAGE', docSnap.data()?.image);
-      } else {
-        // doc.data() will be undefined in this case
-        console.log('No such document!');
-        const tempData = {
-          name: 'Admin',
-          email: email,
-          image:
-            'https://cdn.pixabay.com/photo/2018/08/28/12/41/avatar-3637425_960_720.png',
-          id: auth.currentUser.uid,
-        };
-        console.log('0000', tempData);
-        await setDoc(doc(db, 'admin', auth.currentUser.uid), tempData);
-        localStorage.setItem(
-          'DM_Admin_IMAGE',
-          `https://cdn.pixabay.com/photo/2018/08/28/12/41/avatar-3637425_960_720.png`
-        );
-        localStorage.setItem('DM_Admin_NAME', 'Admin');
-        console.log('created Doc');
-      }
       setcheckVisible({ email: false, password: false });
     }
   };
@@ -87,8 +57,38 @@ function Login() {
         console.log(user);
         setemail('');
         setpassword('');
+        localStorage.setItem('DM_Admin_EMAIL', email);
+        const auth = getAuth();
+
+        const docRef = doc(db, 'admin', email);
+        const docSnap = getDoc(docRef);
+
+        if (docSnap.exists()) {
+          console.log('Document data:', docSnap.data());
+          console.log('111Current User', auth.currentUser);
+          localStorage.setItem('DM_Admin_ID', docSnap.data().id);
+          localStorage.setItem('DM_Admin_NAME', docSnap.data()?.name);
+          localStorage.setItem('DM_Admin_IMAGE', docSnap.data()?.image);
+        } else {
+          // doc.data() will be undefined in this case
+          console.log('No such document!');
+          const tempData = {
+            name: 'Admin',
+            email: email,
+            image:
+              'https://cdn.pixabay.com/photo/2018/08/28/12/41/avatar-3637425_960_720.png',
+            id: auth.currentUser.uid,
+          };
+          console.log('0000', tempData);
+          setDoc(doc(db, 'admin', auth.currentUser.uid), tempData);
+          localStorage.setItem(
+            'DM_Admin_IMAGE',
+            `https://cdn.pixabay.com/photo/2018/08/28/12/41/avatar-3637425_960_720.png`
+          );
+          localStorage.setItem('DM_Admin_NAME', 'Admin');
+          console.log('created Doc');
+        }
         navigate('/dashboard');
-        // ...
       })
       .catch((error) => {
         // const errorCode = error.code;
