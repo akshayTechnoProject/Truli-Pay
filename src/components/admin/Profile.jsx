@@ -92,23 +92,42 @@ export default function Profile() {
     if (validate()) {
       setDisable(true);
       const updateId = localStorage.getItem('DM_Admin_ID');
-
-      const adminRef = doc(db, 'admin', updateId);
-      await updateDoc(adminRef, { name: profileInfo.name, image: image })
-        .then(() => {
-          localStorage.setItem('DM_Admin_NAME', profileInfo.name);
-          localStorage.setItem('DM_Admin_IMAGE', img.src);
-          toast.success('Profile Updated Successfully');
-          setDisable(false);
-          setIsPicUpload(false);
-          setChange(!change);
-        })
-        .catch((error) => {
-          toast.error('Something went wrong!');
-          console.log(error);
-          setDisable(false);
-          setIsPicUpload(false);
-        });
+      if (isPicUpload) {
+        const adminRef = doc(db, 'admin', updateId);
+        await updateDoc(adminRef, { name: profileInfo.name, image: image })
+          .then(() => {
+            localStorage.setItem('DM_Admin_NAME', profileInfo.name);
+            localStorage.setItem('DM_Admin_IMAGE', image);
+            toast.success('Profile Updated Successfully');
+            setDisable(false);
+            setIsPicUpload(false);
+            setChange(!change);
+            setImage();
+          })
+          .catch((error) => {
+            toast.error('Something went wrong!');
+            console.log(error);
+            setDisable(false);
+            setIsPicUpload(false);
+          });
+      } else {
+        console.log('hii');
+        const adminRef = doc(db, 'admin', updateId);
+        await updateDoc(adminRef, { name: profileInfo.name })
+          .then(() => {
+            localStorage.setItem('DM_Admin_NAME', profileInfo.name);
+            toast.success('Profile Updated Successfully');
+            setDisable(false);
+            setIsPicUpload(false);
+            setChange(!change);
+          })
+          .catch((error) => {
+            toast.error('Something went wrong!');
+            console.log(error);
+            setDisable(false);
+            setIsPicUpload(false);
+          });
+      }
     }
   };
 
