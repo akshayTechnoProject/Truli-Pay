@@ -1,23 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, useHistory } from 'react-router-dom';
-import { db, storage } from './firebase/firebase';
+import { NavLink } from 'react-router-dom';
+import { db } from './firebase/firebase';
 import Loader from './include/Loader';
 import Menu from './include/Menu';
 import Footer from './include/Footer';
-import axios from 'axios';
-import {
-  getAuth,
-  updatePassword,
-  EmailAuthProvider,
-  reauthenticateWithCredential,
-} from 'firebase/auth';
-import {
-  deleteDoc,
-  doc,
-  query,
-  collection,
-  onSnapshot,
-} from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+import { query, collection, onSnapshot } from 'firebase/firestore';
 function Dashboard() {
   const [totalCountry, setTotalCountry] = useState(0);
   const [totalLocation, setTotalLocation] = useState(0);
