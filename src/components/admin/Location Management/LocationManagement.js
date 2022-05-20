@@ -207,17 +207,17 @@ export default function LocationManagement() {
                           />
                         </thead>
                         <tbody></tbody>
-                        <div className="row m-5 d-flex justify-content-center w-100">
-                          <div className="mx-auto m-5  d-flex justify-content-center w-100">
-                            <img
-                              src="./assets/img/icon/no-location.png"
-                              className="form-img__img-preview"
-                              style={{ width: '100px', height: '100px' }}
-                              alt=""
-                            />
-                          </div>
-                        </div>
                       </Table>
+                      <div className="row d-flex justify-content-center w-100">
+                        <div className="mx-auto  d-flex justify-content-center w-100">
+                          <img
+                            src="./assets/img/icon/no-location.png"
+                            className="form-img__img-preview"
+                            style={{ width: '100px', height: '100px' }}
+                            alt=""
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
