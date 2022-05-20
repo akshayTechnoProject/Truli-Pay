@@ -4,7 +4,7 @@ import Menu from '../include/Menu';
 import PopUp from './LocationPopUp';
 import { TableHeader, Pagination, Search } from '../Table';
 import { Dropdown, Table } from 'react-bootstrap';
-
+import LocationPopUp from './LocationPopUp';
 export default function LocationManagement() {
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -73,7 +73,7 @@ export default function LocationManagement() {
           </ol>
           <h1 className="page-header">Location Management</h1>
 
-          <div className="popup">
+          {/* <div className="popup">
             <button
               className="btn btn-outline-success"
               style={{
@@ -86,7 +86,8 @@ export default function LocationManagement() {
               Add Location
             </button>
             <PopUp state={state} setState={(e) => setState(e)} />
-          </div>
+          </div> */}
+          <LocationPopUp />
 
           <div
             style={{
