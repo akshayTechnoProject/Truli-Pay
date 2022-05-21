@@ -215,38 +215,16 @@ export default function PopUpEdit(props) {
   };
   return (
     <>
-      <div className="popup">
-        <Popup
-          open={props.state}
-          modal
-          nested
-          lockScroll={true}
-          onClose={() => {
-            props.setState(false);
-          }}
-          contentStyle={{
-            zIndex: "10",
-          }}
-          position="bottom center"
-        >
-          {(close) => (
-            <div
-              style={{
-                height: "100vh",
-                padding: "20px",
-                whiteSpace: "nowrap",
-                overflowY: "visible",
-                overflowX: "hidden",
-                paddingBottom: "40px",
-              }}
-            >
+      <div>
+        {props.state ? (
+          <div className="card card-body " style={{ borderRadius: "20px" }}>
+            <div className="px-5 w-75 ">
               <br />
-              <br />
-              <br />
+
               <div className="d-flex justify-content-between">
                 <div className="page-header"> Edit country </div>
 
-                <button
+                {/* <button
                   className="btn btn-outline-success "
                   style={{
                     fontSize: "30px",
@@ -257,11 +235,11 @@ export default function PopUpEdit(props) {
                     paddingLeft: "5px",
                   }}
                   onClick={() => {
-                    close();
+                    props.setState(false);
                   }}
                 >
                   &times;
-                </button>
+                </button> */}
               </div>
               <div>
                 <div>
@@ -582,7 +560,7 @@ export default function PopUpEdit(props) {
                       style={{ borderRadius: "20px" }}
                       onClick={(e) => {
                         submitHandler(e);
-                        if (validate()) close();
+                        if (validate()) props.setState(false);
                       }}
                     >
                       {disable ? "Processing..." : "Upload"}
@@ -591,8 +569,8 @@ export default function PopUpEdit(props) {
                 </div>
               </div>
             </div>
-          )}
-        </Popup>
+          </div>
+        ) : null}
       </div>
     </>
   );

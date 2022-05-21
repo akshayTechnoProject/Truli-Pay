@@ -1,27 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { async } from "@firebase/util";
-import {
-  doc,
-  setDoc,
-  addDoc,
-  getDocs,
-  onSnapshot,
-  collection,
-  query,
-  where,
-  getDoc,
-  isEmpty,
-} from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 function Login() {
   const navigate = useNavigate();
 
   const [email, setemail] = useState("");
-  const [isDB, setIsDB] = useState(false);
   const [userID, setUserID] = useState("");
   const [password, setpassword] = useState("");
   const [disable, setDisable] = useState(false);
@@ -55,37 +42,7 @@ function Login() {
       }
     } else {
       await checkAuth(email);
-      await localStorage.setItem("DM_Admin_EMAIL", email);
-      const auth = await getAuth();
 
-      const docRef = doc(db, "admin", email);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
-        console.log("111Current User", auth.currentUser);
-        await localStorage.setItem("DM_Admin_ID", docSnap.data().id);
-        localStorage.setItem("DM_Admin_NAME", docSnap.data()?.name);
-        localStorage.setItem("DM_Admin_IMAGE", docSnap.data()?.image);
-      } else {
-        // doc.data() will be undefined in this case
-        console.log("No such document!");
-        const tempData = {
-          name: "Admin",
-          email: email,
-          image:
-            "https://cdn.pixabay.com/photo/2018/08/28/12/41/avatar-3637425_960_720.png",
-          id: auth?.currentUser?.uid,
-        };
-        console.log("0000", tempData);
-        await setDoc(doc(db, "admin", auth?.currentUser?.uid), tempData);
-        localStorage.setItem(
-          "DM_Admin_IMAGE",
-          `https://cdn.pixabay.com/photo/2018/08/28/12/41/avatar-3637425_960_720.png`
-        );
-        localStorage.setItem("DM_Admin_NAME", "Admin");
-        console.log("created Doc");
-      }
       setcheckVisible({ email: false, password: false });
     }
   };
@@ -112,11 +69,11 @@ function Login() {
           errorMessage.search("user-not-found") === -1
         ) {
           if (errorMessage.search("auth/network-request-failed") !== -1)
-            toast.error("Please, Connect with internet.");
-          else toast.error("Incorrect email or password ");
+            toast.error(".Please, Connect with internet");
+          else toast.error("!Incorrect email or password ");
           setDisable(false);
         } else {
-          toast.error(`Something Went Wrong`);
+          toast.error(`!Something Went Wrong`);
           setDisable(false);
         }
       });
@@ -157,7 +114,9 @@ function Login() {
 
   useEffect(() => {
     if (localStorage.getItem("DM_Admin_ID") != null) {
-      toast.error("Already login...!");
+      toast.success(
+        `Already login as ${localStorage.getItem("DM_Admin_NAME")}`
+      );
       navigate("/dashboard");
     }
     document.getElementById("page-loader").style.display = "none";

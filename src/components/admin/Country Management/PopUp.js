@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import Popup from 'reactjs-popup';
-import 'reactjs-popup/dist/index.css';
-import SelectionDropdown from './components/SelectionDropdown';
-import SelectionDropdownMonth from './components/SelectionDropdownMonth';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import Data from '../json/countryByContinent.json';
-import { db } from '../firebase/firebase';
-import { collection, addDoc } from 'firebase/firestore';
+import React, { useState, useEffect } from "react";
+import Popup from "reactjs-popup";
+import "reactjs-popup/dist/index.css";
+import SelectionDropdown from "./components/SelectionDropdown";
+import SelectionDropdownMonth from "./components/SelectionDropdownMonth";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import Data from "../json/countryByContinent.json";
+import { db } from "../firebase/firebase";
+import { collection, addDoc } from "firebase/firestore";
 export default function PopUp(props) {
   var continentList = [];
   const [countinentList, setCountinentList] = useState([]);
@@ -15,36 +15,36 @@ export default function PopUp(props) {
   const [country, setCountry] = useState();
   const [month, setMonth] = useState([]);
   const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
   const [disable, setDisable] = useState(false);
   const [error, setError] = useState({});
   const [addPicture, setAddPicture] = useState(false);
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState("");
   const [change, setchange] = useState(false);
   const [showImg, setShowImg] = useState({
-    src: '',
-    alt: '',
+    src: "",
+    alt: "",
   });
 
-  let [state, setState] = useState('');
+  let [state, setState] = useState("");
   const [placeList, setPlaceList] = useState([]);
   const [formData, setFormData] = useState({
-    description: '',
-    budgetFrom: '',
-    budgetTo: '',
-    safetyGuidelines: '',
+    description: "",
+    budgetFrom: "",
+    budgetTo: "",
+    safetyGuidelines: "",
   });
   const [option1, setOption1] = useState(false);
   const [option2, setOption2] = useState(false);
@@ -64,48 +64,48 @@ export default function PopUp(props) {
     let error = {};
     if (!country) {
       isValid = false;
-      error['countryName'] = 'Please enter country name';
+      error["countryName"] = "Please enter country name";
     }
     if (!continent) {
       isValid = false;
-      error['continent'] = 'Please enter continent';
+      error["continent"] = "Please enter continent";
     }
     if (!addPicture) {
       isValid = false;
-      error['img_err'] = 'Please select the image.';
+      error["img_err"] = "Please select the image.";
     }
-    if (!input['description'].trim()) {
+    if (!input["description"].trim()) {
       isValid = false;
-      error['description'] = 'Please enter description';
+      error["description"] = "Please enter description";
     }
     if (placeList.length === 0) {
       isValid = false;
-      error['placeToVisit'] = 'Please enter name of place ';
+      error["placeToVisit"] = "Please enter name of place ";
     }
-    if (!input['budgetFrom']) {
+    if (!input["budgetFrom"]) {
       isValid = false;
-      error['budget'] = 'Please enter minimum budget';
-    } else if (!input['budgetTo']) {
+      error["budget"] = "Please enter minimum budget";
+    } else if (!input["budgetTo"]) {
       isValid = false;
-      error['budget'] = 'Please enter maximum budget';
+      error["budget"] = "Please enter maximum budget";
     } else if (formData.budgetFrom <= 0) {
       isValid = false;
-      error['budget'] = 'Amount should be positive';
+      error["budget"] = "Amount should be positive";
     } else if (formData.budgetTo <= 0) {
       isValid = false;
-      error['budget'] = 'Amount should be positive';
+      error["budget"] = "Amount should be positive";
     } else if (formData.budgetFrom >= formData.budgetTo) {
       isValid = false;
-      error['budgetInvalid'] =
+      error["budgetInvalid"] =
         "Maximum value can't be less then minimum (Ex. : from:4000 To: 4100)";
     }
-    if (!input['safetyGuidelines'].trim()) {
+    if (!input["safetyGuidelines"].trim()) {
       isValid = false;
-      error['safetyGuidelines'] = 'Please enter guidelines';
+      error["safetyGuidelines"] = "Please enter guidelines";
     }
     if (month.length === 0) {
       isValid = false;
-      error['bestMonths'] = 'Please select month';
+      error["bestMonths"] = "Please select month";
     }
     if (
       option1 === false &&
@@ -115,7 +115,7 @@ export default function PopUp(props) {
       option5 === false
     ) {
       isValid = false;
-      error['multiChoice'] = 'Please select any one';
+      error["multiChoice"] = "Please select any one";
     }
     setError(error);
     return isValid;
@@ -144,10 +144,10 @@ export default function PopUp(props) {
   const handleContinent = (e) => {
     var temp = [];
 
-    if (e != 'Select Continent') {
+    if (e != "Select Continent") {
       setContinent(e);
     } else {
-      setContinent('');
+      setContinent("");
     }
     Data.filter((e1, i) => e1.continent == e).map((e, i) => {
       temp.push(e.country);
@@ -159,7 +159,7 @@ export default function PopUp(props) {
     setDisable(true);
     const uploadDataList = async (tempData) => {
       try {
-        await addDoc(collection(db, 'cities'), tempData);
+        await addDoc(collection(db, "cities"), tempData);
       } catch (e) {
         console.warn(e);
       }
@@ -178,7 +178,7 @@ export default function PopUp(props) {
         image: image,
         category: {
           Mountains: option1,
-          'Sea Side': option2,
+          "Sea Side": option2,
           Adventures: option3,
           Desert: option4,
           Romantic: option5,
@@ -188,14 +188,14 @@ export default function PopUp(props) {
       uploadDataList(tempData).then(() => {
         // navigate("/country-management");
         setShowImg({
-          src: '',
-          alt: '',
+          src: "",
+          alt: "",
         });
         setFormData({
-          description: '',
-          budgetFrom: '',
-          budgetTo: '',
-          safetyGuidelines: '',
+          description: "",
+          budgetFrom: "",
+          budgetTo: "",
+          safetyGuidelines: "",
         });
         setMonth([]);
         setPlaceList([]);
@@ -207,66 +207,45 @@ export default function PopUp(props) {
   };
   return (
     <>
-      <div className="popup">
-        <Popup
-          open={props.state}
-          modal
-          nested
-          lockScroll={true}
-          onClose={() => {
-            props.setState(false);
-          }}
-          contentStyle={{
-            zIndex: '10',
-          }}
-        >
-          {(close) => (
-            <div
-              style={{
-                height: '100vh',
-                padding: '20px',
-                whiteSpace: 'nowrap',
-                overflowY: 'visible',
-                overflowX: 'hidden',
-                paddingBottom: '40px',
-              }}
-            >
-              <br />
-              <br />
+      <div>
+        {props.state ? (
+          <div className="card card-body " style={{ borderRadius: "20px" }}>
+            <div className="px-5 w-75 ">
               <br />
               <div className="d-flex justify-content-between">
                 <div className="page-header"> Add country </div>
 
-                <button
+                {/* <button
                   className="btn btn-outline-success "
                   style={{
-                    fontSize: '30px',
-                    paddingTop: '0',
-                    paddingBottom: '0',
-                    border: 'none',
-                    paddingRight: '5px',
-                    paddingLeft: '5px',
+                    fontSize: "30px",
+                    paddingTop: "0",
+                    paddingBottom: "0",
+                    border: "none",
+                    paddingRight: "5px",
+                    paddingLeft: "5px",
                   }}
                   onClick={() => {
                     setShowImg({
-                      src: '',
-                      alt: '',
+                      src: "",
+                      alt: "",
                     });
                     setFormData({
-                      description: '',
-                      budgetFrom: '',
-                      budgetTo: '',
-                      safetyGuidelines: '',
+                      description: "",
+                      budgetFrom: "",
+                      budgetTo: "",
+                      safetyGuidelines: "",
                     });
                     setMonth([]);
                     setPlaceList([]);
                     setDisable(false);
-                    close();
+                    props.setState(false);
                   }}
                 >
                   &times;
-                </button>
+                </button> */}
               </div>
+
               <div>
                 <div>
                   <form className="CountryForm">
@@ -278,7 +257,7 @@ export default function PopUp(props) {
                     />
                     <div
                       className="text-danger"
-                      style={{ marginTop: '-20px', marginBottom: '15px' }}
+                      style={{ marginTop: "-20px", marginBottom: "15px" }}
                     >
                       {error.continent}
                     </div>
@@ -288,10 +267,10 @@ export default function PopUp(props) {
                         <SelectionDropdown
                           list={countryList}
                           setState={(e) => {
-                            if (e != 'Select Country') {
+                            if (e != "Select Country") {
                               setCountry(e);
                             } else {
-                              setCountry('');
+                              setCountry("");
                             }
                           }}
                           label="Country Name:"
@@ -300,8 +279,8 @@ export default function PopUp(props) {
                         <div
                           className="text-danger"
                           style={{
-                            marginTop: '-20px',
-                            marginBottom: '15px',
+                            marginTop: "-20px",
+                            marginBottom: "15px",
                           }}
                         >
                           {error.countryName}
@@ -320,7 +299,7 @@ export default function PopUp(props) {
                             name="option1"
                             value="option1"
                             onClick={(e) => setOption1(!option1)}
-                            style={{ cursor: 'pointer' }}
+                            style={{ cursor: "pointer" }}
                           />
                           <label
                             className="form-check-label mb-2 checkBox"
@@ -337,7 +316,7 @@ export default function PopUp(props) {
                             name="option2"
                             value="option2"
                             onClick={(e) => setOption2(!option2)}
-                            style={{ cursor: 'pointer' }}
+                            style={{ cursor: "pointer" }}
                           />
                           <label
                             className="form-check-label mb-2 checkBox"
@@ -354,7 +333,7 @@ export default function PopUp(props) {
                             value="option3"
                             name="option3"
                             onClick={(e) => setOption3(!option3)}
-                            style={{ cursor: 'pointer' }}
+                            style={{ cursor: "pointer" }}
                           />
                           <label
                             className="form-check-label mb-2 checkBox"
@@ -371,7 +350,7 @@ export default function PopUp(props) {
                             value="option4"
                             name="option4"
                             onClick={(e) => setOption4(!option4)}
-                            style={{ cursor: 'pointer' }}
+                            style={{ cursor: "pointer" }}
                           />
                           <label
                             className="form-check-label mb-2 checkBox"
@@ -388,7 +367,7 @@ export default function PopUp(props) {
                             value="option5"
                             name="option5"
                             onClick={(e) => setOption5(!option5)}
-                            style={{ cursor: 'pointer' }}
+                            style={{ cursor: "pointer" }}
                           />
                           <label
                             className="form-check-label mb-2 checkBox"
@@ -408,19 +387,19 @@ export default function PopUp(props) {
                         className="form-control-file imgInput"
                         id="exampleFormControlFile1"
                         onChange={uploadPicture}
-                        style={{ cursor: 'pointer' }}
+                        style={{ cursor: "pointer" }}
                         accept="image/png, image/gif, image/jpeg"
                       />
                       <div className="text-danger">{error.img_err}</div>
-                      {showImg.src != '' ? (
+                      {showImg.src != "" ? (
                         <img
                           src={showImg.src}
                           className="form-img__img-preview"
-                          style={{ width: '84px', height: '84px' }}
+                          style={{ width: "84px", height: "84px" }}
                           alt="imgs"
                         />
                       ) : (
-                        ''
+                        ""
                       )}
                     </div>
                     <div className="form-group mb-4">
@@ -458,21 +437,21 @@ export default function PopUp(props) {
                           onChange={(e) => {
                             if (e.target.value.trim().length != 0)
                               setState(e.target.value);
-                            else setState('');
+                            else setState("");
                           }}
                         />
                         <button
                           className="btn btn-sm btn-primary"
                           style={{
-                            borderRadius: '20px',
-                            height: '30px',
-                            marginTop: '14px',
+                            borderRadius: "20px",
+                            height: "30px",
+                            marginTop: "14px",
                           }}
                           onClick={(e) => {
                             e.preventDefault();
                             if (state)
                               setPlaceList([...new Set([...placeList, state])]);
-                            setState('');
+                            setState("");
                           }}
                         >
                           Add
@@ -521,8 +500,8 @@ export default function PopUp(props) {
                           <label
                             for="exampleInputPassword1"
                             style={{
-                              marginTop: '16px',
-                              marginRight: '5px',
+                              marginTop: "16px",
+                              marginRight: "5px",
                             }}
                           >
                             From:
@@ -546,8 +525,8 @@ export default function PopUp(props) {
                           <label
                             for="exampleInputPassword1"
                             style={{
-                              marginTop: '16px',
-                              marginRight: '5px',
+                              marginTop: "16px",
+                              marginRight: "5px",
                             }}
                           >
                             To:
@@ -602,7 +581,7 @@ export default function PopUp(props) {
                       label=" Best Months to Visit:"
                       firstOption="Select Month"
                     />
-                    <div className="text-danger" style={{ marginTop: '-15px' }}>
+                    <div className="text-danger" style={{ marginTop: "-15px" }}>
                       {error.bestMonths}
                     </div>
                     <div className="monthDiv row mb-2 ">
@@ -614,7 +593,7 @@ export default function PopUp(props) {
                                 className="btn btn-primary m-4 placeButton"
                                 type="button"
                               >
-                                {subItems}{' '}
+                                {subItems}{" "}
                                 <span className="placeDeleteIcon">
                                   <i
                                     className="fa fa-trash placeDeleteIcon"
@@ -642,20 +621,20 @@ export default function PopUp(props) {
                       type="submit"
                       className="btn btn-primary"
                       disabled={disable}
-                      style={{ borderRadius: '20px' }}
+                      style={{ borderRadius: "20px" }}
                       onClick={(e) => {
                         submitHandler(e);
-                        if (validate()) close();
+                        if (validate()) props.setState(false);
                       }}
                     >
-                      {disable ? 'Processing...' : 'Upload'}
+                      {disable ? "Processing..." : "Upload"}
                     </button>
                   </form>
                 </div>
               </div>
             </div>
-          )}
-        </Popup>
+          </div>
+        ) : null}
       </div>
     </>
   );

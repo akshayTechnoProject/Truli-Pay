@@ -141,8 +141,10 @@ export default function CountryManagement() {
               className="btn btn-outline-success"
               style={{
                 borderRadius: "20px",
+                marginBottom: "20px",
               }}
               onClick={() => {
+                setState1(false);
                 setState(!state);
               }}
             >
@@ -300,7 +302,9 @@ export default function CountryManagement() {
                                   style={{ cursor: "pointer" }}
                                   onClick={() => {
                                     console.log(e);
-                                    setState1(true);
+                                    setState(false);
+                                    setState1(!state1);
+
                                     setEdit(e);
                                   }}
                                 ></i>

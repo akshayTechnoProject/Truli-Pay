@@ -23,6 +23,8 @@ function App() {
   return (
     <Routes>
       <Route path="/travel-app-admin" exact element={<Login />} />
+      <Route path="*" exact element={<Login />} />
+
       <Route path="/forgot-password" exact element={<ForgotPass />} />
       <Route path="/admin-profile" exact element={<Profile />} />
       <Route path="/dashboard" exact element={<Dashboard />} />
