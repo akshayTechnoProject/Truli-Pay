@@ -3,8 +3,6 @@ import Loader from "../include/Loader";
 import Menu from "../include/Menu";
 import { TableHeader, Pagination, Search } from "../Table";
 import { Dropdown, Table } from "react-bootstrap";
-import { confirmAlert } from "react-confirm-alert"; // Import
-import "react-confirm-alert/src/react-confirm-alert.css";
 import {
   deleteDoc,
   doc,
@@ -12,7 +10,6 @@ import {
   collection,
   onSnapshot,
 } from "firebase/firestore";
-import { Button, Modal } from "react-bootstrap";
 import { db } from "../firebase/firebase";
 import PopUp from "./PopUp";
 import PopUpEdit from "./PopUpEdit";
@@ -313,21 +310,8 @@ export default function CountryManagement() {
                                   className="fa fa-trash delete"
                                   style={{ cursor: "pointer" }}
                                   onClick={() => {
-                                    setShow(true);
-                                    confirmAlert({
-                                      title: "Confirm to submit",
-                                      message: "Are you sure to do this.",
-                                      buttons: [
-                                        {
-                                          label: "Yes",
-                                          onClick: () => alert("Click Yes"),
-                                        },
-                                        {
-                                          label: "No",
-                                          onClick: () => alert("Click No"),
-                                        },
-                                      ],
-                                    });
+                                    // setShow(true);
+                                    // setOpen(true);
                                     //   async () => {
                                     //   if (
                                     //     window.confirm(

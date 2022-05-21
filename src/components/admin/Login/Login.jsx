@@ -89,19 +89,19 @@ function Login() {
       setcheckVisible({ email: false, password: false });
     }
   };
-  function checkAuth(tempEmail) {
+  const checkAuth = async (tempEmail) => {
     const auth = getAuth();
 
-    signInWithEmailAndPassword(auth, tempEmail.trim(), password)
-      .then((userCredential) => {
+    await signInWithEmailAndPassword(auth, tempEmail.trim(), password)
+      .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user;
         setUserID(auth?.currentUser?.uid);
         console.log(user);
         setemail("");
         setpassword("");
+        await credential(auth?.currentUser?.uid);
         navigate("/dashboard");
-        // ...
       })
       .catch((error) => {
         // const errorCode = error.code;
@@ -120,7 +120,40 @@ function Login() {
           setDisable(false);
         }
       });
-  }
+  };
+  const credential = async (uid) => {
+    await localStorage.setItem("DM_Admin_EMAIL", email);
+    const auth = await getAuth();
+
+    const docRef = doc(db, "admin", email);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+      console.log("111Current User", auth.currentUser);
+      await localStorage.setItem("DM_Admin_ID", docSnap.data().id);
+      localStorage.setItem("DM_Admin_NAME", docSnap.data()?.name);
+      localStorage.setItem("DM_Admin_IMAGE", docSnap.data()?.image);
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+      const tempData = {
+        name: "Admin",
+        email: email,
+        image:
+          "https://cdn.pixabay.com/photo/2018/08/28/12/41/avatar-3637425_960_720.png",
+        id: uid,
+      };
+      console.log("0000", tempData);
+      await setDoc(doc(db, "admin", uid), tempData);
+      localStorage.setItem(
+        "DM_Admin_IMAGE",
+        `https://cdn.pixabay.com/photo/2018/08/28/12/41/avatar-3637425_960_720.png`
+      );
+      localStorage.setItem("DM_Admin_NAME", "Admin");
+      console.log("created Doc");
+    }
+  };
 
   useEffect(() => {
     if (localStorage.getItem("DM_Admin_ID") != null) {

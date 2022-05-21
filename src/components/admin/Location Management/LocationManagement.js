@@ -4,7 +4,7 @@ import Menu from '../include/Menu';
 import PopUp from './LocationPopUp';
 import { TableHeader, Pagination, Search } from '../Table';
 import { Dropdown, Table } from 'react-bootstrap';
-
+import LocationPopUp from './LocationPopUp';
 export default function LocationManagement() {
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -73,7 +73,7 @@ export default function LocationManagement() {
           </ol>
           <h1 className="page-header">Location Management</h1>
 
-          <div className="popup">
+          {/* <div className="popup">
             <button
               className="btn btn-outline-success"
               style={{
@@ -86,7 +86,8 @@ export default function LocationManagement() {
               Add Location
             </button>
             <PopUp state={state} setState={(e) => setState(e)} />
-          </div>
+          </div> */}
+          <LocationPopUp />
 
           <div
             style={{
@@ -207,17 +208,17 @@ export default function LocationManagement() {
                           />
                         </thead>
                         <tbody></tbody>
-                        <div className="row m-5 d-flex justify-content-center w-100">
-                          <div className="mx-auto m-5  d-flex justify-content-center w-100">
-                            <img
-                              src="./assets/img/icon/no-location.png"
-                              className="form-img__img-preview"
-                              style={{ width: '100px', height: '100px' }}
-                              alt=""
-                            />
-                          </div>
-                        </div>
                       </Table>
+                      <div className="row d-flex justify-content-center w-100">
+                        <div className="mx-auto  d-flex justify-content-center w-100">
+                          <img
+                            src="./assets/img/icon/no-location.png"
+                            className="form-img__img-preview"
+                            style={{ width: '100px', height: '100px' }}
+                            alt=""
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

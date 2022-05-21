@@ -7,7 +7,7 @@ import 'reactjs-popup/dist/index.css';
 import Data from '../json/countryByContinent.json';
 import currencyData from '../json/countryByCurrency.json';
 
-export default function LocationPopUp(props) {
+export default function LocationPopUp() {
   const [countryList, setCountryList] = useState([]);
   const [currencyList, setCurrencyList] = useState([]);
   const [country, setCountry] = useState();
@@ -231,509 +231,474 @@ export default function LocationPopUp(props) {
   };
   return (
     <>
-      <div className="popup">
-        <Popup
-          open={props.state}
-          modal
-          nested
-          lockScroll={true}
-          onClose={() => {
-            props.setState(false);
-          }}
-          contentStyle={{
-            zIndex: '10',
-          }}
-        >
-          {(close) => (
-            <div
-              style={{
-                height: '100vh',
-                padding: '20px',
-                whiteSpace: 'nowrap',
-                overflowY: 'visible',
-                overflowX: 'hidden',
-                paddingBottom: '40px',
-              }}
-            >
-              <br />
-              <br />
-              <br />
-              <div className="d-flex justify-content-between">
-                <div className="page-header"> Add Location </div>
+      <button
+        className="btn btn-primary "
+        type="button"
+        data-toggle="collapse"
+        data-target="#collapseExample"
+        aria-expanded="false"
+        aria-controls="collapseExample"
+        style={{ borderRadius: '20px' }}
+      >
+        Add Location
+      </button>
 
-                <button
-                  className="btn btn-outline-success "
-                  style={{
-                    fontSize: '30px',
-                    paddingTop: '0',
-                    paddingBottom: '0',
-                    border: 'none',
-                    paddingRight: '5px',
-                    paddingLeft: '5px',
-                  }}
-                  onClick={close}
-                >
-                  &times;
-                </button>
-              </div>
+      <div
+        className="collapse mt-2"
+        id="collapseExample"
+        style={{ borderRadius: '20px' }}
+      >
+        <div className="card card-body " style={{ borderRadius: '20px' }}>
+          <div className="px-5 w-75 ">
+            <div className="d-flex justify-content-between">
+              <div className="page-header"> Add Location </div>
+            </div>
+            <div>
               <div>
-                <div>
-                  <form className="CountryForm" autocomplete="off">
-                    {/* best month */}
-                    <div className="mb-4">
-                      <SelectionDropdownMonth
-                        list={months}
-                        setState={(e) => {
-                          if (e) {
-                            if (e != 'Select Month') {
-                              setMonth([...new Set([...month, e])]);
-                            }
+                <form className="CountryForm" autocomplete="off">
+                  {/* best month */}
+                  <div className="mb-4">
+                    <SelectionDropdownMonth
+                      list={months}
+                      setState={(e) => {
+                        if (e) {
+                          if (e != 'Select Month') {
+                            setMonth([...new Set([...month, e])]);
                           }
-                        }}
-                        label=" Best Months to Visit:"
-                        firstOption="Select Month"
-                      />
-                      <div
-                        className="text-danger"
-                        style={{ marginTop: '-15px' }}
-                      >
-                        {error.bestMonths}
-                      </div>
-
-                      <div className="monthDiv row mb-4">
-                        {month.length !== 0 ? (
-                          <div className="row ml-2 mt-0">
-                            {month.map((subItems, i) => {
-                              return (
-                                <button
-                                  className="btn btn-primary m-4 mt-0 placeButton"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                  }}
-                                >
-                                  {subItems}{' '}
-                                  <span className="placeDeleteIcon">
-                                    <i
-                                      className="fa fa-trash placeDeleteIcon"
-                                      onClick={(e1) => {
-                                        e1.preventDefault();
-
-                                        var array = month;
-                                        var index = i;
-
-                                        if (index !== -1) {
-                                          array.splice(index, 1);
-                                          setMonth(array);
-                                        }
-                                        setchange(!change);
-                                      }}
-                                    ></i>
-                                  </span>
-                                </button>
-                              );
-                            })}
-                          </div>
-                        ) : null}
-                      </div>
+                        }
+                      }}
+                      label=" Best Months to Visit:"
+                      firstOption="Select Month"
+                    />
+                    <div className="text-danger" style={{ marginTop: '-15px' }}>
+                      {error.bestMonths}
                     </div>
 
-                    {/* Weather */}
-                    <div class="form-group mb-4">
-                      <label for="exampleInputPassword1">Select Weather:</label>
-                      <br />
-                      <div className="row categoryDiv">
-                        <div className="form-check form-check-inline ">
-                          <input
-                            className="form-check-input mt-1"
-                            type="checkbox"
-                            id="inlineCheckbox1"
-                            name="option1"
-                            value="option1"
-                            onClick={(e) => setOption1(!option1)}
-                            style={{ cursor: 'pointer' }}
-                          />
-                          <label
-                            className="form-check-label mb-2 checkBox"
-                            for="inlineCheckbox1"
-                          >
-                            Sunny
-                          </label>
-                        </div>
-                        <div className="form-check form-check-inline">
-                          <input
-                            className="form-check-input mt-1"
-                            type="checkbox"
-                            id="inlineCheckbox2"
-                            name="option2"
-                            value="option2"
-                            onClick={(e) => setOption2(!option2)}
-                            style={{ cursor: 'pointer' }}
-                          />
-                          <label
-                            className="form-check-label mb-2 checkBox"
-                            for="inlineCheckbox2"
-                          >
-                            Cloudy
-                          </label>
-                        </div>
-                        <div className="form-check form-check-inline">
-                          <input
-                            className="form-check-input mt-1"
-                            type="checkbox"
-                            id="inlineCheckbox3"
-                            value="option3"
-                            name="option3"
-                            onClick={(e) => setOption3(!option3)}
-                            style={{ cursor: 'pointer' }}
-                          />
-                          <label
-                            className="form-check-label mb-2 checkBox"
-                            for="inlineCheckbox3"
-                          >
-                            Rainy
-                          </label>
-                        </div>
-                        <div className="form-check form-check-inline">
-                          <input
-                            className="form-check-input mt-1"
-                            type="checkbox"
-                            id="inlineCheckbox4"
-                            value="option4"
-                            name="option4"
-                            onClick={(e) => setOption4(!option4)}
-                            style={{ cursor: 'pointer' }}
-                          />
-                          <label
-                            className="form-check-label mb-2 checkBox"
-                            for="inlineCheckbox4"
-                          >
-                            Windy
-                          </label>
-                        </div>
-                        <div className="form-check form-check-inline">
-                          <input
-                            className="form-check-input mt-1"
-                            type="checkbox"
-                            id="inlineCheckbox5"
-                            value="option5"
-                            name="option5"
-                            onClick={(e) => setOption5(!option5)}
-                            style={{ cursor: 'pointer' }}
-                          />
-                          <label
-                            className="form-check-label mb-2 checkBox"
-                            for="inlineCheckbox5"
-                          >
-                            Snowy
-                          </label>
-                        </div>
-                      </div>
-                      <div className="text-danger">{error.multiChoice}</div>
-                    </div>
+                    <div className="monthDiv row mb-4">
+                      {month.length !== 0 ? (
+                        <div className="row ml-2 mt-0">
+                          {month.map((subItems, i) => {
+                            return (
+                              <button
+                                className="btn btn-primary m-4 mt-0 placeButton"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                }}
+                              >
+                                {subItems}{' '}
+                                <span className="placeDeleteIcon">
+                                  <i
+                                    className="fa fa-trash placeDeleteIcon"
+                                    onClick={(e1) => {
+                                      e1.preventDefault();
 
-                    {/* budget */}
-                    <div className="form-group mb-4">
-                      <label for="exampleInputPassword1">
-                        Budget Range Per Person:
-                      </label>
-                      <div className="row budgetRow">
-                        <div className="d-flex w-50">
-                          <label
-                            for="exampleInputPassword1"
-                            style={{
-                              marginTop: '16px',
-                              marginRight: '5px',
-                            }}
-                          >
-                            From:
-                          </label>
-                          <input
-                            type="number"
-                            className="form-control ml-0"
-                            id="exampleInputPassword1"
-                            placeholder="Minimum ₹"
-                            name="budgetFrom"
-                            value={formData.budgetFrom}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                budgetFrom: e.target.value,
-                              })
-                            }
-                          />
-                        </div>
-                        <div className="d-flex w-50">
-                          <label
-                            for="exampleInputPassword1"
-                            style={{
-                              marginTop: '16px',
-                              marginRight: '5px',
-                            }}
-                          >
-                            To:
-                          </label>
-                          <input
-                            type="number"
-                            className="form-control ml-0"
-                            id="exampleInputPassword1"
-                            placeholder="Maximum ₹"
-                            name="budgetTo"
-                            value={formData.budgetTo}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                budgetTo: e.target.value,
-                              })
-                            }
-                          />
-                        </div>
-                        <div className="text-danger">{error.budgetInvalid}</div>
-                      </div>
-                      <div className="text-danger">{error.budget}</div>
-                    </div>
+                                      var array = month;
+                                      var index = i;
 
-                    {/* activities */}
-                    <div className="form-group mb-4">
-                      <label for="exampleInputPassword1">Activities:</label>
-                      <div className="d-flex align-item-center">
+                                      if (index !== -1) {
+                                        array.splice(index, 1);
+                                        setMonth(array);
+                                      }
+                                      setchange(!change);
+                                    }}
+                                  ></i>
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+
+                  {/* Weather */}
+                  <div className="form-group mb-4">
+                    <label for="exampleInputPassword1">Select Weather:</label>
+                    <br />
+                    <div className="row categoryDiv">
+                      <div className="form-check form-check-inline ">
                         <input
-                          type="text"
-                          className="form-control ml-0"
-                          id="exampleInputPassword1"
-                          placeholder="Enter activities"
-                          name="activities"
-                          value={stateOfActivities}
-                          onChange={(e) => {
-                            if (e.target.value.trim().length != 0)
-                              setStateOfActivities(e.target.value);
-                            else setStateOfActivities('');
-                          }}
+                          className="form-check-input mt-1"
+                          type="checkbox"
+                          id="inlineCheckbox1"
+                          name="option1"
+                          value="option1"
+                          onClick={(e) => setOption1(!option1)}
+                          style={{ cursor: 'pointer' }}
                         />
-                        <button
-                          className="btn btn-sm btn-primary"
+                        <label
+                          className="form-check-label mb-2 checkBox"
+                          for="inlineCheckbox1"
+                        >
+                          Sunny
+                        </label>
+                      </div>
+                      <div className="form-check form-check-inline">
+                        <input
+                          className="form-check-input mt-1"
+                          type="checkbox"
+                          id="inlineCheckbox2"
+                          name="option2"
+                          value="option2"
+                          onClick={(e) => setOption2(!option2)}
+                          style={{ cursor: 'pointer' }}
+                        />
+                        <label
+                          className="form-check-label mb-2 checkBox"
+                          for="inlineCheckbox2"
+                        >
+                          Cloudy
+                        </label>
+                      </div>
+                      <div className="form-check form-check-inline">
+                        <input
+                          className="form-check-input mt-1"
+                          type="checkbox"
+                          id="inlineCheckbox3"
+                          value="option3"
+                          name="option3"
+                          onClick={(e) => setOption3(!option3)}
+                          style={{ cursor: 'pointer' }}
+                        />
+                        <label
+                          className="form-check-label mb-2 checkBox"
+                          for="inlineCheckbox3"
+                        >
+                          Rainy
+                        </label>
+                      </div>
+                      <div className="form-check form-check-inline">
+                        <input
+                          className="form-check-input mt-1"
+                          type="checkbox"
+                          id="inlineCheckbox4"
+                          value="option4"
+                          name="option4"
+                          onClick={(e) => setOption4(!option4)}
+                          style={{ cursor: 'pointer' }}
+                        />
+                        <label
+                          className="form-check-label mb-2 checkBox"
+                          for="inlineCheckbox4"
+                        >
+                          Windy
+                        </label>
+                      </div>
+                      <div className="form-check form-check-inline">
+                        <input
+                          className="form-check-input mt-1"
+                          type="checkbox"
+                          id="inlineCheckbox5"
+                          value="option5"
+                          name="option5"
+                          onClick={(e) => setOption5(!option5)}
+                          style={{ cursor: 'pointer' }}
+                        />
+                        <label
+                          className="form-check-label mb-2 checkBox"
+                          for="inlineCheckbox5"
+                        >
+                          Snowy
+                        </label>
+                      </div>
+                    </div>
+                    <div className="text-danger">{error.multiChoice}</div>
+                  </div>
+
+                  {/* budget */}
+                  <div className="form-group mb-4">
+                    <label for="exampleInputPassword1">
+                      Budget Range Per Person:
+                    </label>
+                    <div className="row budgetRow">
+                      <div className="d-flex w-50">
+                        <label
+                          for="exampleInputPassword1"
                           style={{
-                            borderRadius: '20px',
-                            height: '30px',
-                            marginTop: '14px',
-                          }}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            if (stateOfActivities)
-                              setActivities([
-                                ...new Set([...activities, stateOfActivities]),
-                              ]);
-                            setStateOfActivities('');
+                            marginTop: '16px',
+                            marginRight: '5px',
                           }}
                         >
-                          Add
-                        </button>
-                      </div>
-                      <div className="text-danger">{error.activities}</div>
-                      <div className="topDestinationsDiv row">
-                        {activities.length !== 0 ? (
-                          <div className="row ml-2">
-                            {activities.map((subItems, i) => {
-                              return (
-                                <button
-                                  className="btn btn-primary m-4 placeButton"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                  }}
-                                >
-                                  {subItems}
-                                  <span className="placeDeleteIcon">
-                                    <i
-                                      className="fa fa-trash placeDeleteIcon"
-                                      onClick={(e1) => {
-                                        e1.preventDefault();
-                                        let array = activities;
-                                        let index = i;
-
-                                        if (index !== -1) {
-                                          array.splice(index, 1);
-                                          setActivities(array);
-                                        }
-                                        setchange(!change);
-                                      }}
-                                    ></i>
-                                  </span>
-                                </button>
-                              );
-                            })}
-                          </div>
-                        ) : null}
-                      </div>
-                    </div>
-
-                    {/* purpose of trip */}
-                    <div className="form-group mb-4">
-                      <label for="exampleFormControlTextarea1">
-                        Purpose of the trip:
-                      </label>
-                      <textarea
-                        className="form-control textArea"
-                        id="exampleFormControlTextarea1"
-                        rows="3"
-                        name="purpose"
-                        value={formData.purpose}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            purpose: e.target.value,
-                          })
-                        }
-                      ></textarea>
-                      <div className="text-danger">{error.purpose}</div>
-                    </div>
-
-                    {/* country */}
-                    <div style={{ marginBottom: '35px' }}>
-                      <SelectionDropdown
-                        list={countryList}
-                        setState={(e) => {
-                          if (e != 'Select Country') {
-                            setCountry(e);
-                          } else {
-                            setCountry('');
+                          From:
+                        </label>
+                        <input
+                          type="number"
+                          className="form-control ml-0"
+                          id="exampleInputPassword1"
+                          placeholder="Minimum ₹"
+                          name="budgetFrom"
+                          value={formData.budgetFrom}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              budgetFrom: e.target.value,
+                            })
                           }
-                        }}
-                        label="Country Name:"
-                        firstOption="Select Country"
-                      />
-                      <div
-                        className="text-danger"
-                        style={{ marginTop: '-25px' }}
-                      >
-                        {error.countryName}
+                        />
                       </div>
+                      <div className="d-flex w-50">
+                        <label
+                          for="exampleInputPassword1"
+                          style={{
+                            marginTop: '16px',
+                            marginRight: '5px',
+                          }}
+                        >
+                          To:
+                        </label>
+                        <input
+                          type="number"
+                          className="form-control ml-0"
+                          id="exampleInputPassword1"
+                          placeholder="Maximum ₹"
+                          name="budgetTo"
+                          value={formData.budgetTo}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              budgetTo: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                      <div className="text-danger">{error.budgetInvalid}</div>
                     </div>
+                    <div className="text-danger">{error.budget}</div>
+                  </div>
 
-                    {/* image */}
-                    <div
-                      className="form-group"
-                      style={{ marginBottom: '30px' }}
-                    >
-                      <label for="exampleFormControlFile1">Image:</label>
+                  {/* activities */}
+                  <div className="form-group mb-4">
+                    <label for="exampleInputPassword1">Activities:</label>
+                    <div className="d-flex align-item-center">
                       <input
-                        type="file"
-                        className="form-control-file imgInput"
-                        id="exampleFormControlFile1"
-                        onChange={uploadPicture}
-                        style={{ cursor: 'pointer' }}
+                        type="text"
+                        className="form-control ml-0"
+                        id="exampleInputPassword1"
+                        placeholder="Enter activities"
+                        name="activities"
+                        value={stateOfActivities}
+                        onChange={(e) => {
+                          if (e.target.value.trim().length != 0)
+                            setStateOfActivities(e.target.value);
+                          else setStateOfActivities('');
+                        }}
                       />
-                      <div className="text-danger">{error.img_err}</div>
-                      {showImg.src != '' ? (
-                        <img
-                          src={showImg.src}
-                          className="form-img__img-preview"
-                          style={{ width: '84px', height: '84px' }}
-                          alt={showImg.alt}
-                        />
-                      ) : (
-                        ''
-                      )}
+                      <button
+                        className="btn btn-sm btn-primary"
+                        style={{
+                          borderRadius: '20px',
+                          height: '30px',
+                          marginTop: '14px',
+                        }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (stateOfActivities)
+                            setActivities([
+                              ...new Set([...activities, stateOfActivities]),
+                            ]);
+                          setStateOfActivities('');
+                        }}
+                      >
+                        Add
+                      </button>
                     </div>
+                    <div className="text-danger">{error.activities}</div>
+                    <div className="topDestinationsDiv row">
+                      {activities.length !== 0 ? (
+                        <div className="row ml-2">
+                          {activities.map((subItems, i) => {
+                            return (
+                              <button
+                                className="btn btn-primary m-4 placeButton"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                }}
+                              >
+                                {subItems}
+                                <span className="placeDeleteIcon">
+                                  <i
+                                    className="fa fa-trash placeDeleteIcon"
+                                    onClick={(e1) => {
+                                      e1.preventDefault();
+                                      let array = activities;
+                                      let index = i;
 
-                    {/* summary of the destination */}
-                    <div
-                      className="form-group"
-                      style={{ marginBottom: '30px' }}
-                    >
-                      <label for="exampleFormControlTextarea1">
-                        Summary of the destination:
-                      </label>
-                      <textarea
-                        className="form-control textArea"
-                        id="exampleFormControlTextarea1"
-                        rows="3"
-                        name="summary"
-                        value={formData.summary}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            summary: e.target.value,
-                          })
+                                      if (index !== -1) {
+                                        array.splice(index, 1);
+                                        setActivities(array);
+                                      }
+                                      setchange(!change);
+                                    }}
+                                  ></i>
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+
+                  {/* purpose of trip */}
+                  <div className="form-group mb-4">
+                    <label for="exampleFormControlTextarea1">
+                      Purpose of the trip:
+                    </label>
+                    <textarea
+                      className="form-control textArea"
+                      id="exampleFormControlTextarea1"
+                      rows="3"
+                      name="purpose"
+                      value={formData.purpose}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          purpose: e.target.value,
+                        })
+                      }
+                    ></textarea>
+                    <div className="text-danger">{error.purpose}</div>
+                  </div>
+
+                  {/* country */}
+                  <div style={{ marginBottom: '35px' }}>
+                    <SelectionDropdown
+                      list={countryList}
+                      setState={(e) => {
+                        if (e != 'Select Country') {
+                          setCountry(e);
+                        } else {
+                          setCountry('');
                         }
-                      ></textarea>
-                      <div className="text-danger">{error.summary}</div>
+                      }}
+                      label="Country Name:"
+                      firstOption="Select Country"
+                    />
+                    <div className="text-danger" style={{ marginTop: '-25px' }}>
+                      {error.countryName}
                     </div>
+                  </div>
 
-                    {/* Top Destinations to visit */}
-                    <div className="form-group mb-3">
-                      <label for="exampleInputPassword1">
-                        Top Destinations to visit:
-                      </label>
-                      <div className="d-flex align-item-center">
-                        <input
-                          type="text"
-                          className="form-control ml-0"
-                          id="exampleInputPassword1"
-                          placeholder="Enter destinations"
-                          name="placeToVisit"
-                          value={state}
-                          onChange={(e) => {
-                            if (e.target.value.trim().length != 0)
-                              setState(e.target.value);
-                            else setState('');
-                          }}
-                        />
-                        <button
-                          className="btn btn-sm btn-primary"
-                          style={{
-                            borderRadius: '20px',
-                            height: '30px',
-                            marginTop: '14px',
-                          }}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            if (state)
-                              setTopDestinations([
-                                ...new Set([...topDestinations, state]),
-                              ]);
-                            setState('');
-                          }}
-                        >
-                          Add
-                        </button>
-                      </div>
-                      <div className="text-danger">{error.placeToVisit}</div>
-                      <div className="topDestinationsDiv row">
-                        {topDestinations.length !== 0 ? (
-                          <div className="row ml-2">
-                            {topDestinations.map((subItems, i) => {
-                              return (
-                                <button
-                                  className="btn btn-primary m-4 placeButton"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                  }}
-                                >
-                                  {subItems}
-                                  <span className="placeDeleteIcon">
-                                    <i
-                                      className="fa fa-trash placeDeleteIcon"
-                                      onClick={(e1) => {
-                                        e1.preventDefault();
-                                        let array = topDestinations;
-                                        let index = i;
+                  {/* image */}
+                  <div className="form-group" style={{ marginBottom: '30px' }}>
+                    <label for="exampleFormControlFile1">Image:</label>
+                    <input
+                      type="file"
+                      className="form-control-file imgInput"
+                      id="exampleFormControlFile1"
+                      onChange={uploadPicture}
+                      style={{ cursor: 'pointer' }}
+                    />
+                    <div className="text-danger">{error.img_err}</div>
+                    {showImg.src != '' ? (
+                      <img
+                        src={showImg.src}
+                        className="form-img__img-preview"
+                        style={{ width: '84px', height: '84px' }}
+                        alt={showImg.alt}
+                      />
+                    ) : (
+                      ''
+                    )}
+                  </div>
 
-                                        if (index !== -1) {
-                                          array.splice(index, 1);
-                                          setTopDestinations(array);
-                                        }
-                                        setchange(!change);
-                                      }}
-                                    ></i>
-                                  </span>
-                                </button>
-                              );
-                            })}
-                          </div>
-                        ) : null}
-                      </div>
+                  {/* summary of the destination */}
+                  <div className="form-group" style={{ marginBottom: '30px' }}>
+                    <label for="exampleFormControlTextarea1">
+                      Summary of the destination:
+                    </label>
+                    <textarea
+                      className="form-control textArea"
+                      id="exampleFormControlTextarea1"
+                      rows="3"
+                      name="summary"
+                      value={formData.summary}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          summary: e.target.value,
+                        })
+                      }
+                    ></textarea>
+                    <div className="text-danger">{error.summary}</div>
+                  </div>
+
+                  {/* Top Destinations to visit */}
+                  <div className="form-group mb-3">
+                    <label for="exampleInputPassword1">
+                      Top Destinations to visit:
+                    </label>
+                    <div className="d-flex align-item-center">
+                      <input
+                        type="text"
+                        className="form-control ml-0"
+                        id="exampleInputPassword1"
+                        placeholder="Enter destinations"
+                        name="placeToVisit"
+                        value={state}
+                        onChange={(e) => {
+                          if (e.target.value.trim().length != 0)
+                            setState(e.target.value);
+                          else setState('');
+                        }}
+                      />
+                      <button
+                        className="btn btn-sm btn-primary"
+                        style={{
+                          borderRadius: '20px',
+                          height: '30px',
+                          marginTop: '14px',
+                        }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (state)
+                            setTopDestinations([
+                              ...new Set([...topDestinations, state]),
+                            ]);
+                          setState('');
+                        }}
+                      >
+                        Add
+                      </button>
                     </div>
+                    <div className="text-danger">{error.placeToVisit}</div>
+                    <div className="topDestinationsDiv row">
+                      {topDestinations.length !== 0 ? (
+                        <div className="row ml-2">
+                          {topDestinations.map((subItems, i) => {
+                            return (
+                              <button
+                                className="btn btn-primary m-4 placeButton"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                }}
+                              >
+                                {subItems}
+                                <span className="placeDeleteIcon">
+                                  <i
+                                    className="fa fa-trash placeDeleteIcon"
+                                    onClick={(e1) => {
+                                      e1.preventDefault();
+                                      let array = topDestinations;
+                                      let index = i;
 
-                    {/* <div className="form-group mb-4">
+                                      if (index !== -1) {
+                                        array.splice(index, 1);
+                                        setTopDestinations(array);
+                                      }
+                                      setchange(!change);
+                                    }}
+                                  ></i>
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+
+                  {/* <div className="form-group mb-4">
                           <label for="exampleFormControl">Currency:</label>
                           <input
                             className="form-control ml-0"
@@ -751,69 +716,63 @@ export default function LocationPopUp(props) {
                           <div className="text-danger">{error.currency}</div>
                         </div> */}
 
-                    {/* Currency */}
-                    <div style={{ marginBottom: '35px' }}>
-                      <SelectionDropdown
-                        list={currencyList}
-                        setState={(e) => {
-                          if (e != 'Select Currency') {
-                            setCurrency(e);
-                          } else {
-                            setCurrency('');
-                          }
-                        }}
-                        label="Currency:"
-                        firstOption="Select Currency"
-                      />
-                      <div
-                        className="text-danger"
-                        style={{ marginTop: '-25px' }}
-                      >
-                        {error.currency}
-                      </div>
-                    </div>
-
-                    {/* Safety Status */}
-                    <div className="form-group mb-4">
-                      <label for="exampleFormControlTextarea1">
-                        Safety Status:
-                      </label>
-                      <textarea
-                        className="form-control textArea"
-                        id="exampleFormControlTextarea1"
-                        rows="3"
-                        name="safetyGuidelines"
-                        value={formData.safetyGuidelines}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            safetyGuidelines: e.target.value,
-                          })
+                  {/* Currency */}
+                  <div style={{ marginBottom: '35px' }}>
+                    <SelectionDropdown
+                      list={currencyList}
+                      setState={(e) => {
+                        if (e != 'Select Currency') {
+                          setCurrency(e);
+                        } else {
+                          setCurrency('');
                         }
-                      ></textarea>
-                      <div className="text-danger">
-                        {error.safetyGuidelines}
-                      </div>
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="btn btn-primary"
-                      disabled={disable}
-                      style={{ borderRadius: '20px' }}
-                      onClick={(e) => {
-                        submitHandler(e);
-                        if (validate()) close();
                       }}
-                    >
-                      {disable ? 'Processing...' : 'Upload'}
-                    </button>
-                  </form>
-                </div>
+                      label="Currency:"
+                      firstOption="Select Currency"
+                    />
+                    <div className="text-danger" style={{ marginTop: '-25px' }}>
+                      {error.currency}
+                    </div>
+                  </div>
+
+                  {/* Safety Status */}
+                  <div className="form-group mb-4">
+                    <label for="exampleFormControlTextarea1">
+                      Safety Status:
+                    </label>
+                    <textarea
+                      className="form-control textArea"
+                      id="exampleFormControlTextarea1"
+                      rows="3"
+                      name="safetyGuidelines"
+                      value={formData.safetyGuidelines}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          safetyGuidelines: e.target.value,
+                        })
+                      }
+                    ></textarea>
+                    <div className="text-danger">{error.safetyGuidelines}</div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    disabled={disable}
+                    style={{ borderRadius: '20px' }}
+                    onClick={(e) => {
+                      submitHandler(e);
+                      if (validate());
+                    }}
+                  >
+                    {disable ? 'Processing...' : 'Upload'}
+                  </button>
+                </form>
               </div>
             </div>
-          )}
-        </Popup>
+          </div>
+        </div>
       </div>
     </>
   );
