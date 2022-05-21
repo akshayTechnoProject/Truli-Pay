@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useMemo } from "react";
 import Loader from "../include/Loader";
 import Menu from "../include/Menu";
+import Popup from "reactjs-popup";
+// import "reactjs-popup/dist/index.css";
 import { TableHeader, Pagination, Search } from "../Table";
 import { Dropdown, Table } from "react-bootstrap";
 import {
@@ -268,6 +270,72 @@ export default function CountryManagement() {
                   </div>
                 </div>
 
+                <div>
+                  <Popup
+                    open={show}
+                    modal
+                    nested
+                    lockScroll={true}
+                    onClose={() => setShow(false)}
+                    contentStyle={{
+                      paddingInline: "20px",
+                      paddingBlock: "10px",
+                      // marginTop: "50vh",
+                      // marginBlockStart: "10vh",
+
+                      top: window.innerWidth >= 678 ? "-30vh" : "15vh",
+
+                      marginInline: window.innerWidth >= 678 ? "75vh" : null,
+                    }}
+                  >
+                    {(close) => (
+                      <div>
+                        <div class="d-flex justify-content-around align-items-center ">
+                          <div className="header">Do you want to delete? </div>
+                          <p
+                            onClick={() => {
+                              close();
+                              setShow(false);
+                            }}
+                            style={{ fontSize: "25px", cursor: "pointer" }}
+                          >
+                            &times;
+                          </p>
+                        </div>
+                        <br />
+                        <div className="d-flex justify-content-end ">
+                          <button
+                            className="btn btn-outline-success"
+                            onClick={async () => {
+                              await deleteDoc(doc(db, "cities", eVal.id));
+                              setShow(false);
+                              close();
+                            }}
+                            style={{
+                              marginInlineEnd: "15px",
+                              backgroundColor: "rgb(35, 21, 73)",
+                              color: "white",
+                            }}
+                          >
+                            Yes
+                          </button>
+                          <button
+                            className="btn btn-outline-dark"
+                            onClick={() => {
+                              close();
+                              setShow(false);
+                            }}
+                            style={{
+                              marginInlineEnd: "15px",
+                            }}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </Popup>
+                </div>
                 <div className="row ">
                   <div className="col-12">
                     <div className="table-responsive">
@@ -316,13 +384,16 @@ export default function CountryManagement() {
                                   onClick={async () => {
                                     // setModalOpen(true);
                                     // async () => {
-                                    if (
-                                      window.confirm(
-                                        "Do you want to delete? "
-                                      ) == true
-                                    ) {
-                                      await deleteDoc(doc(db, "cities", e.id));
-                                    }
+                                    // if (
+                                    //   window.confirm(
+                                    //     "Do you want to delete? "
+                                    //   ) == true
+                                    // ) {
+                                    //   await deleteDoc(doc(db, "cities", e.id));
+
+                                    // }
+                                    setShow(true);
+                                    seteVal(e);
                                   }}
                                   // }
                                 ></i>

@@ -108,11 +108,11 @@ export default function PopUp(props) {
       error["bestMonths"] = "Please select month";
     }
     if (
-      option1 === false &&
-      option2 === false &&
-      option3 === false &&
-      option4 === false &&
-      option5 === false
+      option1 == false &&
+      option2 == false &&
+      option3 == false &&
+      option4 == false &&
+      option5 == false
     ) {
       isValid = false;
       error["multiChoice"] = "Please select any one";
@@ -200,6 +200,12 @@ export default function PopUp(props) {
         setMonth([]);
         setPlaceList([]);
         setDisable(false);
+        setAddPicture(false);
+        setOption1(false);
+        setOption2(false);
+        setOption3(false);
+        setOption4(false);
+        setOption5(false);
       });
     } else {
       setDisable(false);
