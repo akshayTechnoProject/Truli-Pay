@@ -59,7 +59,7 @@ function Menu() {
     : "";
   useEffect(() => {
     if (localStorage.getItem("DM_Admin_ID") == null) {
-      toast.error("Please login first...!");
+      toast.error("!..Please login first");
       navigate("/travel-app-admin");
     }
   }, []);
