@@ -24,6 +24,7 @@ export default function CountryManagement() {
   const [sorting, setSorting] = useState({ field: "", order: "" });
   const [limit, setlimit] = useState(10);
   const [eVal, seteVal] = useState();
+  const [modalOpen, setModalOpen] = useState(false);
   const [show, setShow] = useState(false);
   const [edit, setEdit] = useState();
   const Header = [
@@ -135,7 +136,6 @@ export default function CountryManagement() {
             </li>
           </ol>
           <h1 className="page-header">Country Management</h1>
-
           <div className="popup">
             <button
               className="btn btn-outline-success"
@@ -314,6 +314,7 @@ export default function CountryManagement() {
                                   className="fa fa-trash delete"
                                   style={{ cursor: "pointer" }}
                                   onClick={async () => {
+                                    // setModalOpen(true);
                                     // async () => {
                                     if (
                                       window.confirm(
