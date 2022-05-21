@@ -57,8 +57,9 @@ function Login() {
         console.log(user);
         setemail("");
         setpassword("");
-        await credential(auth?.currentUser?.uid);
-        navigate("/dashboard");
+        await credential(auth?.currentUser?.uid).then(() =>
+          navigate("/dashboard")
+        );
       })
       .catch((error) => {
         // const errorCode = error.code;
@@ -79,8 +80,8 @@ function Login() {
       });
   };
   const credential = async (uid) => {
-    await localStorage.setItem("DM_Admin_EMAIL", email);
-    const auth = await getAuth();
+    localStorage.setItem("DM_Admin_EMAIL", email);
+    const auth = getAuth();
 
     const docRef = doc(db, "admin", email);
     const docSnap = await getDoc(docRef);
@@ -88,7 +89,7 @@ function Login() {
     if (docSnap.exists()) {
       console.log("Document data:", docSnap.data());
       console.log("111Current User", auth.currentUser);
-      await localStorage.setItem("DM_Admin_ID", docSnap.data().id);
+      localStorage.setItem("DM_Admin_ID", docSnap.data().id);
       localStorage.setItem("DM_Admin_NAME", docSnap.data()?.name);
       localStorage.setItem("DM_Admin_IMAGE", docSnap.data()?.image);
     } else {
@@ -102,13 +103,14 @@ function Login() {
         id: uid,
       };
       console.log("0000", tempData);
-      await setDoc(doc(db, "admin", uid), tempData);
+      await setDoc(doc(db, "admin", email), tempData);
       localStorage.setItem(
         "DM_Admin_IMAGE",
         `https://cdn.pixabay.com/photo/2018/08/28/12/41/avatar-3637425_960_720.png`
       );
       localStorage.setItem("DM_Admin_NAME", "Admin");
       console.log("created Doc");
+      localStorage.setItem("DM_Admin_ID", uid);
     }
   };
 
