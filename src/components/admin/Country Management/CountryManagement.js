@@ -313,20 +313,17 @@ export default function CountryManagement() {
                                 <i
                                   className="fa fa-trash delete"
                                   style={{ cursor: "pointer" }}
-                                  onClick={() => {
-                                    // setShow(true);
-                                    // setOpen(true);
-                                    //   async () => {
-                                    //   if (
-                                    //     window.confirm(
-                                    //       "Do you want to delete? "
-                                    //     ) == true
-                                    //   ) {
-                                    //     await deleteDoc(doc(db, "cities", e.id));
-                                    //   } else {
-                                    //   }
-                                    // }
+                                  onClick={async () => {
+                                    // async () => {
+                                    if (
+                                      window.confirm(
+                                        "Do you want to delete? "
+                                      ) == true
+                                    ) {
+                                      await deleteDoc(doc(db, "cities", e.id));
+                                    }
                                   }}
+                                  // }
                                 ></i>
                               </td>
                             </tr>

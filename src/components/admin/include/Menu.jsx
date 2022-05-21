@@ -71,7 +71,7 @@ function Menu() {
           <NavLink to="/dashboard" className="navbar-brand ">
             <img
               src="/assets/img/logo/adminLogo.png"
-              alt="Dance-Match-logo"
+              alt="Travel-App-logo"
               className="d-inline-block align-text-top mr-2"
             />
             <span className="BrudAdmin">
