@@ -281,16 +281,16 @@ input {
 
 /* ================= Country Form ===================== */
 
-/* .CountryForm {
-  width: 600px !important;
+.CountryForm {
+  width: 700px !important;
 }
 @media (max-width: 950px) {
   .CountryForm {
-    width: auto;
+    width: 300px !important;
     padding-left: 0px;
     padding-top: 0px;
   }
-} */
+}
 .CountryForm label {
   font-size: 16px;
   font-weight: 600;

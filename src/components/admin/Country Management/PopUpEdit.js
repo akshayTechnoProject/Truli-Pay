@@ -218,32 +218,30 @@ export default function PopUpEdit(props) {
       <div>
         {props.state ? (
           <div className="card card-body " style={{ borderRadius: "20px" }}>
-            <div className="px-5 w-75 ">
-              <br />
-
-              <div className="d-flex justify-content-between">
-                <div className="page-header"> Edit country </div>
-
-                {/* <button
-                  className="btn btn-outline-success "
-                  style={{
-                    fontSize: "30px",
-                    paddingTop: "0",
-                    paddingBottom: "0",
-                    border: "none",
-                    paddingRight: "5px",
-                    paddingLeft: "5px",
-                  }}
-                  onClick={() => {
-                    props.setState(false);
-                  }}
-                >
-                  &times;
-                </button> */}
-              </div>
+            <div className="d-flex justify-content-center ">
               <div>
                 <div>
                   <form className="CountryForm">
+                    <div className="d-flex justify-content-between">
+                      <div className="page-header"> Edit country </div>
+
+                      <button
+                        className="btn btn-outline-success "
+                        style={{
+                          fontSize: "30px",
+                          paddingTop: "0",
+                          paddingBottom: "0",
+                          border: "none",
+                          paddingRight: "5px",
+                          paddingLeft: "5px",
+                        }}
+                        onClick={() => {
+                          props.setState(false);
+                        }}
+                      >
+                        &times;
+                      </button>
+                    </div>
                     <SelectionDropdown
                       list={countinentList}
                       setState={handleContinent}
@@ -555,7 +553,7 @@ export default function PopUpEdit(props) {
                     </div>
                     <button
                       type="submit"
-                      className="btn btn-primary"
+                      className="btn btn-primary "
                       disabled={disable}
                       style={{ borderRadius: "20px" }}
                       onClick={(e) => {

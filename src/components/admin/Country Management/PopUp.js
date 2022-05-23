@@ -82,6 +82,7 @@ export default function PopUp(props) {
       isValid = false;
       error["placeToVisit"] = "Please enter name of place ";
     }
+    console.log(Number(formData.budgetFrom) >= Number(formData.budgetTo));
     if (!input["budgetFrom"]) {
       isValid = false;
       error["budget"] = "Please enter minimum budget";
@@ -94,10 +95,11 @@ export default function PopUp(props) {
     } else if (formData.budgetTo <= 0) {
       isValid = false;
       error["budget"] = "Amount should be positive";
-    } else if (formData.budgetFrom >= formData.budgetTo) {
+    } else if (Number(formData.budgetFrom) >= Number(formData.budgetTo)) {
       isValid = false;
       error["budgetInvalid"] =
         "Maximum value can't be less then minimum (Ex. : from:4000 To: 4100)";
+    } else {
     }
     if (!input["safetyGuidelines"].trim()) {
       isValid = false;
@@ -215,46 +217,52 @@ export default function PopUp(props) {
     <>
       <div>
         {props.state ? (
-          <div className="card card-body " style={{ borderRadius: "20px" }}>
-            <div className="px-5 w-75 ">
+          <div
+            className="card card-body "
+            style={{
+              borderRadius: "20px",
+            }}
+          >
+            {/* px-5 w-75  */}
+            <div className="d-flex justify-content-center ">
               <br />
-              <div className="d-flex justify-content-between">
-                <div className="page-header"> Add country </div>
-
-                {/* <button
-                  className="btn btn-outline-success "
-                  style={{
-                    fontSize: "30px",
-                    paddingTop: "0",
-                    paddingBottom: "0",
-                    border: "none",
-                    paddingRight: "5px",
-                    paddingLeft: "5px",
-                  }}
-                  onClick={() => {
-                    setShowImg({
-                      src: "",
-                      alt: "",
-                    });
-                    setFormData({
-                      description: "",
-                      budgetFrom: "",
-                      budgetTo: "",
-                      safetyGuidelines: "",
-                    });
-                    setMonth([]);
-                    setPlaceList([]);
-                    setDisable(false);
-                    props.setState(false);
-                  }}
-                >
-                  &times;
-                </button> */}
-              </div>
 
               <div>
                 <div>
                   <form className="CountryForm">
+                    <div className="d-flex justify-content-between">
+                      <div className="page-header"> Add country </div>
+
+                      <button
+                        className="btn btn-outline-success "
+                        style={{
+                          fontSize: "30px",
+                          paddingTop: "0",
+                          paddingBottom: "0",
+                          border: "none",
+                          paddingRight: "5px",
+                          paddingLeft: "5px",
+                        }}
+                        onClick={() => {
+                          setShowImg({
+                            src: "",
+                            alt: "",
+                          });
+                          setFormData({
+                            description: "",
+                            budgetFrom: "",
+                            budgetTo: "",
+                            safetyGuidelines: "",
+                          });
+                          setMonth([]);
+                          setPlaceList([]);
+                          setDisable(false);
+                          props.setState(false);
+                        }}
+                      >
+                        &times;
+                      </button>
+                    </div>
                     <SelectionDropdown
                       list={countinentList}
                       setState={handleContinent}
