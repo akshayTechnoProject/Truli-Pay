@@ -250,14 +250,15 @@ export default function LocationPopUp(props) {
         style={{ borderRadius: "20px" }}
       >
         <div className="card card-body " style={{ borderRadius: "20px" }}>
-          <div className="px-5 w-75 ">
-            <div className="d-flex justify-content-between">
-              <div className="page-header"> Add Location </div>
-            </div>
+          <div className="d-flex justify-content-center">
             <div>
               <div>
                 <form className="CountryForm" autocomplete="off">
                   {/* best month */}
+                  <div className="d-flex justify-content-between">
+                    <div className="page-header"> Add Location </div>
+                  </div>
+
                   <div className="mb-4">
                     <SelectionDropdownMonth
                       list={months}
