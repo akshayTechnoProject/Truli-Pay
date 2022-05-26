@@ -43,7 +43,7 @@ function Menu() {
 
   var aboutus = window.location.pathname.match(/^\/about-us/) ? "active" : "";
 
-  var inquiriesClass = window.location.pathname.match(/^\/inquiries/)
+  var inquiriesClass = window.location.pathname.match(/^\/queries/)
     ? "active"
     : "";
 
@@ -162,7 +162,7 @@ function Menu() {
             </li>
 
             <li>
-              <NavLink to="/cms/t&c" className={TandC} activeClassName="active">
+              <NavLink to="/t&c" className={TandC} activeClassName="active">
                 <div className="menuItemDiv">
                   <i className="menuIcon">
                     <GavelIcon style={{ fontSize: "17px" }} />
@@ -173,7 +173,7 @@ function Menu() {
             </li>
             <li>
               <NavLink
-                to="/cms/privacy-policy"
+                to="/privacy-policy"
                 className={pp}
                 activeClassName="active"
               >
@@ -188,7 +188,7 @@ function Menu() {
 
             <li>
               <NavLink
-                to="/cms/about-us"
+                to="/about-us"
                 className={aboutus}
                 activeClassName="active"
               >
