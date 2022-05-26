@@ -1,28 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { db } from '../firebase/firebase';
 import Loader from '../include/Loader';
 import Menu from '../include/Menu';
 import Footer from '../include/Footer';
 import { getAuth } from 'firebase/auth';
 import { query, collection, onSnapshot } from 'firebase/firestore';
+import { toast } from 'react-toastify';
 function Dashboard() {
   const [totalCountry, setTotalCountry] = useState(0);
   const [totalLocation, setTotalLocation] = useState(0);
+  const location = useLocation();
 
   useEffect(() => {
-    onSnapshot(query(collection(db, 'cities')), (querySnapshot) => {
-      setTotalCountry(querySnapshot.size);
-    });
-    onSnapshot(query(collection(db, 'location')), (querySnapshot) => {
-      setTotalLocation(querySnapshot.size);
-    });
-    //setTimeout(() => {
+    if (location.state && localStorage.getItem('first')) {
+      toast.success('Login successfull');
+      localStorage.setItem('first', false);
+    }
+    // onSnapshot(query(collection(db, "cities")), (querySnapshot) => {
+    // setTotalCountry(querySnapshot.size);
+    //});
+    //onSnapshot(query(collection(db, "location")), (querySnapshot) => {
+    //  setTotalLocation(querySnapshot.size);
+    //});
     document.getElementById('page-loader').style.display = 'none';
 
     var element = document.getElementById('page-container');
     element.classList.add('show');
-    //}, 2000);
   }, []);
   console.log('Current User', getAuth().currentUser);
   console.log('Image', localStorage.getItem('DM_Admin_EMAIL'));
