@@ -63,13 +63,14 @@ function Menu() {
       <div id="header" className="header navbar-default">
         <div className="navbar-header">
           <NavLink to="/dashboard" className="navbar-brand ">
-            <img
+            {/* <img
               src="/assets/img/logo/adminLogo.png"
               alt="Travel-App-logo"
               className="d-inline-block align-text-top mr-2"
-            />
+            /> */}
+            {/* <span className="logo"></span> */}
             <span className="BrudAdmin">
-              <b>Travel App</b>
+              <b>Truli Pay</b>
             </span>
           </NavLink>
 

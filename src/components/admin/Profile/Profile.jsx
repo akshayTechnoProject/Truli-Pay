@@ -56,8 +56,14 @@ export default function Profile() {
 
       const file = e.target.files[0];
       const storage = getStorage();
-      const reference = ref(storage, `profilePic_${new Date().getTime()}.jpg`);
-      uploadBytes(reference, file)
+      const reference = ref(
+        storage,
+        `profile-image/profilePic_${new Date().getTime()}.jpg`
+      );
+      const metadata = {
+        contentType: 'image/jpeg',
+      };
+      uploadBytes(reference, file, metadata)
         .then((snapshot) => {
           return getDownloadURL(snapshot.ref);
         })
@@ -99,9 +105,9 @@ export default function Profile() {
             localStorage.setItem('DM_Admin_IMAGE', image);
             toast.success('Profile Updated Successfully');
             setDisable(false);
+            setImage();
             setIsPicUpload(false);
             setChange(!change);
-            setImage();
             // updateId = '';
           })
           .catch((error) => {
@@ -112,8 +118,7 @@ export default function Profile() {
             // updateId = '';
           });
       } else {
-        console.log('hii');
-        const adminRef = doc(db, 'admin', auth.currentUser.uid);
+        const adminRef = doc(db, 'admin', updateId);
         await updateDoc(adminRef, { name: profileInfo.name })
           .then(() => {
             localStorage.setItem('DM_Admin_NAME', profileInfo.name);
@@ -203,17 +208,26 @@ export default function Profile() {
               toast.success('Password Updated Successfully.');
               console.log('Password updated successfully');
               setChange(!change);
+              setPassword(initialValues);
+              setPassErrors({});
             })
             .catch((error) => {
-              console.log('Errors', error);
+              console.log('Errors', error.message);
               setDisable1(false);
-              toast.error('Something went wrong. Please try again later.');
+              if (
+                error?.message?.match(
+                  'Password should be at least 6 characters'
+                )
+              ) {
+                toast.error('Password should be at least 6 characters');
+              } else
+                toast.error('Something went wrong. Please try again later.');
             });
         })
         .catch((error) => {
           console.log(':: ', error);
           setDisable1(false);
-          toast.error('Invalid Inputs!');
+          toast.error('Invalid Inputs! ');
         });
     } else {
       setDisable1(false);
@@ -282,7 +296,7 @@ export default function Profile() {
                     {console.log(profileInfo)}
                     {profileInfo.image != '' ? (
                       <img
-                        src={profileInfo.image}
+                        src={localStorage.getItem('DM_Admin_IMAGE')}
                         className="form-img__img-preview ml-2"
                         style={{
                           width: '60px',
@@ -295,7 +309,7 @@ export default function Profile() {
                       <>
                         <img
                           src={'/assets/img/icon/profile-icon.png'}
-                          alt="RestoImage"
+                          alt="ProfileImage"
                           className="form-img__img-preview ml-2"
                           style={{
                             width: '100px',
@@ -310,9 +324,10 @@ export default function Profile() {
 
                     <input
                       type="file"
-                      className="form-control ml-0"
+                      className="form-control imgInput ml-0"
                       id="exampleInputImage"
                       onChange={handleImg}
+                      accept="image/png, image/gif, image/jpeg"
                     />
                     {img.src != '' ? (
                       <img

@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { doc, setDoc, getDoc } from "firebase/firestore";
-import { db } from "../firebase/firebase";
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase/firebase';
 function Login() {
   const navigate = useNavigate();
 
-  const [email, setemail] = useState("");
-  const [userID, setUserID] = useState("");
-  const [password, setpassword] = useState("");
+  const [email, setemail] = useState('');
+  const [userID, setUserID] = useState('');
+  const [password, setpassword] = useState('');
   const [disable, setDisable] = useState(false);
   const [checkVisible, setcheckVisible] = useState({
     email: false,
@@ -18,9 +18,9 @@ function Login() {
   });
   const [first, setfirst] = useState(1);
   useEffect(() => {
-    if (localStorage.getItem("forgotTest") != "false") {
-      toast.success("Password reset mail sent successfully");
-      localStorage.setItem("forgotTest", false);
+    if (localStorage.getItem('forgotTest') != 'false') {
+      toast.success('Password reset mail sent successfully');
+      localStorage.setItem('forgotTest', false);
       setfirst(first);
     }
   }, [first]);
@@ -55,10 +55,10 @@ function Login() {
         const user = userCredential.user;
         setUserID(auth?.currentUser?.uid);
         console.log(user);
-        setemail("");
-        setpassword("");
+        setemail('');
+        setpassword('');
         await credential(auth?.currentUser?.uid).then(() =>
-          navigate("/dashboard")
+          navigate('/dashboard')
         );
       })
       .catch((error) => {
@@ -66,12 +66,12 @@ function Login() {
         const errorMessage = error.message;
 
         if (
-          errorMessage.search("wrong-password") === -1 ||
-          errorMessage.search("user-not-found") === -1
+          errorMessage.search('wrong-password') === -1 ||
+          errorMessage.search('user-not-found') === -1
         ) {
-          if (errorMessage.search("auth/network-request-failed") !== -1)
-            toast.error(".Please, Connect with internet");
-          else toast.error("!Incorrect email or password ");
+          if (errorMessage.search('auth/network-request-failed') !== -1)
+            toast.error('.Please, Connect with internet');
+          else toast.error('!Incorrect email or password ');
           setDisable(false);
         } else {
           toast.error(`!Something Went Wrong`);
@@ -80,51 +80,51 @@ function Login() {
       });
   };
   const credential = async (uid) => {
-    localStorage.setItem("DM_Admin_EMAIL", email);
+    localStorage.setItem('DM_Admin_EMAIL', email);
     const auth = getAuth();
 
-    const docRef = doc(db, "admin", email);
+    const docRef = doc(db, 'admin', email);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-      console.log("111Current User", auth.currentUser);
-      localStorage.setItem("DM_Admin_ID", docSnap.data().id);
-      localStorage.setItem("DM_Admin_NAME", docSnap.data()?.name);
-      localStorage.setItem("DM_Admin_IMAGE", docSnap.data()?.image);
+      console.log('Document data:', docSnap.data());
+      console.log('111Current User', auth.currentUser);
+      localStorage.setItem('DM_Admin_ID', docSnap.data().id);
+      localStorage.setItem('DM_Admin_NAME', docSnap.data()?.name);
+      localStorage.setItem('DM_Admin_IMAGE', docSnap.data()?.image);
     } else {
       // doc.data() will be undefined in this case
-      console.log("No such document!");
+      console.log('No such document!');
       const tempData = {
-        name: "Admin",
+        name: 'Admin',
         email: email,
         image:
-          "https://cdn.pixabay.com/photo/2018/08/28/12/41/avatar-3637425_960_720.png",
+          'https://cdn.pixabay.com/photo/2018/08/28/12/41/avatar-3637425_960_720.png',
         id: uid,
       };
-      console.log("0000", tempData);
-      await setDoc(doc(db, "admin", email), tempData);
+      console.log('0000', tempData);
+      await setDoc(doc(db, 'admin', email), tempData);
       localStorage.setItem(
-        "DM_Admin_IMAGE",
+        'DM_Admin_IMAGE',
         `https://cdn.pixabay.com/photo/2018/08/28/12/41/avatar-3637425_960_720.png`
       );
-      localStorage.setItem("DM_Admin_NAME", "Admin");
-      console.log("created Doc");
-      localStorage.setItem("DM_Admin_ID", uid);
+      localStorage.setItem('DM_Admin_NAME', 'Admin');
+      console.log('created Doc');
+      localStorage.setItem('DM_Admin_ID', uid);
     }
   };
 
   useEffect(() => {
-    if (localStorage.getItem("DM_Admin_ID") != null) {
+    if (localStorage.getItem('DM_Admin_ID') != null) {
       toast.success(
-        `Already login as ${localStorage.getItem("DM_Admin_NAME")}`
+        `Already login as ${localStorage.getItem('DM_Admin_NAME')}`
       );
-      navigate("/dashboard");
+      navigate('/dashboard');
     }
-    document.getElementById("page-loader").style.display = "none";
+    document.getElementById('page-loader').style.display = 'none';
 
-    var element = document.getElementById("page-container");
-    element.classList.add("show");
+    var element = document.getElementById('page-container');
+    element.classList.add('show');
   }, []);
 
   return (
@@ -137,7 +137,7 @@ function Login() {
         <div
           className="login-cover-image"
           style={{
-            backgroundImage: "url(assets/img/login-bg/login-bg-17.jpg)",
+            backgroundImage: 'url(assets/img/login-bg/login-bg-17.jpg)',
           }}
           data-id="login-cover-image"
         ></div>
@@ -151,8 +151,8 @@ function Login() {
         >
           <div className="login-header">
             <div className="brand">
-              <span className="logo"></span> <b>Travel App</b>
-              <small>Login for Travel App admin panel</small>
+              <span className="logo"></span> <b>Truli Pay</b>
+              <small>Login for Truli Pay admin panel</small>
             </div>
             <div className="icon">
               <i className="fa fa-lock"></i>
@@ -189,13 +189,13 @@ function Login() {
                   <div className="text-danger ms-0 text-start">
                     Please enter password
                   </div>
-                ) : null}{" "}
+                ) : null}{' '}
               </div>
               {console.log(email)}
               <div className="form-group m-b-20">
                 <Link
                   to={{
-                    pathname: "/forgot-password",
+                    pathname: '/forgot-password',
                   }}
                   state={email}
                 >
@@ -210,7 +210,7 @@ function Login() {
                   disabled={disable}
                   onClick={submitHandler}
                 >
-                  {disable ? "Processing..." : "Sign me in"}
+                  {disable ? 'Processing...' : 'Sign me in'}
                 </button>
               </div>
             </form>
