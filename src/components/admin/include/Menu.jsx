@@ -9,7 +9,9 @@ import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 function Menu() {
   const navigate = useNavigate();
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(
+    Boolean(localStorage.getItem("visible"))
+  );
   const Logout = () => {
     const auth = getAuth();
     signOut(auth)
@@ -35,34 +37,28 @@ function Menu() {
     ? "active"
     : "";
 
-  // var addRestaurantsClass = window.location.pathname.match(/^\/add-restaurant/) ? "active" : "";
+  var pp = window.location.pathname.match(/^\/privacy-policy/) ? "active" : "";
 
-  var pp = window.location.pathname.match(/^\/privatepolicy/) ? "active" : "";
-  //  if(addRestaurantsClass=='active'){
-  //      restaurantsClass = 'active';
-  //  }
   var TandC = window.location.pathname.match(/^\/t&c/) ? "active" : "";
 
-  var aboutus = window.location.pathname.match(/^\/aboutus/) ? "active" : "";
+  var aboutus = window.location.pathname.match(/^\/about-us/) ? "active" : "";
 
   var inquiriesClass = window.location.pathname.match(/^\/inquiries/)
     ? "active"
     : "";
-  var feedbackClass = window.location.pathname.match(/^\/feedback/)
-    ? "active"
-    : "";
+
   useEffect(() => {
     if (localStorage.getItem("DM_Admin_ID") == null) {
       toast.error("!..Please login first");
       navigate("/truli-pay-admin");
     }
   }, []);
-  useEffect(() => {
-    localStorage.getItem("visible")
-      ? localStorage.setItem("visible", visible)
-      : localStorage.setItem("visible", false);
-    console.log(localStorage.getItem("visible"));
-  }, [visible]);
+  // useEffect(() => {
+  //   localStorage.getItem("visible")
+  //     ? localStorage.setItem("visible", visible)
+  //     : localStorage.setItem("visible", false);
+  //   console.log(localStorage.getItem("visible"));
+  // }, [visible]);
 
   return (
     <>
@@ -164,88 +160,46 @@ function Menu() {
                 </div>
               </NavLink>
             </li>
-            <li
-              onClick={() => setVisible(!visible)}
-              style={{ cursor: "pointer", marginInlineStart: "10px" }}
-            >
-              <div className="menuItemDiv mr-3">
-                <span className="menuItem">CMS</span>
-                <i className="menuIcon">
-                  {visible ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-                </i>
-              </div>
-            </li>
-            {visible ? (
-              <>
-                <li>
-                  <NavLink
-                    to="/cms/t&c"
-                    className={TandC}
-                    activeClassName="active"
-                  >
-                    <div
-                      className="menuItemDiv"
-                      style={{ marginInlineStart: "25px" }}
-                    >
-                      <i className="menuIcon">
-                        <GavelIcon style={{ fontSize: "17px" }} />
-                      </i>
-                      <span
-                        className="menuItem"
-                        onClick={() => setVisible(!visible)}
-                      >
-                        T&C
-                      </span>
-                    </div>
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="/cms/privatepolicy"
-                    className={pp}
-                    activeClassName="active"
-                  >
-                    <div
-                      className="menuItemDiv"
-                      style={{ marginInlineStart: "25px" }}
-                    >
-                      <i className="menuIcon">
-                        <PolicyIcon style={{ fontSize: "17px" }} />
-                      </i>
-                      <span
-                        className="menuItem"
-                        onClick={() => setVisible(!visible)}
-                      >
-                        Policy
-                      </span>{" "}
-                    </div>
-                  </NavLink>
-                </li>
 
-                <li>
-                  <NavLink
-                    to="/cms/aboutus"
-                    className={aboutus}
-                    activeClassName="active"
-                  >
-                    <div
-                      className="menuItemDiv"
-                      style={{ marginInlineStart: "25px" }}
-                    >
-                      <i className="menuIcon">
-                        <InfoIcon style={{ fontSize: "17px" }} />
-                      </i>
-                      <span
-                        className="menuItem"
-                        onClick={() => setVisible(!visible)}
-                      >
-                        AboutUs
-                      </span>
-                    </div>
-                  </NavLink>
-                </li>
-              </>
-            ) : null}
+            <li>
+              <NavLink to="/cms/t&c" className={TandC} activeClassName="active">
+                <div className="menuItemDiv">
+                  <i className="menuIcon">
+                    <GavelIcon style={{ fontSize: "17px" }} />
+                  </i>
+                  <span className="menuItem">T&C</span>
+                </div>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/cms/privacy-policy"
+                className={pp}
+                activeClassName="active"
+              >
+                <div className="menuItemDiv">
+                  <i className="menuIcon">
+                    <PolicyIcon style={{ fontSize: "17px" }} />
+                  </i>
+                  <span className="menuItem">Policy</span>{" "}
+                </div>
+              </NavLink>
+            </li>
+
+            <li>
+              <NavLink
+                to="/cms/about-us"
+                className={aboutus}
+                activeClassName="active"
+              >
+                <div className="menuItemDiv">
+                  <i className="menuIcon">
+                    <InfoIcon style={{ fontSize: "17px" }} />
+                  </i>
+                  <span className="menuItem">AboutUs</span>
+                </div>
+              </NavLink>
+            </li>
           </ul>
         </div>
       </div>

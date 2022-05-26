@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
-import Loader from "../include/Loader";
-import Menu from "../include/Menu";
+import React, { useEffect } from 'react';
+import Loader from '../include/Loader';
+import Menu from '../include/Menu';
 export default function PrivatePolicy() {
   useEffect(() => {
-    document.getElementById("page-loader").style.display = "none";
+    document.getElementById('page-loader').style.display = 'none';
 
-    var element = document.getElementById("page-container");
-    element.classList.add("show");
+    var element = document.getElementById('page-container');
+    element.classList.add('show');
   }, []);
   return (
     <>
@@ -24,10 +24,10 @@ export default function PrivatePolicy() {
               <a href="javascript:;">Home</a>
             </li>
             <li className="breadcrumb-item active currentPath">
-              Private Policy
+              Privacy Policy
             </li>
           </ol>
-          <h1 className="page-header">Private Policy</h1>
+          <h1 className="page-header">Privacy Policy</h1>
         </div>
       </div>
     </>
