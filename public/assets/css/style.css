@@ -440,3 +440,10 @@ input {
   color: #000 !important;
   margin-top: -2px;
 }
+label {
+  font-size: 16px;
+  font-weight: 600;
+}
+input {
+  border-radius: 20px;
+}
