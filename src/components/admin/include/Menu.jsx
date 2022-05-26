@@ -79,9 +79,9 @@ function Menu() {
             className="navbar-toggle"
             data-click="sidebar-toggled"
           >
-            <span className="icon-bar"></span>
-            <span className="icon-bar"></span>
-            <span className="icon-bar"></span>
+            <span className="icon-bar" style={{ color: '#fff' }}></span>
+            <span className="icon-bar" style={{ color: '#fff' }}></span>
+            <span className="icon-bar" style={{ color: '#fff' }}></span>
           </button>
         </div>
 
@@ -162,7 +162,7 @@ function Menu() {
               onClick={() => setVisible(!visible)}
               style={{ cursor: 'pointer', marginInlineStart: '10px' }}
             >
-              <div className="menuItemDiv">
+              <div className="menuItemDiv mr-3">
                 <span className="menuItem">CMS</span>
                 <i className="menuIcon">
                   {visible ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
@@ -234,7 +234,7 @@ function Menu() {
                         onClick={() => setVisible(!visible)}
                       >
                         AboutUs
-                      </span>{' '}
+                      </span>
                     </div>
                   </NavLink>
                 </li>
