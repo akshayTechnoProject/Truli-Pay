@@ -88,7 +88,7 @@ function ForgotPass() {
         >
           <div className="login-header">
             <div className="brand">
-              <span className="logo"></span> <b>Travel App</b>
+              <span className="logo"></span> <b>TruliPay</b>
               <small>Forgot Password </small>
             </div>
             <div className="icon">
