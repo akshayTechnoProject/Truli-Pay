@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
-import Loader from '../include/Loader';
-import Menu from '../include/Menu';
-export default function Inquiries() {
+import React, { useEffect } from "react";
+import Loader from "../include/Loader";
+import Menu from "../include/Menu";
+export default function TandC() {
   useEffect(() => {
-    document.getElementById('page-loader').style.display = 'none';
+    document.getElementById("page-loader").style.display = "none";
 
-    var element = document.getElementById('page-container');
-    element.classList.add('show');
+    var element = document.getElementById("page-container");
+    element.classList.add("show");
   }, []);
   return (
     <>
@@ -23,9 +23,9 @@ export default function Inquiries() {
             <li className="breadcrumb-item basePath ">
               <a href="javascript:;">Home</a>
             </li>
-            <li className="breadcrumb-item active currentPath">Inquiries</li>
+            <li className="breadcrumb-item active currentPath">T&C</li>
           </ol>
-          <h1 className="page-header">Inquiries</h1>
+          <h1 className="page-header">T&C</h1>
         </div>
       </div>
     </>

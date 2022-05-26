@@ -46,6 +46,8 @@ a {
   margin-left: 5px;
 }
 .menuItem:hover {
+  color: #231549;
+
   font-weight: 600;
 }
 .menuItemDiv {

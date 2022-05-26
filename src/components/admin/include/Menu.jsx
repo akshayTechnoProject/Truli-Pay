@@ -1,11 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getAuth, signOut } from "firebase/auth";
-
+import InfoIcon from "@material-ui/icons/Info";
+import PolicyIcon from "@material-ui/icons/Policy";
+import GavelIcon from "@material-ui/icons/Gavel";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 function Menu() {
   const navigate = useNavigate();
-
+  const [visible, setVisible] = useState(true);
   const Logout = () => {
     const auth = getAuth();
     signOut(auth)
@@ -33,23 +37,13 @@ function Menu() {
 
   // var addRestaurantsClass = window.location.pathname.match(/^\/add-restaurant/) ? "active" : "";
 
-  var userStateClass = window.location.pathname.match(/^\/user-state/)
-    ? "active"
-    : "";
+  var pp = window.location.pathname.match(/^\/privatepolicy/) ? "active" : "";
   //  if(addRestaurantsClass=='active'){
   //      restaurantsClass = 'active';
   //  }
-  var locationManagementClass = window.location.pathname.match(
-    /^\/location-management/
-  )
-    ? "active"
-    : "";
+  var TandC = window.location.pathname.match(/^\/t&c/) ? "active" : "";
 
-  var countryManagementClass = window.location.pathname.match(
-    /^\/country-management/
-  )
-    ? "active"
-    : "";
+  var aboutus = window.location.pathname.match(/^\/aboutus/) ? "active" : "";
 
   var inquiriesClass = window.location.pathname.match(/^\/inquiries/)
     ? "active"
@@ -150,68 +144,101 @@ function Menu() {
                 </div>
               </NavLink>
             </li>
-
             <li>
               <NavLink
-                to="/user-state"
-                className={userStateClass}
-                activeClassName="active"
-              >
-                <div className="menuItemDiv">
-                  <i className="fa fa-chart-pie menuIcon"></i>
-                  <span className="menuItem">Analyze</span>
-                </div>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/location-management"
-                className={locationManagementClass}
-                activeClassName="active"
-              >
-                <div className="menuItemDiv">
-                  <i className="fa fa-map-pin menuIcon"></i>
-                  <span className="menuItem">Location</span>
-                </div>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/country-management"
-                className={countryManagementClass}
-                activeClassName="active"
-              >
-                <div className="menuItemDiv">
-                  <i className="fa fa-globe menuIcon"></i>
-                  <span className="menuItem">Country</span>
-                </div>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/inquiries"
+                to="/queries"
                 className={inquiriesClass}
                 activeClassName="active"
               >
                 <div className="menuItemDiv">
                   <i className="fa fa-question menuIcon"></i>
 
-                  <span className="menuItem"> Inquiries</span>
+                  <span className="menuItem"> Queries</span>
                 </div>
               </NavLink>
             </li>
-            <li>
-              <NavLink
-                to="/feedback"
-                className={feedbackClass}
-                activeClassName="active"
-              >
-                <div className="menuItemDiv">
-                  <i className="fa fa-comment menuIcon"></i>
-                  <span className="menuItem">Feedback</span>
-                </div>
-              </NavLink>
+            <li
+              onClick={() => setVisible(!visible)}
+              style={{ cursor: "pointer", marginInlineStart: "10px" }}
+            >
+              <div className="menuItemDiv">
+                <span className="menuItem">CMS</span>
+                <i className="menuIcon">
+                  {visible ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+                </i>
+              </div>
             </li>
+            {visible ? (
+              <>
+                <li>
+                  <NavLink
+                    to="/cms/t&c"
+                    className={TandC}
+                    activeClassName="active"
+                  >
+                    <div
+                      className="menuItemDiv"
+                      style={{ marginInlineStart: "25px" }}
+                    >
+                      <i className="menuIcon">
+                        <GavelIcon style={{ fontSize: "17px" }} />
+                      </i>
+                      <span
+                        className="menuItem"
+                        onClick={() => setVisible(!visible)}
+                      >
+                        T&C
+                      </span>
+                    </div>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/cms/privatepolicy"
+                    className={pp}
+                    activeClassName="active"
+                  >
+                    <div
+                      className="menuItemDiv"
+                      style={{ marginInlineStart: "25px" }}
+                    >
+                      <i className="menuIcon">
+                        <PolicyIcon style={{ fontSize: "17px" }} />
+                      </i>
+                      <span
+                        className="menuItem"
+                        onClick={() => setVisible(!visible)}
+                      >
+                        Policy
+                      </span>{" "}
+                    </div>
+                  </NavLink>
+                </li>
+
+                <li>
+                  <NavLink
+                    to="/cms/aboutus"
+                    className={aboutus}
+                    activeClassName="active"
+                  >
+                    <div
+                      className="menuItemDiv"
+                      style={{ marginInlineStart: "25px" }}
+                    >
+                      <i className="menuIcon">
+                        <InfoIcon style={{ fontSize: "17px" }} />
+                      </i>
+                      <span
+                        className="menuItem"
+                        onClick={() => setVisible(!visible)}
+                      >
+                        AboutUs
+                      </span>{" "}
+                    </div>
+                  </NavLink>
+                </li>
+              </>
+            ) : null}
           </ul>
         </div>
       </div>
