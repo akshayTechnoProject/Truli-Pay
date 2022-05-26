@@ -6,7 +6,7 @@ import UserList from './components/admin/User List/UserList';
 import ForgotPass from './components/admin/Login/ForgotPass';
 import Queries from './components/admin/queries/Queries';
 import TandC from './components/admin/CMS/T&C';
-import PrivatePolicy from './components/admin/CMS/PrivatePolicy';
+import PrivacyPolicy from './components/admin/CMS/PrivacyPolicy';
 import AboutUs from './components/admin/CMS/AboutUs';
 function App() {
   return (
@@ -19,7 +19,7 @@ function App() {
       <Route path="/user-list" exact element={<UserList />} />
       <Route path="/queries" exact element={<Queries />} />
       <Route path="/cms/terms-and-conditions" exact element={<TandC />} />
-      <Route path="/cms/privacy-policy" exact element={<PrivatePolicy />} />
+      <Route path="/cms/privacy-policy" exact element={<PrivacyPolicy />} />
       <Route path="/cms/about-us" exact element={<AboutUs />} />
       <Route path="/" element={<Navigate to="/truli-pay-admin" />} />
     </Routes>

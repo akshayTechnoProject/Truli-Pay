@@ -45,7 +45,7 @@ function Menu() {
 
   var aboutus = window.location.pathname.match(/^\/about-us/) ? 'active' : '';
 
-  var inquiriesClass = window.location.pathname.match(/^\/inquiries/)
+  var inquiriesClass = window.location.pathname.match(/^\/queries/)
     ? 'active'
     : '';
 
@@ -158,7 +158,7 @@ function Menu() {
                 <div className="menuItemDiv">
                   <i className="fa fa-question menuIcon"></i>
 
-                  <span className="menuItem"> Queries</span>
+                  <span className="menuItem">Queries</span>
                 </div>
               </NavLink>
             </li>

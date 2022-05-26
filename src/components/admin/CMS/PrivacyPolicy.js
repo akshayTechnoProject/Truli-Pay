@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Loader from '../include/Loader';
 import Menu from '../include/Menu';
-export default function PrivatePolicy() {
+export default function PrivacyPolicy() {
   useEffect(() => {
     document.getElementById('page-loader').style.display = 'none';
 
