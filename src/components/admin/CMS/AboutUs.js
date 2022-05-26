@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
-import Loader from "../include/Loader";
-import Menu from "../include/Menu";
+import React, { useEffect } from 'react';
+import Loader from '../include/Loader';
+import Menu from '../include/Menu';
 export default function AboutUs() {
   useEffect(() => {
-    document.getElementById("page-loader").style.display = "none";
+    document.getElementById('page-loader').style.display = 'none';
 
-    var element = document.getElementById("page-container");
-    element.classList.add("show");
+    var element = document.getElementById('page-container');
+    element.classList.add('show');
   }, []);
   return (
     <>
@@ -23,9 +23,9 @@ export default function AboutUs() {
             <li className="breadcrumb-item basePath ">
               <a href="javascript:;">Home</a>
             </li>
-            <li className="breadcrumb-item active currentPath">Aboutus</li>
+            <li className="breadcrumb-item active currentPath">AboutUs</li>
           </ol>
-          <h1 className="page-header">Aboutus</h1>
+          <h1 className="page-header">AboutUs</h1>
         </div>
       </div>
     </>

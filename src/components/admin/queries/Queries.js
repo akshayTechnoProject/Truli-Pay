@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
-import Loader from "../include/Loader";
-import Menu from "../include/Menu";
+import React, { useEffect } from 'react';
+import Loader from '../include/Loader';
+import Menu from '../include/Menu';
 export default function Queries() {
   useEffect(() => {
-    document.getElementById("page-loader").style.display = "none";
+    document.getElementById('page-loader').style.display = 'none';
 
-    var element = document.getElementById("page-container");
-    element.classList.add("show");
+    var element = document.getElementById('page-container');
+    element.classList.add('show');
   }, []);
   return (
     <>
@@ -25,7 +25,7 @@ export default function Queries() {
             </li>
             <li className="breadcrumb-item active currentPath">queries</li>
           </ol>
-          <h1 className="page-header">queries</h1>
+          <h1 className="page-header">Queries</h1>
         </div>
       </div>
     </>
