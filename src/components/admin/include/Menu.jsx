@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { getAuth, signOut } from "firebase/auth";
-import InfoIcon from "@material-ui/icons/Info";
-import PolicyIcon from "@material-ui/icons/Policy";
-import GavelIcon from "@material-ui/icons/Gavel";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
+import React, { useEffect, useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { getAuth, signOut } from 'firebase/auth';
+import InfoIcon from '@material-ui/icons/Info';
+import PolicyIcon from '@material-ui/icons/Policy';
+import GavelIcon from '@material-ui/icons/Gavel';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 function Menu() {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(true);
@@ -14,47 +14,47 @@ function Menu() {
     const auth = getAuth();
     signOut(auth)
       .then(() => {
-        console.log("Sign-out successful.");
+        console.log('Sign-out successful.');
       })
       .catch((error) => {
-        console.log("An error happened.");
+        console.log('An error happened.');
       });
-    localStorage.removeItem("DM_Admin_ID");
-    localStorage.removeItem("DM_Admin_EMAIL");
-    localStorage.removeItem("DM_Admin_NAME");
-    localStorage.removeItem("DM_Admin_IMAGE");
-    navigate("/travel-app-admin");
-    toast.success("!Logout Successfully");
+    localStorage.removeItem('DM_Admin_ID');
+    localStorage.removeItem('DM_Admin_EMAIL');
+    localStorage.removeItem('DM_Admin_NAME');
+    localStorage.removeItem('DM_Admin_IMAGE');
+    navigate('/truli-pay-admin');
+    toast.success('!Logout Successfully');
   };
 
   var dashboardClass = window.location.pathname.match(/^\/dashboard/)
-    ? "active"
-    : "";
+    ? 'active'
+    : '';
 
   var userListClass = window.location.pathname.match(/^\/user-list/)
-    ? "active"
-    : "";
+    ? 'active'
+    : '';
 
   // var addRestaurantsClass = window.location.pathname.match(/^\/add-restaurant/) ? "active" : "";
 
-  var pp = window.location.pathname.match(/^\/privatepolicy/) ? "active" : "";
+  var pp = window.location.pathname.match(/^\/privatepolicy/) ? 'active' : '';
   //  if(addRestaurantsClass=='active'){
   //      restaurantsClass = 'active';
   //  }
-  var TandC = window.location.pathname.match(/^\/t&c/) ? "active" : "";
+  var TandC = window.location.pathname.match(/^\/t&c/) ? 'active' : '';
 
-  var aboutus = window.location.pathname.match(/^\/aboutus/) ? "active" : "";
+  var aboutus = window.location.pathname.match(/^\/aboutus/) ? 'active' : '';
 
   var inquiriesClass = window.location.pathname.match(/^\/inquiries/)
-    ? "active"
-    : "";
+    ? 'active'
+    : '';
   var feedbackClass = window.location.pathname.match(/^\/feedback/)
-    ? "active"
-    : "";
+    ? 'active'
+    : '';
   useEffect(() => {
-    if (localStorage.getItem("DM_Admin_ID") == null) {
-      toast.error("!..Please login first");
-      navigate("/travel-app-admin");
+    if (localStorage.getItem('DM_Admin_ID') == null) {
+      toast.error('!..Please login first');
+      navigate('/truli-pay-admin');
     }
   }, []);
 
@@ -88,22 +88,22 @@ function Menu() {
         <ul className="navbar-nav navbar-right">
           <li className="dropdown navbar-user">
             <a href="#" className="dropdown-toggle" data-toggle="dropdown">
-              <img src={localStorage.getItem("DM_Admin_IMAGE")} alt="" />
+              <img src={localStorage.getItem('DM_Admin_IMAGE')} alt="" />
               <span className="d-none d-md-inline userName">
-                {localStorage.getItem("DM_Admin_NAME")}
-              </span>{" "}
+                {localStorage.getItem('DM_Admin_NAME')}
+              </span>{' '}
               <b className="caret"></b>
             </a>
             <div
               className="dropdown-menu dropdown-menu-right"
-              style={{ borderRadius: "20px", padding: "5px " }}
+              style={{ borderRadius: '20px', padding: '5px ' }}
             >
               <span className="dropdown-item">
                 <NavLink
                   to="/admin-profile"
-                  style={{ textDecoration: "none", color: "#231549" }}
+                  style={{ textDecoration: 'none', color: '#231549' }}
                 >
-                  <span className="DropdownItem" style={{ color: "#231549" }}>
+                  <span className="DropdownItem" style={{ color: '#231549' }}>
                     Edit Profile
                   </span>
                 </NavLink>
@@ -160,7 +160,7 @@ function Menu() {
             </li>
             <li
               onClick={() => setVisible(!visible)}
-              style={{ cursor: "pointer", marginInlineStart: "10px" }}
+              style={{ cursor: 'pointer', marginInlineStart: '10px' }}
             >
               <div className="menuItemDiv">
                 <span className="menuItem">CMS</span>
@@ -179,10 +179,10 @@ function Menu() {
                   >
                     <div
                       className="menuItemDiv"
-                      style={{ marginInlineStart: "25px" }}
+                      style={{ marginInlineStart: '25px' }}
                     >
                       <i className="menuIcon">
-                        <GavelIcon style={{ fontSize: "17px" }} />
+                        <GavelIcon style={{ fontSize: '17px' }} />
                       </i>
                       <span
                         className="menuItem"
@@ -201,17 +201,17 @@ function Menu() {
                   >
                     <div
                       className="menuItemDiv"
-                      style={{ marginInlineStart: "25px" }}
+                      style={{ marginInlineStart: '25px' }}
                     >
                       <i className="menuIcon">
-                        <PolicyIcon style={{ fontSize: "17px" }} />
+                        <PolicyIcon style={{ fontSize: '17px' }} />
                       </i>
                       <span
                         className="menuItem"
                         onClick={() => setVisible(!visible)}
                       >
                         Policy
-                      </span>{" "}
+                      </span>{' '}
                     </div>
                   </NavLink>
                 </li>
@@ -224,17 +224,17 @@ function Menu() {
                   >
                     <div
                       className="menuItemDiv"
-                      style={{ marginInlineStart: "25px" }}
+                      style={{ marginInlineStart: '25px' }}
                     >
                       <i className="menuIcon">
-                        <InfoIcon style={{ fontSize: "17px" }} />
+                        <InfoIcon style={{ fontSize: '17px' }} />
                       </i>
                       <span
                         className="menuItem"
                         onClick={() => setVisible(!visible)}
                       >
                         AboutUs
-                      </span>{" "}
+                      </span>{' '}
                     </div>
                   </NavLink>
                 </li>
