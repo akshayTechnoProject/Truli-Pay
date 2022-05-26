@@ -1,4 +1,4 @@
-import { Routes, Route, Link, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/admin/Login/Login';
 import Dashboard from './components/admin/Dashboard/Dashboard';
 import Profile from './components/admin/Profile/Profile';
@@ -18,7 +18,7 @@ function App() {
       <Route path="/dashboard" exact element={<Dashboard />} />
       <Route path="/user-list" exact element={<UserList />} />
       <Route path="/queries" exact element={<Queries />} />
-      <Route path="/cms/t&c" exact element={<TandC />} />
+      <Route path="/cms/terms-and-conditions" exact element={<TandC />} />
       <Route path="/cms/privacy-policy" exact element={<PrivatePolicy />} />
       <Route path="/cms/about-us" exact element={<AboutUs />} />
       <Route path="/" element={<Navigate to="/truli-pay-admin" />} />

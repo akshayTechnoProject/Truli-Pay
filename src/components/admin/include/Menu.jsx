@@ -37,7 +37,9 @@ function Menu() {
 
   var pp = window.location.pathname.match(/^\/privacy-policy/) ? 'active' : '';
 
-  var TandC = window.location.pathname.match(/^\/t&c/) ? 'active' : '';
+  var TandC = window.location.pathname.match(/^\/terms-and-conditions/)
+    ? 'active'
+    : '';
 
   var aboutus = window.location.pathname.match(/^\/about-us/) ? 'active' : '';
 
@@ -167,7 +169,7 @@ function Menu() {
               <>
                 <li>
                   <NavLink
-                    to="/cms/t&c"
+                    to="/cms/terms-and-conditions"
                     className={TandC}
                     activeClassName="active"
                   >
@@ -182,7 +184,7 @@ function Menu() {
                         className="menuItem"
                         onClick={() => setVisible(!visible)}
                       >
-                        T&C
+                        T & C
                       </span>
                     </div>
                   </NavLink>

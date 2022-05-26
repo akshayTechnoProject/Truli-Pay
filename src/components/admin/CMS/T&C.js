@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
-import Loader from "../include/Loader";
-import Menu from "../include/Menu";
+import React, { useEffect } from 'react';
+import Loader from '../include/Loader';
+import Menu from '../include/Menu';
 export default function TandC() {
   useEffect(() => {
-    document.getElementById("page-loader").style.display = "none";
+    document.getElementById('page-loader').style.display = 'none';
 
-    var element = document.getElementById("page-container");
-    element.classList.add("show");
+    var element = document.getElementById('page-container');
+    element.classList.add('show');
   }, []);
   return (
     <>
@@ -25,7 +25,7 @@ export default function TandC() {
             </li>
             <li className="breadcrumb-item active currentPath">T&C</li>
           </ol>
-          <h1 className="page-header">T&C</h1>
+          <h1 className="page-header">Terms and Conditions</h1>
         </div>
       </div>
     </>
