@@ -113,7 +113,7 @@ export default function Profile() {
           });
       } else {
         console.log('hii');
-        const adminRef = doc(db, 'admin', auth.currentUser.uid);
+        const adminRef = doc(db, 'admin', updateId);
         await updateDoc(adminRef, { name: profileInfo.name })
           .then(() => {
             localStorage.setItem('DM_Admin_NAME', profileInfo.name);
@@ -203,17 +203,26 @@ export default function Profile() {
               toast.success('Password Updated Successfully.');
               console.log('Password updated successfully');
               setChange(!change);
+              setPassword(initialValues);
+              setPassErrors({});
             })
             .catch((error) => {
-              console.log('Errors', error);
+              console.log('Errors', error.message);
               setDisable1(false);
-              toast.error('Something went wrong. Please try again later.');
+              if (
+                error?.message?.match(
+                  'Password should be at least 6 characters'
+                )
+              ) {
+                toast.error('Password should be at least 6 characters');
+              } else
+                toast.error('Something went wrong. Please try again later.');
             });
         })
         .catch((error) => {
           console.log(':: ', error);
           setDisable1(false);
-          toast.error('Invalid Inputs!');
+          toast.error('Invalid Inputs! ');
         });
     } else {
       setDisable1(false);
