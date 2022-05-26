@@ -9,6 +9,12 @@ import { query, collection, onSnapshot } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { TableHeader, Pagination, Search } from "../Table";
 import { Dropdown, Table } from "react-bootstrap";
+import TotalBank from "./tabComponent/TotalBank";
+import TotalCompleted from "./tabComponent/TotalCompleted";
+import TotalInProcess from "./tabComponent/TotalInProcess";
+import TotalTransactions from "./tabComponent/TotalTransactions";
+import TotalUsers from "./tabComponent/TotalUsers";
+import TotalWallet from "./tabComponent/TotalWallet";
 
 import countryData from "../json/Country.json";
 function Dashboard() {
@@ -316,31 +322,31 @@ function Dashboard() {
       sortable: false,
     },
     {
-      name: "Image",
-      field: "image",
+      name: "from",
+      field: "from",
       sortable: false,
     },
     {
-      name: "Continent",
-      field: "continent",
+      name: "to",
+      field: "to",
       sortable: false,
     },
     {
-      name: "Country",
-      field: "country",
+      name: "amount",
+      field: "amount",
       sortable: false,
     },
     {
-      name: "Range (₹)",
+      name: "date",
       sortable: false,
     },
 
     {
-      name: "Edit",
+      name: "time",
       sortable: false,
     },
     {
-      name: "Delete",
+      name: "country",
       sortable: false,
     },
   ];
@@ -362,10 +368,13 @@ function Dashboard() {
   }, []);
   const dateWise = (date) => {
     let temp = [];
+    let k = 1;
     data.map((e, i) => {
-      e.transactions.map((e1, i) => {
-        if (new Date(e1.date).getTime() == new Date(date).getTime())
-          temp.push(e1);
+      e.transactions.map((e1, i1) => {
+        if (new Date(e1.date).getTime() == new Date(date).getTime()) {
+          temp.push({ ...e1, sr_no: k });
+          k++;
+        }
       });
     });
     setEntity(temp);
@@ -373,6 +382,7 @@ function Dashboard() {
   const betweenDateWise = (event) => {
     event.preventDefault();
     let temp = [];
+    let k = 1;
     console.log(
       "date",
       new Date(dateBetween.date1).getTime() <
@@ -383,7 +393,7 @@ function Dashboard() {
       new Date(dateBetween.date2).getTime()
     ) {
       data.map((e, i) => {
-        e.transactions.map((e1, i) => {
+        e.transactions.map((e1, i1) => {
           // console.log(
           //   new Date(dateBetween.date1).getTime() <= new Date(e1.date).getTime()
           // );
@@ -397,7 +407,8 @@ function Dashboard() {
             new Date(e1.date).getTime() < new Date(dateBetween.date2).getTime()
           ) {
             console.log(e1);
-            temp.push(e1);
+            temp.push({ ...e1, sr_no: k });
+            k++;
           }
         });
       });
@@ -408,36 +419,52 @@ function Dashboard() {
   };
   const walletWise = () => {
     let temp = [];
+    let k = 1;
     data.map((e, i) => {
-      e.transactions.map((e1, i) => {
-        if (e1.type == "wallet") temp.push(e1);
+      e.transactions.map((e1, i1) => {
+        if (e1.type == "wallet") {
+          temp.push({ ...e1, sr_no: k });
+          k++;
+        }
       });
     });
     setEntity(temp);
   };
   const bankWise = () => {
     let temp = [];
+    let k = 1;
     data.map((e, i) => {
-      e.transactions.map((e1, i) => {
-        if (e1.type == "bank") temp.push(e1);
+      e.transactions.map((e1, i1) => {
+        if (e1.type == "bank") {
+          temp.push({ ...e1, sr_no: k });
+          k++;
+        }
       });
     });
     setEntity(temp);
   };
   const completeTrans = () => {
     let temp = [];
+    let k = 1;
     data.map((e, i) => {
-      e.transactions.map((e1, i) => {
-        if (e1.status == "complete") temp.push(e1);
+      e.transactions.map((e1, i1) => {
+        if (e1.status == "complete") {
+          temp.push({ ...e1, sr_no: k });
+          k++;
+        }
       });
     });
     setEntity(temp);
   };
   const inprocessTrans = () => {
     let temp = [];
+    let k = 1;
     data.map((e, i) => {
-      e.transactions.map((e1, i) => {
-        if (e1.status == "inprocess") temp.push(e1);
+      e.transactions.map((e1, i1) => {
+        if (e1.status == "inprocess") {
+          temp.push({ ...e1, sr_no: k });
+          k++;
+        }
       });
     });
     setEntity(temp);
@@ -493,261 +520,346 @@ function Dashboard() {
             <li className="breadcrumb-item active currentPath">Dashboard</li>
           </ol>
           <h1 className="page-header">Dashboard </h1>
-          <div className="row">
-            <div className="col-xl-3 col-md-6">
-              <div
-                className="widget widget-stats bg-success"
-                style={{ borderRadius: "20px" }}
-              >
-                <div className="stats-icon">
-                  <i className="fa fa-globe"></i>
-                </div>
-                <div className="stats-info">
-                  <h4>Total Countries</h4>
-                  <p>{totalCountry}</p>
-                </div>
-                <div className="stats-link">
-                  <NavLink to="/country-management">
-                    View Detail <i className="fa fa-arrow-alt-circle-right"></i>
-                  </NavLink>
-                </div>
-              </div>
-            </div>
-            <div className="col-xl-3 col-md-6">
-              <div
-                className="widget widget-stats bg-dark"
-                style={{ borderRadius: "20px" }}
-              >
-                <div className="stats-icon">
-                  <i className="fa fa-map-pin "></i>
-                </div>
-                <div className="stats-info">
-                  <h4>Total Location</h4>
-                  <p>{totalLocation}</p>
-                </div>
-                <div className="stats-link">
-                  <a href="">
-                    View Detail <i className="fa fa-arrow-alt-circle-right"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <input type="date" onChange={(e) => dateWise(e.target.value)} />
-            <form onSubmit={betweenDateWise}>
-              <label>Start Date : </label>
-              <input
-                type="date"
-                onChange={(e) =>
-                  setDateBetween({ ...dateBetween, date1: e.target.value })
-                }
-              />
-              <br />
-              <label>End Date : </label>
 
-              <input
-                type="date"
-                onChange={(e) =>
-                  setDateBetween({ ...dateBetween, date2: e.target.value })
-                }
-              />
-              <button className="btn btn-success" type="submit">
-                Search
-              </button>
-            </form>
+          <input type="date" onChange={(e) => dateWise(e.target.value)} />
+          <form onSubmit={betweenDateWise}>
+            <label>Start Date : </label>
+            <input
+              type="date"
+              onChange={(e) =>
+                setDateBetween({ ...dateBetween, date1: e.target.value })
+              }
+            />
             <br />
-            <button className="btn btn-success" onClick={walletWise}>
-              Wallet wise
-            </button>
-            <button className="btn btn-success" onClick={bankWise}>
-              Bank Wise
-            </button>
-            <button className="btn btn-success" onClick={completeTrans}>
-              complete transactions
-            </button>
-            <button className="btn btn-success" onClick={inprocessTrans}>
-              ?Inprocess transactions
-            </button>
+            <label>End Date : </label>
 
-            {console.log(entity)}
-            {/* <div className="col-xl-3 col-md-6">
-                  <div className="widget widget-stats bg-orange">
-                     <div className="stats-icon"><i className="fa fa-dollar-sign"></i></div>
-                     <div className="stats-info">
-                        <h4>Total Revenue</h4>
-                        <p>1,291,922</p>
-                     </div>
-                     <div className="stats-link">
-                        <a href="javascript:;">View Detail <i className="fa fa-arrow-alt-circle-right"></i></a>
-                     </div>
-                  </div>
-               </div> */}
-            {/* <div className="col-xl-3 col-md-6">
-              <div className="widget widget-stats bg-red">
-                <div className="stats-icon">
-                  <i className="fa fa-shopping-cart"></i>
-                </div>
-                <div className="stats-info">
-                  <h4>Total Orders</h4>
-                  <p>{orders}</p>
-                </div>
-                <div className="stats-link">
-                  <NavLink to="/orders">
-                    View Detail <i className="fa fa-arrow-alt-circle-right"></i>
-                  </NavLink>
-                </div>
+            <input
+              type="date"
+              onChange={(e) =>
+                setDateBetween({ ...dateBetween, date2: e.target.value })
+              }
+            />
+            <button className="btn btn-success" type="submit">
+              Search
+            </button>
+          </form>
+          <br />
+          <button className="btn btn-success" onClick={walletWise}>
+            Wallet wise
+          </button>
+          <button className="btn btn-success" onClick={bankWise}>
+            Bank Wise
+          </button>
+          <button className="btn btn-success" onClick={completeTrans}>
+            complete transactions
+          </button>
+          <button className="btn btn-success" onClick={inprocessTrans}>
+            ?Inprocess transactions
+          </button>
+          <br />
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "20px",
+              borderRadius: "20px",
+            }}
+          >
+            <ul className="nav nav-tabs Tabs" id="myTab" role="tablist">
+              <li className="nav-item">
+                <a
+                  className="nav-link active"
+                  id="TotalUsers-tab"
+                  data-toggle="tab"
+                  href="#TotalUsers"
+                  role="tab"
+                  aria-controls="TotalUsers"
+                  aria-selected="true"
+                >
+                  Total Users
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  id="TotalTransactions-tab"
+                  data-toggle="tab"
+                  href="#TotalTransactions"
+                  role="tab"
+                  aria-controls="TotalTransactions"
+                  aria-selected="false"
+                >
+                  Total Transactions
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  id="TotalWallet-tab"
+                  data-toggle="tab"
+                  href="#TotalWallet"
+                  role="tab"
+                  aria-controls="TotalWallet"
+                  aria-selected="false"
+                >
+                  Total Wallet Transactions
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  id="TotalBank-tab"
+                  data-toggle="tab"
+                  href="#TotalBank"
+                  role="tab"
+                  aria-controls="TotalBank"
+                  aria-selected="false"
+                >
+                  Total Bank Transfer Transactions
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  id="TotalCompleted-tab"
+                  data-toggle="tab"
+                  href="#TotalCompleted"
+                  role="tab"
+                  aria-controls="TotalCompleted"
+                  aria-selected="false"
+                >
+                  Total Completed Transaction
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  id="TotalInProcess-tab"
+                  data-toggle="tab"
+                  href="#TotalInProcess"
+                  role="tab"
+                  aria-controls="TotalInProcess"
+                  aria-selected="false"
+                >
+                  Total in process transactions
+                </a>
+              </li>
+            </ul>
+
+            <div className="tab-content">
+              <div
+                className="tab-pane active"
+                id="TotalUsers"
+                role="tabpanel"
+                aria-labelledby="TotalUsers-tab"
+              >
+                <TotalUsers />
               </div>
-            </div> */}
+              <div
+                className="tab-pane"
+                id="TotalTransactions"
+                role="tabpanel"
+                aria-labelledby="TotalTransactions-tab"
+              >
+                <TotalTransactions />
+              </div>
+              <div
+                className="tab-pane"
+                id="TotalWallet"
+                role="tabpanel"
+                aria-labelledby="TotalWallet-tab"
+              >
+                <TotalWallet />
+              </div>
+              <div
+                className="tab-pane"
+                id="TotalBank"
+                role="tabpanel"
+                aria-labelledby="TotalBank-tab"
+              >
+                <TotalBank />
+              </div>
+              <div
+                className="tab-pane"
+                id="TotalCompleted"
+                role="tabpanel"
+                aria-labelledby="TotalCompleted-tab"
+              >
+                <TotalCompleted />
+              </div>
+              <div
+                className="tab-pane"
+                id="TotalInProcess"
+                role="tabpanel"
+                aria-labelledby="TotalInProcess-tab"
+              >
+                <TotalInProcess />
+              </div>
+            </div>
           </div>
-        </div>
-        <div
-          style={{
-            backgroundColor: "white",
-            padding: "20px",
-            borderRadius: "20px",
-            marginTop: "10px",
-          }}
-        >
-          <div className="row w-100">
-            <div className="mb-3 col-12 text-center">
-              <div className="row">
-                <div className="col-xl-6 col-lg-6 col-sm-6 col-12 mb-3">
-                  <div className="ml-0">
-                    <div className="d-flex">
-                      <h5 className="mt-2 mr-1">Search: </h5>
-                      <Search
-                        onSearch={(value) => {
-                          setSearch(value);
-                          setCurrentPage(1);
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="col-xl-6 col-lg-6 col-sm-6 col-12 d-flex justify-content-end mb-3">
-                  <div
-                    style={{
-                      color: "black",
-                      fontSize: "12px",
-                      fontWeight: "300",
-                      paddingTop: "0px",
-                      paddingBottom: "0px",
-                    }}
-                    className="align-self-center"
-                  >
-                    <b>Rows per page :&nbsp;</b>
-                  </div>
-                  <div className="align-self-center">
-                    <Dropdown>
-                      <Dropdown.Toggle
-                        variant="none"
-                        id="dropdown-basic"
-                        style={{
-                          cursor: "auto",
-                          backgroundColor: "white",
-                          borderColor: "#d5dbe0",
-                          paddingBottom: "3px",
-                          paddingTop: "3px",
-                        }}
-                      >
-                        {limit}&nbsp;<i class="fa fa-caret-down"></i>
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu>
-                        {limit !== 10 ? (
-                          <>
-                            <Dropdown.Item
-                              onClick={() => {
-                                setlimit(10);
-                              }}
-                            >
-                              10
-                            </Dropdown.Item>
-                          </>
-                        ) : null}
-
-                        {limit !== 20 ? (
-                          <>
-                            <Dropdown.Item
-                              onClick={() => {
-                                setlimit(20);
-                              }}
-                            >
-                              20
-                            </Dropdown.Item>
-                          </>
-                        ) : null}
-
-                        {limit !== 30 ? (
-                          <>
-                            <Dropdown.Item
-                              onClick={() => {
-                                setlimit(30);
-                              }}
-                            >
-                              30
-                            </Dropdown.Item>
-                          </>
-                        ) : null}
-
-                        {limit !== 50 ? (
-                          <>
-                            <Dropdown.Item
-                              onClick={() => {
-                                setlimit(50);
-                              }}
-                            >
-                              50
-                            </Dropdown.Item>
-                          </>
-                        ) : null}
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </div>
-                </div>
-              </div>
-
-              <div className="row ">
-                <div className="col-12">
-                  <div className="table-responsive">
-                    <Table striped bordered hover>
-                      <thead>
-                        <TableHeader
-                          headers={Header}
-                          onSorting={(field, order) =>
-                            setSorting({ field, order })
-                          }
-                        />
-                      </thead>
-                      <tbody></tbody>
-                    </Table>
-                    <div className="row d-flex justify-content-center w-100">
-                      <div className="mx-auto  d-flex justify-content-center w-100">
-                        <img
-                          src="./assets/img/icon/no-location.png"
-                          className="form-img__img-preview"
-                          style={{ width: "100px", height: "100px" }}
-                          alt=""
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "20px",
+              borderRadius: "20px",
+              marginTop: "10px",
+            }}
+          >
+            <div className="row w-100">
+              <div className="mb-3 col-12 text-center">
+                <div className="row">
+                  <div className="col-xl-6 col-lg-6 col-sm-6 col-12 mb-3">
+                    <div className="ml-0">
+                      <div className="d-flex">
+                        <h5 className="mt-2 mr-1">Search: </h5>
+                        <Search
+                          onSearch={(value) => {
+                            setSearch(value);
+                            setCurrentPage(1);
+                          }}
                         />
                       </div>
                     </div>
                   </div>
+                  <div className="col-xl-6 col-lg-6 col-sm-6 col-12 d-flex justify-content-end mb-3">
+                    <div
+                      style={{
+                        color: "black",
+                        fontSize: "12px",
+                        fontWeight: "300",
+                        paddingTop: "0px",
+                        paddingBottom: "0px",
+                      }}
+                      className="align-self-center"
+                    >
+                      <b>Rows per page :&nbsp;</b>
+                    </div>
+                    <div className="align-self-center">
+                      <Dropdown>
+                        <Dropdown.Toggle
+                          variant="none"
+                          id="dropdown-basic"
+                          style={{
+                            cursor: "auto",
+                            backgroundColor: "white",
+                            borderColor: "#d5dbe0",
+                            paddingBottom: "3px",
+                            paddingTop: "3px",
+                          }}
+                        >
+                          {limit}&nbsp;<i class="fa fa-caret-down"></i>
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu>
+                          {limit !== 10 ? (
+                            <>
+                              <Dropdown.Item
+                                onClick={() => {
+                                  setlimit(10);
+                                }}
+                              >
+                                10
+                              </Dropdown.Item>
+                            </>
+                          ) : null}
+
+                          {limit !== 20 ? (
+                            <>
+                              <Dropdown.Item
+                                onClick={() => {
+                                  setlimit(20);
+                                }}
+                              >
+                                20
+                              </Dropdown.Item>
+                            </>
+                          ) : null}
+
+                          {limit !== 30 ? (
+                            <>
+                              <Dropdown.Item
+                                onClick={() => {
+                                  setlimit(30);
+                                }}
+                              >
+                                30
+                              </Dropdown.Item>
+                            </>
+                          ) : null}
+
+                          {limit !== 50 ? (
+                            <>
+                              <Dropdown.Item
+                                onClick={() => {
+                                  setlimit(50);
+                                }}
+                              >
+                                50
+                              </Dropdown.Item>
+                            </>
+                          ) : null}
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div
-                className="mt-2 d-flex justify-content-sm-center justify-content-xs-center justify-content-lg-end"
-                style={{
-                  overflowX: "auto",
-                }}
-              >
-                <Pagination
-                  total={totalItems}
-                  itemsPerPage={limit}
-                  currentPage={currentPage}
-                  onPageChange={(page) => setCurrentPage(page)}
-                />
+
+                <div className="row ">
+                  <div className="col-12">
+                    <div className="table-responsive">
+                      <Table striped bordered hover>
+                        <thead>
+                          <TableHeader
+                            headers={Header}
+                            onSorting={(field, order) =>
+                              setSorting({ field, order })
+                            }
+                          />
+                        </thead>
+                        <tbody>
+                          {commentsData.map((e, i) => (
+                            <tr>
+                              <td>{e.sr_no}</td>
+                              <td>{e.from}</td>
+                              <td>{e.to}</td>
+                              <td>{e.amount}</td>
+
+                              <td>{e.date}</td>
+                              <td>{e.time}</td>
+                              <td>{e.country}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                      <div className="row d-flex justify-content-center w-100">
+                        <div className="mx-auto  d-flex justify-content-center w-100">
+                          <img
+                            src="./assets/img/icon/no-location.png"
+                            className="form-img__img-preview"
+                            style={{ width: "100px", height: "100px" }}
+                            alt=""
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="mt-2 d-flex justify-content-sm-center justify-content-xs-center justify-content-lg-end"
+                  style={{
+                    overflowX: "auto",
+                  }}
+                >
+                  <Pagination
+                    total={totalItems}
+                    itemsPerPage={limit}
+                    currentPage={currentPage}
+                    onPageChange={(page) => setCurrentPage(page)}
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
+
         <Footer />
       </div>
     </>

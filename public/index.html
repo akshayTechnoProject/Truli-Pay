@@ -40,6 +40,10 @@
 <script src="assets/js/demo/dashboard.js"></script>
 <script>
   $(document).ready(function () { });
+  $('#myTab a').on('click', function (e) {
+    e.preventDefault()
+    $(this).tab('show')
+  })
 </script>
 
 </html>
