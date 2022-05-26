@@ -7,6 +7,7 @@ import Footer from '../include/Footer';
 import { getAuth } from 'firebase/auth';
 import { query, collection, onSnapshot } from 'firebase/firestore';
 import { toast } from 'react-toastify';
+import Analytics from './Analytics';
 function Dashboard() {
   const [totalCountry, setTotalCountry] = useState(0);
   const [totalLocation, setTotalLocation] = useState(0);
@@ -90,36 +91,8 @@ function Dashboard() {
                 </div>
               </div>
             </div>
-
-            {/* <div className="col-xl-3 col-md-6">
-                  <div className="widget widget-stats bg-orange">
-                     <div className="stats-icon"><i className="fa fa-dollar-sign"></i></div>
-                     <div className="stats-info">
-                        <h4>Total Revenue</h4>
-                        <p>1,291,922</p>
-                     </div>
-                     <div className="stats-link">
-                        <a href="javascript:;">View Detail <i className="fa fa-arrow-alt-circle-right"></i></a>
-                     </div>
-                  </div>
-               </div> */}
-            {/* <div className="col-xl-3 col-md-6">
-              <div className="widget widget-stats bg-red">
-                <div className="stats-icon">
-                  <i className="fa fa-shopping-cart"></i>
-                </div>
-                <div className="stats-info">
-                  <h4>Total Orders</h4>
-                  <p>{orders}</p>
-                </div>
-                <div className="stats-link">
-                  <NavLink to="/orders">
-                    View Detail <i className="fa fa-arrow-alt-circle-right"></i>
-                  </NavLink>
-                </div>
-              </div>
-            </div> */}
           </div>
+          <Analytics />
         </div>
 
         <Footer />
