@@ -13,12 +13,10 @@ function App() {
     <Routes>
       <Route path="/travel-app-admin" exact element={<Login />} />
       <Route path="*" exact element={<Login />} />
-
       <Route path="/forgot-password" exact element={<ForgotPass />} />
       <Route path="/admin-profile" exact element={<Profile />} />
       <Route path="/dashboard" exact element={<Dashboard />} />
       <Route path="/user-list" exact element={<UserList />} />
-
       <Route path="/queries" exact element={<Queries />} />
       <Route path="/cms/t&c" exact element={<TandC />} />
       <Route path="/cms/privatepolicy" exact element={<PrivatePolicy />} />

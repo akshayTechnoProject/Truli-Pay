@@ -70,7 +70,7 @@ function Menu() {
             /> */}
             {/* <span className="logo"></span> */}
             <span className="BrudAdmin">
-              <b>Truli Pay</b>
+              <b>TruliPay</b>
             </span>
           </NavLink>
 
