@@ -35,22 +35,16 @@ function Menu() {
     ? 'active'
     : '';
 
-  // var addRestaurantsClass = window.location.pathname.match(/^\/add-restaurant/) ? "active" : "";
+  var pp = window.location.pathname.match(/^\/privacy-policy/) ? 'active' : '';
 
-  var pp = window.location.pathname.match(/^\/privatepolicy/) ? 'active' : '';
-  //  if(addRestaurantsClass=='active'){
-  //      restaurantsClass = 'active';
-  //  }
   var TandC = window.location.pathname.match(/^\/t&c/) ? 'active' : '';
 
-  var aboutus = window.location.pathname.match(/^\/aboutus/) ? 'active' : '';
+  var aboutus = window.location.pathname.match(/^\/about-us/) ? 'active' : '';
 
   var inquiriesClass = window.location.pathname.match(/^\/inquiries/)
     ? 'active'
     : '';
-  var feedbackClass = window.location.pathname.match(/^\/feedback/)
-    ? 'active'
-    : '';
+
   useEffect(() => {
     if (localStorage.getItem('DM_Admin_ID') == null) {
       toast.error('!..Please login first');
@@ -195,7 +189,7 @@ function Menu() {
                 </li>
                 <li>
                   <NavLink
-                    to="/cms/privatepolicy"
+                    to="/cms/privacy-policy"
                     className={pp}
                     activeClassName="active"
                   >
@@ -218,7 +212,7 @@ function Menu() {
 
                 <li>
                   <NavLink
-                    to="/cms/aboutus"
+                    to="/cms/about-us"
                     className={aboutus}
                     activeClassName="active"
                   >

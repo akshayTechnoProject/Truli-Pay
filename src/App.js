@@ -19,8 +19,8 @@ function App() {
       <Route path="/user-list" exact element={<UserList />} />
       <Route path="/queries" exact element={<Queries />} />
       <Route path="/cms/t&c" exact element={<TandC />} />
-      <Route path="/cms/privatepolicy" exact element={<PrivatePolicy />} />
-      <Route path="/cms/aboutus" exact element={<AboutUs />} />
+      <Route path="/cms/privacy-policy" exact element={<PrivatePolicy />} />
+      <Route path="/cms/about-us" exact element={<AboutUs />} />
       <Route path="/" element={<Navigate to="/truli-pay-admin" />} />
     </Routes>
   );
