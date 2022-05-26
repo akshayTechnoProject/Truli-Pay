@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { db } from './firebase/firebase';
-import Loader from './include/Loader';
-import Menu from './include/Menu';
-import Footer from './include/Footer';
+import { db } from '../firebase/firebase';
+import Loader from '../include/Loader';
+import Menu from '../include/Menu';
+import Footer from '../include/Footer';
 import { getAuth } from 'firebase/auth';
 import { query, collection, onSnapshot } from 'firebase/firestore';
 function Dashboard() {
