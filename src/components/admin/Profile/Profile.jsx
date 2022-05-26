@@ -56,8 +56,14 @@ export default function Profile() {
 
       const file = e.target.files[0];
       const storage = getStorage();
-      const reference = ref(storage, `profilePic_${new Date().getTime()}.jpg`);
-      uploadBytes(reference, file)
+      const reference = ref(
+        storage,
+        `profile-image/profilePic_${new Date().getTime()}.jpg`
+      );
+      const metadata = {
+        contentType: 'image/jpeg',
+      };
+      uploadBytes(reference, file, metadata)
         .then((snapshot) => {
           return getDownloadURL(snapshot.ref);
         })
@@ -112,7 +118,6 @@ export default function Profile() {
             // updateId = '';
           });
       } else {
-        console.log('hii');
         const adminRef = doc(db, 'admin', updateId);
         await updateDoc(adminRef, { name: profileInfo.name })
           .then(() => {
@@ -291,7 +296,7 @@ export default function Profile() {
                     {console.log(profileInfo)}
                     {profileInfo.image != '' ? (
                       <img
-                        src={profileInfo.image}
+                        src={localStorage.getItem('DM_Admin_IMAGE')}
                         className="form-img__img-preview ml-2"
                         style={{
                           width: '60px',
@@ -319,9 +324,10 @@ export default function Profile() {
 
                     <input
                       type="file"
-                      className="form-control ml-0"
+                      className="form-control imgInput ml-0"
                       id="exampleInputImage"
                       onChange={handleImg}
+                      accept="image/png, image/gif, image/jpeg"
                     />
                     {img.src != '' ? (
                       <img
