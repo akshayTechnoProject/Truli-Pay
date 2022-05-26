@@ -99,9 +99,9 @@ export default function Profile() {
             localStorage.setItem('DM_Admin_IMAGE', image);
             toast.success('Profile Updated Successfully');
             setDisable(false);
+            setImage();
             setIsPicUpload(false);
             setChange(!change);
-            setImage();
             // updateId = '';
           })
           .catch((error) => {
@@ -304,7 +304,7 @@ export default function Profile() {
                       <>
                         <img
                           src={'/assets/img/icon/profile-icon.png'}
-                          alt="RestoImage"
+                          alt="ProfileImage"
                           className="form-img__img-preview ml-2"
                           style={{
                             width: '100px',
