@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { db } from "../firebase/firebase";
 import Loader from "../include/Loader";
@@ -7,8 +7,16 @@ import Footer from "../include/Footer";
 import { getAuth } from "firebase/auth";
 import { query, collection, onSnapshot } from "firebase/firestore";
 import { toast } from "react-toastify";
+import { TableHeader, Pagination, Search } from "../Table";
+import { Dropdown, Table } from "react-bootstrap";
+
 import countryData from "../json/Country.json";
 function Dashboard() {
+  const [totalItems, setTotalItems] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [sorting, setSorting] = useState({ field: "", order: "" });
+  const [limit, setlimit] = useState(10);
   const [totalCountry, setTotalCountry] = useState(0);
   const [totalLocation, setTotalLocation] = useState(0);
   const location = useLocation();
@@ -301,6 +309,41 @@ function Dashboard() {
       ],
     },
   ]);
+  const Header = [
+    {
+      name: "Sr. NO.",
+      field: "sr_no",
+      sortable: false,
+    },
+    {
+      name: "Image",
+      field: "image",
+      sortable: false,
+    },
+    {
+      name: "Continent",
+      field: "continent",
+      sortable: false,
+    },
+    {
+      name: "Country",
+      field: "country",
+      sortable: false,
+    },
+    {
+      name: "Range (₹)",
+      sortable: false,
+    },
+
+    {
+      name: "Edit",
+      sortable: false,
+    },
+    {
+      name: "Delete",
+      sortable: false,
+    },
+  ];
   useEffect(() => {
     if (location.state && localStorage.getItem("first")) {
       toast.success("Login successfull");
@@ -399,6 +442,34 @@ function Dashboard() {
     });
     setEntity(temp);
   };
+  const commentsData = useMemo(() => {
+    let computedComments = entity;
+
+    if (search) {
+      computedComments = computedComments.filter(
+        (customers) =>
+          customers.country.toLowerCase().includes(search.toLowerCase()) ||
+          customers.continent.toLowerCase().includes(search.toLowerCase()) ||
+          customers.budgetFrom.toLowerCase().includes(search.toLowerCase()) ||
+          customers.budgetTo.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+    setTotalItems(computedComments.length);
+
+    //Sorting comments
+    if (sorting.field) {
+      const reversed = sorting.order === "asc" ? 1 : -1;
+      computedComments = computedComments.sort(
+        (a, b) => reversed * a[sorting.field].localeCompare(b[sorting.field])
+      );
+    }
+
+    //Current Page slice
+    return computedComments.slice(
+      (currentPage - 1) * limit,
+      (currentPage - 1) * limit + limit
+    );
+  }, [currentPage, search, sorting, limit, entity]);
   // console.log("Current User", getAuth().currentUser);
   // console.log("Image", localStorage.getItem("DM_Admin_EMAIL"));
   // console.log("Image", localStorage.getItem("DM_Admin_NAME"));
@@ -528,7 +599,155 @@ function Dashboard() {
             </div> */}
           </div>
         </div>
+        <div
+          style={{
+            backgroundColor: "white",
+            padding: "20px",
+            borderRadius: "20px",
+            marginTop: "10px",
+          }}
+        >
+          <div className="row w-100">
+            <div className="mb-3 col-12 text-center">
+              <div className="row">
+                <div className="col-xl-6 col-lg-6 col-sm-6 col-12 mb-3">
+                  <div className="ml-0">
+                    <div className="d-flex">
+                      <h5 className="mt-2 mr-1">Search: </h5>
+                      <Search
+                        onSearch={(value) => {
+                          setSearch(value);
+                          setCurrentPage(1);
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="col-xl-6 col-lg-6 col-sm-6 col-12 d-flex justify-content-end mb-3">
+                  <div
+                    style={{
+                      color: "black",
+                      fontSize: "12px",
+                      fontWeight: "300",
+                      paddingTop: "0px",
+                      paddingBottom: "0px",
+                    }}
+                    className="align-self-center"
+                  >
+                    <b>Rows per page :&nbsp;</b>
+                  </div>
+                  <div className="align-self-center">
+                    <Dropdown>
+                      <Dropdown.Toggle
+                        variant="none"
+                        id="dropdown-basic"
+                        style={{
+                          cursor: "auto",
+                          backgroundColor: "white",
+                          borderColor: "#d5dbe0",
+                          paddingBottom: "3px",
+                          paddingTop: "3px",
+                        }}
+                      >
+                        {limit}&nbsp;<i class="fa fa-caret-down"></i>
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu>
+                        {limit !== 10 ? (
+                          <>
+                            <Dropdown.Item
+                              onClick={() => {
+                                setlimit(10);
+                              }}
+                            >
+                              10
+                            </Dropdown.Item>
+                          </>
+                        ) : null}
 
+                        {limit !== 20 ? (
+                          <>
+                            <Dropdown.Item
+                              onClick={() => {
+                                setlimit(20);
+                              }}
+                            >
+                              20
+                            </Dropdown.Item>
+                          </>
+                        ) : null}
+
+                        {limit !== 30 ? (
+                          <>
+                            <Dropdown.Item
+                              onClick={() => {
+                                setlimit(30);
+                              }}
+                            >
+                              30
+                            </Dropdown.Item>
+                          </>
+                        ) : null}
+
+                        {limit !== 50 ? (
+                          <>
+                            <Dropdown.Item
+                              onClick={() => {
+                                setlimit(50);
+                              }}
+                            >
+                              50
+                            </Dropdown.Item>
+                          </>
+                        ) : null}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
+                </div>
+              </div>
+
+              <div className="row ">
+                <div className="col-12">
+                  <div className="table-responsive">
+                    <Table striped bordered hover>
+                      <thead>
+                        <TableHeader
+                          headers={Header}
+                          onSorting={(field, order) =>
+                            setSorting({ field, order })
+                          }
+                        />
+                      </thead>
+                      <tbody></tbody>
+                    </Table>
+                    <div className="row d-flex justify-content-center w-100">
+                      <div className="mx-auto  d-flex justify-content-center w-100">
+                        <img
+                          src="./assets/img/icon/no-location.png"
+                          className="form-img__img-preview"
+                          style={{ width: "100px", height: "100px" }}
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                className="mt-2 d-flex justify-content-sm-center justify-content-xs-center justify-content-lg-end"
+                style={{
+                  overflowX: "auto",
+                }}
+              >
+                <Pagination
+                  total={totalItems}
+                  itemsPerPage={limit}
+                  currentPage={currentPage}
+                  onPageChange={(page) => setCurrentPage(page)}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
         <Footer />
       </div>
     </>
