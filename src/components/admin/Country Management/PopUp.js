@@ -224,7 +224,7 @@ export default function PopUp(props) {
             }}
           >
             {/* px-5 w-75  */}
-            <div className="d-flex justify-content-center ">
+            <div>
               <br />
 
               <div>

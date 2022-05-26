@@ -218,7 +218,7 @@ export default function PopUpEdit(props) {
       <div>
         {props.state ? (
           <div className="card card-body " style={{ borderRadius: "20px" }}>
-            <div className="d-flex justify-content-center ">
+            <div>
               <div>
                 <div>
                   <form className="CountryForm">
