@@ -1,38 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import Loader from '../include/Loader';
-import Menu from '../include/Menu';
-import Footer from '../include/Footer';
-import { doc, updateDoc } from 'firebase/firestore';
-import { db } from '../firebase/firebase';
+import React, { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import Loader from "../include/Loader";
+import Menu from "../include/Menu";
+import Footer from "../include/Footer";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../firebase/firebase";
 import {
   getAuth,
   updatePassword,
   EmailAuthProvider,
   reauthenticateWithCredential,
-} from 'firebase/auth';
+} from "firebase/auth";
 
 export default function Profile() {
   const auth = getAuth();
   const user = auth.currentUser;
-  console.log('>>>>>>>>>', user?.email);
+  console.log(">>>>>>>>>", user?.email);
   const [change, setChange] = useState(true);
 
   useEffect(() => {
-    document.getElementById('page-loader').style.display = 'none';
-    var element = document.getElementById('page-container');
-    element.classList.add('show');
+    document.getElementById("page-loader").style.display = "none";
+    var element = document.getElementById("page-container");
+    element.classList.add("show");
   }, [change]);
 
   const [img, setImg] = useState({
-    src: '',
-    alt: '',
+    src: "",
+    alt: "",
   });
   const [profileInfo, setProfileInfo] = useState({
-    name: localStorage.getItem('DM_Admin_NAME'),
-    image: localStorage.getItem('DM_Admin_IMAGE'),
+    name: localStorage.getItem("DM_Admin_NAME"),
+    image: localStorage.getItem("DM_Admin_IMAGE"),
   });
   const [addPicture, setAddPicture] = useState(false);
   const [isPicUpload, setIsPicUpload] = useState(false);
@@ -42,9 +42,9 @@ export default function Profile() {
   const [disable, setDisable] = useState(false);
   const [disable1, setDisable1] = useState(false);
   const initialValues = {
-    old_password: '',
-    new_password: '',
-    confirm_password: '',
+    old_password: "",
+    new_password: "",
+    confirm_password: "",
   };
   const [password, setPassword] = useState(initialValues);
 
@@ -61,7 +61,7 @@ export default function Profile() {
         `profile-image/profilePic_${new Date().getTime()}.jpg`
       );
       const metadata = {
-        contentType: 'image/jpeg',
+        contentType: "image/jpeg",
       };
       uploadBytes(reference, file, metadata)
         .then((snapshot) => {
@@ -81,8 +81,7 @@ export default function Profile() {
         })
         .catch(() => {
           setDisable(false);
-          toast.error('Something went wrong!');
-          console.log('Something went wrong!');
+          toast.error("!Something went wrong");
           setChange(!change);
         });
     }
@@ -96,14 +95,14 @@ export default function Profile() {
     e.preventDefault();
     if (validate()) {
       setDisable(true);
-      const updateId = localStorage.getItem('DM_Admin_EMAIL');
+      const updateId = localStorage.getItem("DM_Admin_EMAIL");
       if (isPicUpload) {
-        const adminRef = doc(db, 'admin', updateId);
+        const adminRef = doc(db, "admin", updateId);
         await updateDoc(adminRef, { name: profileInfo.name, image: image })
           .then(() => {
-            localStorage.setItem('DM_Admin_NAME', profileInfo.name);
-            localStorage.setItem('DM_Admin_IMAGE', image);
-            toast.success('Profile Updated Successfully');
+            localStorage.setItem("DM_Admin_NAME", profileInfo.name);
+            localStorage.setItem("DM_Admin_IMAGE", image);
+            toast.success("Profile Updated Successfully");
             setDisable(false);
             setImage();
             setIsPicUpload(false);
@@ -111,24 +110,24 @@ export default function Profile() {
             // updateId = '';
           })
           .catch((error) => {
-            toast.error('Something went wrong!');
+            toast.error("!Something went wrong");
             console.log(error);
             setDisable(false);
             setIsPicUpload(false);
             // updateId = '';
           });
       } else {
-        const adminRef = doc(db, 'admin', updateId);
+        const adminRef = doc(db, "admin", updateId);
         await updateDoc(adminRef, { name: profileInfo.name })
           .then(() => {
-            localStorage.setItem('DM_Admin_NAME', profileInfo.name);
-            toast.success('Profile Updated Successfully');
+            localStorage.setItem("DM_Admin_NAME", profileInfo.name);
+            toast.success("Profile Updated Successfully");
             setDisable(false);
             setIsPicUpload(false);
             setChange(!change);
           })
           .catch((error) => {
-            toast.error('Something went wrong!');
+            toast.error("!Something went wrong");
             console.log(error);
             setDisable(false);
             setIsPicUpload(false);
@@ -143,9 +142,9 @@ export default function Profile() {
     let errors = {};
     let isValid = true;
 
-    if (!input['name']) {
+    if (!input["name"]) {
       isValid = false;
-      errors['name_err'] = 'Please enter name';
+      errors["name_err"] = "Please enter name";
     }
 
     setErrors(errors);
@@ -163,24 +162,24 @@ export default function Profile() {
     let passErrors = {};
     let isValidPass = true;
 
-    if (!input['old_password']) {
+    if (!input["old_password"]) {
       isValidPass = false;
-      passErrors['old_password'] = 'Please enter old password.';
+      passErrors["old_password"] = "Please enter old password.";
     } else {
-      if (!input['new_password']) {
+      if (!input["new_password"]) {
         isValidPass = false;
-        passErrors['new_password'] = 'Please enter new password.';
-      } else if (!input['confirm_password']) {
+        passErrors["new_password"] = "Please enter new password.";
+      } else if (!input["confirm_password"]) {
         isValidPass = false;
-        passErrors['confirm_password'] = 'Please enter confirm password.';
+        passErrors["confirm_password"] = "Please enter confirm password.";
       } else if (
-        input['new_password'] != '' &&
-        input['confirm_password'] != ''
+        input["new_password"] != "" &&
+        input["confirm_password"] != ""
       ) {
-        if (input['new_password'] != input['confirm_password']) {
+        if (input["new_password"] != input["confirm_password"]) {
           isValidPass = false;
-          passErrors['password_error'] =
-            'New password and confirm password are not same.';
+          passErrors["password_error"] =
+            "New password and confirm password are not same.";
         }
       }
     }
@@ -205,29 +204,28 @@ export default function Profile() {
           updatePassword(user, password.new_password)
             .then(() => {
               setDisable1(false);
-              toast.success('Password Updated Successfully.');
-              console.log('Password updated successfully');
+              toast.success(".Password Updated Successfully");
               setChange(!change);
               setPassword(initialValues);
               setPassErrors({});
             })
             .catch((error) => {
-              console.log('Errors', error.message);
+              console.log("Errors", error.message);
               setDisable1(false);
               if (
                 error?.message?.match(
-                  'Password should be at least 6 characters'
+                  "Password should be at least 6 characters"
                 )
               ) {
-                toast.error('Password should be at least 6 characters');
+                toast.error(".Password should be at least 6 characters");
               } else
-                toast.error('Something went wrong. Please try again later.');
+                toast.error(".Something went wrong. Please try again later");
             });
         })
         .catch((error) => {
-          console.log(':: ', error);
+          console.log(":: ", error);
           setDisable1(false);
-          toast.error('Invalid Inputs! ');
+          toast.error("!Invalid Inputs");
         });
     } else {
       setDisable1(false);
@@ -260,13 +258,13 @@ export default function Profile() {
               <div
                 className="card "
                 style={{
-                  height: 'auto',
-                  padding: '20px',
-                  borderRadius: '20px',
+                  height: "auto",
+                  padding: "20px",
+                  borderRadius: "20px",
                 }}
               >
                 <div className="mx-auto">
-                  <h3 class="card-title mx-auto" style={{ color: '#231549' }}>
+                  <h3 class="card-title mx-auto" style={{ color: "#231549" }}>
                     Profile Setting
                   </h3>
                 </div>
@@ -294,27 +292,27 @@ export default function Profile() {
                   <div className="mb-3">
                     <label for="exampleInputImage">Image: </label>
                     {console.log(profileInfo)}
-                    {profileInfo.image != '' ? (
+                    {profileInfo.image != "" ? (
                       <img
-                        src={localStorage.getItem('DM_Admin_IMAGE')}
+                        src={localStorage.getItem("DM_Admin_IMAGE")}
                         className="form-img__img-preview ml-2"
                         style={{
-                          width: '60px',
-                          height: '60px',
-                          borderRadius: '10px',
+                          width: "60px",
+                          height: "60px",
+                          borderRadius: "10px",
                         }}
                         alt="Profile_Picture"
                       />
                     ) : (
                       <>
                         <img
-                          src={'/assets/img/icon/profile-icon.png'}
+                          src={"/assets/img/icon/profile-icon.png"}
                           alt="ProfileImage"
                           className="form-img__img-preview ml-2"
                           style={{
-                            width: '100px',
-                            height: '100px',
-                            margin: '10px',
+                            width: "100px",
+                            height: "100px",
+                            margin: "10px",
                           }}
                         />
                       </>
@@ -329,15 +327,15 @@ export default function Profile() {
                       onChange={handleImg}
                       accept="image/png, image/gif, image/jpeg"
                     />
-                    {img.src != '' ? (
+                    {img.src != "" ? (
                       <img
                         src={img.src}
                         className="form-img__img-preview"
-                        style={{ width: '84px', height: '84px' }}
+                        style={{ width: "84px", height: "84px" }}
                         alt="imgs"
                       />
                     ) : (
-                      ''
+                      ""
                     )}
                     <div className="text-danger">{errors.img_err}</div>
                   </div>
@@ -346,12 +344,12 @@ export default function Profile() {
                     className="btn m-r-5"
                     disabled={disable}
                     style={{
-                      borderRadius: '20px',
-                      backgroundColor: '#231549',
-                      color: '#fff',
+                      borderRadius: "20px",
+                      backgroundColor: "#231549",
+                      color: "#fff",
                     }}
                   >
-                    {disable ? 'Processing...' : 'Submit'}
+                    {disable ? "Processing..." : "Submit"}
                   </button>
                   <button
                     type="reset"
@@ -359,13 +357,13 @@ export default function Profile() {
                     value="Reset"
                     onClick={(e) => {
                       setAddPicture(false);
-                      setImg({ src: '', alt: '' });
+                      setImg({ src: "", alt: "" });
                     }}
                     style={{
-                      borderRadius: '20px',
-                      border: '1px solid #231549',
-                      color: '#231549',
-                      backgroundColor: '#fff4ee',
+                      borderRadius: "20px",
+                      border: "1px solid #231549",
+                      color: "#231549",
+                      backgroundColor: "#fff4ee",
                     }}
                   >
                     Reset
@@ -378,13 +376,13 @@ export default function Profile() {
               <div
                 className="card "
                 style={{
-                  height: 'auto',
-                  padding: '20px',
-                  borderRadius: '20px',
+                  height: "auto",
+                  padding: "20px",
+                  borderRadius: "20px",
                 }}
               >
                 <div className="mx-auto">
-                  <h3 class="card-title mx-auto" style={{ color: '#231549' }}>
+                  <h3 class="card-title mx-auto" style={{ color: "#231549" }}>
                     Change Password
                   </h3>
                 </div>
@@ -445,12 +443,12 @@ export default function Profile() {
                     className="btn m-r-5"
                     disabled={disable1}
                     style={{
-                      borderRadius: '20px',
-                      backgroundColor: '#231549',
-                      color: '#fff',
+                      borderRadius: "20px",
+                      backgroundColor: "#231549",
+                      color: "#fff",
                     }}
                   >
-                    {disable1 ? 'Processing...' : 'Submit'}
+                    {disable1 ? "Processing..." : "Submit"}
                   </button>
                   <button
                     type="reset"
@@ -461,10 +459,10 @@ export default function Profile() {
                       setPassErrors({});
                     }}
                     style={{
-                      borderRadius: '20px',
-                      border: '1px solid #231549',
-                      color: '#231549',
-                      backgroundColor: '#fff4ee',
+                      borderRadius: "20px",
+                      border: "1px solid #231549",
+                      color: "#231549",
+                      backgroundColor: "#fff4ee",
                     }}
                   >
                     Reset
